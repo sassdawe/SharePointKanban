@@ -36,6 +36,21 @@
             }
         }
 
+        public static openSPForm(url: string, title: string = "Project Item", callback: Function = function () { }, width: number = 300, height: number = 400): boolean {
+            var ex = window["ExecuteOrDelayUntilScriptLoaded"];
+            var SP = window["SP"];
+
+            ex(function () {
+                SP.UI.ModalDialog.showModalDialog({
+                    title: title,
+                    showClose: true,
+                    url: url,
+                    dialogReturnValueCallback: callback
+                });
+            }, "sp.js");
+
+            return false;
+        }
         
     }
 

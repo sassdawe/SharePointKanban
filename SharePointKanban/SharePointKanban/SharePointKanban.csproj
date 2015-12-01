@@ -22,20 +22,23 @@
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="app\footer\footer.html" />
-    <Content Include="app\home\home.html" />
-    <Content Include="app\kanban\index.html" />
-    <Content Include="app\menu\menu.html" />
-    <Content Include="app\shell\shell.html" />
+    <Content Include="app.js" />
+    <Content Include="app\footer\footer.htm" />
+    <Content Include="app\home\home.htm" />
+    <Content Include="app\menu\menu.htm" />
+    <Content Include="app\shell\shell.htm" />
     <Content Include="Content\css\bootstrap-theme.css" />
     <Content Include="Content\css\bootstrap-theme.min.css" />
     <Content Include="Content\css\bootstrap.css" />
     <Content Include="Content\css\bootstrap.min.css" />
     <Content Include="Content\css\bootstrap.slate.css" />
     <Content Include="Content\css\bootstrap.slate.min.css" />
+    <Content Include="Content\css\Styles.min.css" />
     <Content Include="Content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Content\images\ajax-progress.gif" />
+    <Content Include="Content\images\samurai.png" />
     <Content Include="Content\ui-bootstrap-csp.css" />
+    <Content Include="index.live.html" />
     <Content Include="index.html" />
     <Content Include="scripts\angular-sanitize.js" />
     <Content Include="scripts\angular-sanitize.min.js" />
@@ -67,6 +70,9 @@
     <Content Include="Content\fonts\glyphicons-halflings-regular.woff2" />
     <Content Include="scripts\jquery-1.11.2.min.map" />
     <Content Include="Content\css\Styles.scss" />
+    <Content Include="app.js.map" />
+    <Content Include="Content\css\Styles.css.map" />
+    <None Include="SharePoint Kanban Publish.pubxml" />
     <None Include="web.Debug.config">
       <DependentUpon>web.config</DependentUpon>
     </None>
@@ -83,7 +89,6 @@
     <TypeScriptCompile Include="app\dvr\views.ts" />
     <TypeScriptCompile Include="app\footer\controllers.footer.ts" />
     <TypeScriptCompile Include="app\home\controllers.home.ts" />
-    <TypeScriptCompile Include="app\kanban\controllers.kanban.ts" />
     <TypeScriptCompile Include="app\menu\controllers.menu.ts" />
     <TypeScriptCompile Include="app\run.ts" />
     <TypeScriptCompile Include="app\services\services.datacontext.ts" />
@@ -139,8 +144,18 @@
     <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)' == 'Release'">
-    <TypeScriptRemoveComments>true</TypeScriptRemoveComments>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
     <TypeScriptSourceMap>false</TypeScriptSourceMap>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptModuleKind>None</TypeScriptModuleKind>
+    <TypeScriptOutFile>app.js</TypeScriptOutFile>
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets')" />
 </Project>

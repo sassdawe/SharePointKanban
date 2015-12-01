@@ -123,13 +123,15 @@ var App;
     var Config = (function () {
         function Config() {
             this.debug = true;
+            this.appPath = 'app/';
             this.orgName = '';
-            this.appPath = '/app/';
-            this.appTitle = 'SharePoint Kanban';
-            this.projectSiteUrl = 'media';
+            this.projectSiteUrl = '/media';
             this.projectListName = 'Projects';
+            this.productionHostname = 'webster';
             this.serverHostname = '//' + window.location.hostname;
+            this.appTitle = 'Dev Projects Kanban';
             this.version = '0.0.1';
+            this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
         }
         Config.Id = 'config';
         return Config;
@@ -147,8 +149,6 @@ var App;
             restrict: 'A',
             scope: {
                 kanbanTask: '=',
-                column: '=',
-                index: '=',
                 parentScope: '='
             },
             link: function (scope, $element, attrs) {
@@ -157,8 +157,6 @@ var App;
                 $element.on('dragstart', function (event) {
                     scope.parentScope.dragging = {
                         task: scope.kanbanTask,
-                        index: scope.index,
-                        col: scope.column
                     };
                 });
             }
@@ -175,12 +173,7 @@ var App;
                 // trigger the event handler when a task element is dropped over the Kanban column.
                 $element.on('drop', function (event) {
                     cancel(event);
-                    var result = scope.kanbanColumn.tasks.unshift(scope.parentScope.dragging.task);
-                    // slice the task off the task list we moved it from
-                    if (result > 0) {
-                        App.Utils.remove(scope.parentScope.dragging.col.tasks, scope.parentScope.dragging.index);
-                        $element.prepend(document.getElementById('task_' + scope.parentScope.dragging.task.Id));
-                    }
+                    scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
                 }).on('dragover', function (event) {
                     cancel(event);
                 });
@@ -204,7 +197,7 @@ var App;
         function Dependencies() {
         }
         Dependencies.projectList = ['datacontext', function (datacontext) {
-                return datacontext.getTestData();
+                return datacontext.getProjects();
             }];
         return Dependencies;
     })();
@@ -230,7 +223,7 @@ var App;
                 // This abstract state will prepend '/' onto the urls of all its children.
                 url: '/',
                 // This is the top level state, so this template file will be loaded and then inserted into the ui-view within index.html.
-                templateUrl: '/app/shell/shell.html',
+                templateUrl: 'app/shell/shell.htm',
                 controller: App.Controllers.ShellController.Id,
                 controllerAs: 'vm'
             });
@@ -264,8 +257,7 @@ var App;
                     ////////////
                     // Footer
                     ////////////
-                    'footer@app': App.Views.footer,
-                    'kanban@app.home': App.Views.kanban
+                    'footer@app': App.Views.footer
                 }
             });
         }
@@ -287,15 +279,15 @@ var App;
         function Views() {
         }
         Views.ts = function () {
-            return '?_=' + new Date().toISOString();
+            return '?_=' + new Date().getTime();
         };
         Views.menu = {
-            templateUrl: '/app/menu/menu.html' + Views.ts(),
+            templateUrl: 'app/menu/menu.htm' + Views.ts(),
             controller: 'menuController',
             controllerAs: 'vm' // the alias of the Angular controller in the HTML templates; `vm` short for 'View Model'
         };
         Views.home = {
-            templateUrl: '/app/home/home.html' + Views.ts(),
+            templateUrl: 'app/home/home.htm' + Views.ts(),
             controller: 'homeController',
             controllerAs: 'vm',
             resolve: {
@@ -303,12 +295,12 @@ var App;
             }
         };
         Views.footer = {
-            templateUrl: '/app/footer/footer.html' + Views.ts(),
+            templateUrl: 'app/footer/footer.htm' + Views.ts(),
             controller: 'footerController',
             controllerAs: 'vm'
         };
         Views.kanban = {
-            templateUrl: '/app/kanban/index.html' + Views.ts(),
+            templateUrl: 'app/kanban/index.htm' + Views.ts(),
             controller: 'kanbanController',
             controllerAs: 'vm'
         };
@@ -321,6 +313,10 @@ var App;
     App.app.filter('by_prop', function () {
         App.Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
         return App.Utils.filterByProperty;
+    });
+    App.app.filter('sp_date', function () {
+        App.Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
+        return App.Utils.parseDate;
     });
 })(App || (App = {}));
 var App;
@@ -345,25 +341,77 @@ var App;
     var Controllers;
     (function (Controllers) {
         var HomeController = (function () {
-            function HomeController(common, config, $stateParams, datacontext, projects) {
+            function HomeController($scope, common, config, $stateParams, datacontext, projects) {
+                this.$scope = $scope;
                 this.common = common;
                 this.config = config;
                 this.$stateParams = $stateParams;
                 this.datacontext = datacontext;
-                this.dragging = {
-                    task: null,
-                    col: null,
-                    index: null
-                };
                 this.projects = projects;
+                // used by directive, `kanbanColumn`, to reference the current task being dragged over it.
+                this.dragging = {
+                    task: null
+                };
+                this.changeQueue = [];
+                this.$scope = $scope;
+                this.projects = projects;
+                this.pristineProjectsData = App.Utils.clone(this.projects);
                 this.updateColumns();
             }
-            HomeController.prototype.updateColumns = function () {
+            HomeController.prototype.saveChanges = function () {
+                if (!confirm('Are you sure you want to save changes to ' + this.changeQueue.length + ' projects?')) {
+                    return false;
+                }
+                var self = this;
+                // update the list item on the server
+                this.datacontext.updateSoapListItems(this.changeQueue, this.config.projectSiteUrl, this.config.projectListName).then(function (response) {
+                    //console.info(response);
+                    //console.info('updated task ' + this.projects[i].Id + ' to ' + status);
+                    var xmlDoc = response.data;
+                    if (!!xmlDoc) {
+                        //<ErrorCode>0x00000000</ErrorCode>
+                        //var $errorNode = $(xmlDoc).find('ErrorCode');
+                        //if ($errorNode.text() != '0x00000000') {
+                        //    // report error message
+                        //    console.warn($errorNode.text());
+                        //    return;
+                        //}
+                        console.info($(xmlDoc).find('UpdateListItemsResult'));
+                        console.info('Saved ' + self.changeQueue.length + ' changes.');
+                        self.changeQueue = [];
+                    }
+                });
+                return false;
+            };
+            HomeController.prototype.resetData = function () {
+                this.projects = [];
+                this.projects = App.Utils.clone(this.pristineProjectsData);
+                this.updateColumns();
+                this.changeQueue = [];
+                return false;
+            };
+            HomeController.prototype.updateTaskStatus = function (taskId, status) {
+                for (var i = 0; i < this.projects.length; i++) {
+                    if (this.projects[i].Id == taskId) {
+                        this.projects[i].Status.Value = status;
+                        this.changeQueue.push({
+                            Id: taskId,
+                            fields: [{ name: 'Status', value: status }]
+                        });
+                        this.updateColumns(true);
+                        return i;
+                    }
+                }
+                return -1;
+            };
+            HomeController.prototype.updateColumns = function (apply) {
+                if (apply === void 0) { apply = false; }
                 this.columns = [
                     {
                         title: 'Backlog',
                         id: 'backlog-tasks',
                         className: 'panel panel-info',
+                        status: 'Not Started',
                         tasks: this.projects.filter(function (task) {
                             return task.Status.Value == 'Not Started';
                         })
@@ -372,6 +420,7 @@ var App;
                         title: 'In Progress',
                         id: 'in-progress-tasks',
                         className: 'panel panel-danger',
+                        status: 'In Progress',
                         tasks: this.projects.filter(function (task) {
                             return task.Status.Value == 'In Progress';
                         })
@@ -380,6 +429,7 @@ var App;
                         title: 'Testing',
                         id: 'testing-tasks',
                         className: 'panel panel-warning',
+                        status: 'Testing',
                         tasks: this.projects.filter(function (task) {
                             return task.Status.Value == 'Testing';
                         })
@@ -388,44 +438,50 @@ var App;
                         title: 'Done',
                         id: 'completed-tasks',
                         className: 'panel panel-success',
+                        status: 'Completed',
                         tasks: this.projects.filter(function (task) {
                             return task.Status.Value == 'Completed';
                         })
                     }
                 ];
+                if (apply) {
+                    this.$scope.$apply();
+                }
             };
-            HomeController.prototype.refreshBoard = function () {
+            HomeController.prototype.deleteTask = function (task, index) {
                 var self = this;
-                this.datacontext.getTestData().then(function (projects) {
+                if (!confirm('Are you sure you want to delete the project with ID# ' + task.Id + '?')) {
+                    return;
+                }
+                this.datacontext.deleteListItem(task).then(function (response) {
+                    App.Utils.remove(self.projects, index);
+                    self.updateColumns(true);
+                });
+                return false;
+            };
+            HomeController.prototype.refreshData = function () {
+                var self = this;
+                this.datacontext.getProjects().then(function (projects) {
                     self.projects = projects;
                     self.updateColumns();
                 });
+                return false;
+            };
+            HomeController.prototype.viewItem = function (task) {
+                var self = this;
+                var itemUrl = this.config.projectSiteUrl + '/Lists/' + this.config.projectListName.replace(/\s/g, '%20') + '/DispForm.aspx?ID=' + task.Id;
+                //console.info(itemUrl);
+                //return false;
+                App.SharePoint.Utils.openSPForm(itemUrl, task.Title, function (result, target) {
+                });
+                return false;
             };
             HomeController.Id = "homeController";
-            HomeController.$inject = ['common', 'config', '$stateParams', 'datacontext', 'projects'];
+            HomeController.$inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext', 'projects'];
             return HomeController;
         })();
         Controllers.HomeController = HomeController;
         App.app.controller(HomeController.Id, HomeController);
-    })(Controllers = App.Controllers || (App.Controllers = {}));
-})(App || (App = {}));
-var App;
-(function (App) {
-    var Controllers;
-    (function (Controllers) {
-        var KanbanController = (function () {
-            function KanbanController($scope) {
-                this.dragging = {};
-                this.$scope = $scope;
-                this.columns = $scope.$parent.vm.columns;
-                this.dragging = $scope.$parent.vm.dragging;
-            }
-            KanbanController.Id = 'kanbanController';
-            KanbanController.$inject = ['$scope'];
-            return KanbanController;
-        })();
-        Controllers.KanbanController = KanbanController;
-        App.app.controller(KanbanController.Id, KanbanController);
     })(Controllers = App.Controllers || (App.Controllers = {}));
 })(App || (App = {}));
 var App;
@@ -468,6 +524,42 @@ var App;
                 this.config = config;
             }
             /**
+            * Execute a REST request.
+            * @param url: string
+            * @param method?: string = 'GET'
+            * @param headers?: Object = undefined
+            * @return IPromise<any>
+            */
+            Datacontext.prototype.executeRestRequest = function (url, data, cache, method, headers) {
+                if (data === void 0) { data = undefined; }
+                if (cache === void 0) { cache = false; }
+                if (method === void 0) { method = 'GET'; }
+                if (headers === void 0) { headers = undefined; }
+                var self = this;
+                var d = this.$q.defer();
+                this.common.showLoader();
+                var params = {
+                    url: url,
+                    method: method,
+                    cache: cache,
+                    headers: { 'Accept': 'application/json;odata=verbose' }
+                };
+                if (!!data) {
+                    params['data'] = data;
+                }
+                if (!!headers) {
+                    for (var p in params.headers) {
+                        params.headers[p] = headers[p];
+                    }
+                }
+                self.$http(params).then(function (response) {
+                    d.resolve(response);
+                }).finally(function () {
+                    self.common.hideLoader();
+                });
+                return d.promise;
+            };
+            /**
             * Get list item via REST services.
             * @param uri: string
             * @param done: JQueryPromiseCallback<any>
@@ -482,7 +574,7 @@ var App;
                 if (expand === void 0) { expand = null; }
                 if (top === void 0) { top = 10; }
                 var self = this;
-                var deferred = this.$q.defer();
+                var d = this.$q.defer();
                 this.common.showLoader();
                 var url = [siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName)];
                 if (!!filter) {
@@ -498,19 +590,201 @@ var App;
                     url.push('$expand=' + expand);
                 }
                 url.push('$top=' + top);
-                self.$http({
-                    url: url.join('&').replace(/\&/, '\?'),
-                    method: 'GET',
-                    headers: { 'Accept': 'application/json;odata=verbose' }
-                }).then(function (response) {
-                    deferred.resolve(response.data.d.results);
+                this.executeRestRequest(url.join('&').replace(/\&/, '\?')).then(function (response) {
+                    d.resolve(response.data.d.results);
+                });
+                return d.promise;
+            };
+            Datacontext.prototype.getProjects = function (prevMonths) {
+                if (prevMonths === void 0) { prevMonths = 12; }
+                if (!this.config.isProduction) {
+                    return this.getTestData();
+                }
+                var today = new Date();
+                var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
+                var filter = 'CategoryValue eq \'Project\' and Created gt datetime\'' + dateFilter + '\'';
+                var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate';
+                var orderBy = 'PriorityValue desc,Created asc';
+                var expand = 'AssignedTo,Attachments,Priority,Status';
+                return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, filter, select, orderBy, expand, 100);
+            };
+            Datacontext.prototype.getProject = function (siteUrl, listName, itemId) {
+                return this.executeRestRequest(siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName) + '(' + itemId + ')');
+            };
+            Datacontext.prototype.insertListItem = function (url, data) {
+                if (data === void 0) { data = undefined; }
+                return this.executeRestRequest(url, data, false, 'POST');
+            };
+            Datacontext.prototype.updateListItem = function (item, data) {
+                if (data === void 0) { data = undefined; }
+                var headers = {
+                    'Accept': 'application/json;odata=verbose',
+                    'X-HTTP-Method': 'MERGE',
+                    'If-Match': item.__metadata.etag
+                };
+                return this.executeRestRequest(item.__metadata.uri, data, false, 'POST', headers);
+            };
+            /**
+            * Delete the list item.
+            * @param model: IViewModel
+            * @param callback?: Function = undefined
+            * @return IPromise<any>
+            */
+            Datacontext.prototype.deleteListItem = function (item) {
+                var headers = {
+                    'Accept': 'application/json;odata=verbose',
+                    'X-Http-Method': 'DELETE',
+                    'If-Match': item.__metadata.etag
+                };
+                return this.executeRestRequest(item.__metadata.uri, null, false, 'POST', headers);
+            };
+            /**
+            * Delete an attachment.
+            * @param att: SharePoint.ISpAttachment
+            * @return IPromise<any>
+            */
+            Datacontext.prototype.deleteAttachment = function (att) {
+                var headers = {
+                    'Accept': 'application/json;odata=verbose',
+                    'X-HTTP-Method': 'DELETE'
+                };
+                return this.executeRestRequest(att.__metadata.uri, null, false, 'POST', headers);
+            };
+            /**
+            * Execute SOAP Request
+            * @param action: string
+            * @param packet: string
+            * @param params: Array<any>
+            * @param siteUrl?: string = ''
+            * @param cache: boolean? = false
+            * @param service?: string = 'lists.asmx'
+            * @return IPromise<any>
+            */
+            Datacontext.prototype.executeSoapRequest = function (action, packet, data, siteUrl, cache, headers, service) {
+                if (siteUrl === void 0) { siteUrl = ''; }
+                if (cache === void 0) { cache = false; }
+                if (headers === void 0) { headers = undefined; }
+                if (service === void 0) { service = 'lists.asmx'; }
+                var d = this.$q.defer();
+                var self = this;
+                this.common.showLoader();
+                var serviceUrl = siteUrl + '/_vti_bin/' + service;
+                if (!!data) {
+                    for (var i = 0; i < data.length; i++) {
+                        packet = packet.replace('{' + i + '}', (data[i] == null ? '' : data[i]));
+                    }
+                }
+                var params = {
+                    url: serviceUrl,
+                    data: packet,
+                    method: 'POST',
+                    cache: cache,
+                    headers: {
+                        'Content-Type': 'text/xml; charset=utf-8',
+                        'SOAPAction': action
+                    }
+                };
+                if (!!headers) {
+                    for (var p in headers) {
+                        params.headers[p] = headers[p];
+                    }
+                }
+                this.$http(params).then(function (response) {
+                    d.resolve(response);
                 }).finally(function () {
                     self.common.hideLoader();
                 });
-                return deferred.promise;
+                return d.promise;
             };
-            Datacontext.prototype.getProjects = function () {
-                return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, null, null, 'Created desc', 'AssignedTo,Attachments,CreatedBy,ModifiedBy,Priority,Status', 100);
+            /**
+            * Update batch of list items via SOAP services.
+            * @param listName: string
+            * @param fields: Array<Array<any>>
+            * @param isNew?: boolean = true
+            * param callback?: Function = undefined
+            * @param self: SPForm = undefined
+            * @return void
+            */
+            Datacontext.prototype.updateSoapListItems = function (fields, siteUrl, listName) {
+                if (!this.config.isProduction) {
+                    var d = this.$q.defer();
+                    d.resolve({
+                        status: 200,
+                        statusText: 'OK'
+                    });
+                    return d.promise;
+                }
+                var action = 'http://schemas.microsoft.com/sharepoint/soap/UpdateListItems';
+                var packet = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<UpdateListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/">' +
+                    '<listName>{0}</listName>' +
+                    '<updates>{1}</updates>' +
+                    '</UpdateListItems>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
+                var batch = ["<Batch OnError='Continue'>"];
+                for (var i = 0; i < fields.length; i++) {
+                    batch.push("<Method ID='1' Cmd='Update'>");
+                    for (var j = 0; j < fields[i].fields.length; j++) {
+                        batch.push("<Field Name='" + fields[i].fields[j].name + "'>" + App.SharePoint.Utils.escapeColumnValue(fields[i].fields[j].value) + "</Field>");
+                    }
+                    batch.push("<Field Name='ID'>" + fields[i].Id + "</Field>");
+                    batch.push("</Method>");
+                }
+                batch.push("</Batch>");
+                packet = packet.replace(/\{0\}/, listName).replace(/\{1\}/, batch.join());
+                return this.executeSoapRequest(action, packet, null, siteUrl);
+            };
+            Datacontext.prototype.getSoapListItems = function (siteUrl, listName, viewFields, query, rowLimit) {
+                if (rowLimit === void 0) { rowLimit = 25; }
+                var packet = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<GetListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/">' +
+                    '<listName>' + listName + '</listName>' +
+                    '<query>' + query + '</query>' +
+                    '<viewFields>' + viewFields + '</viewFields>' +
+                    '<rowLimit>' + rowLimit + '</rowLimit>' +
+                    '</GetListItems>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
+                return this.executeSoapRequest('http://schemas.microsoft.com/sharepoint/soap/GetListItems', packet, null, siteUrl);
+            };
+            Datacontext.prototype.searchPrincipals = function (term, maxResults, principalType) {
+                if (maxResults === void 0) { maxResults = 10; }
+                if (principalType === void 0) { principalType = 'User'; }
+                var d = this.$q.defer();
+                var action = 'http://schemas.microsoft.com/sharepoint/soap/SearchPrincipals';
+                var params = [term, maxResults, principalType];
+                var packet = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<SearchPrincipals xmlns="http://schemas.microsoft.com/sharepoint/soap/">' +
+                    '<searchText>{0}</searchText>' +
+                    '<maxResults>{1}</maxResults>' +
+                    '<principalType>{2}</principalType>' +
+                    '</SearchPrincipals>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
+                this.executeSoapRequest(action, packet, params, '', true, null, 'People.asmx').then(function (response) {
+                    var xmlDoc = response.data;
+                    var results = [];
+                    $(xmlDoc).find('PrincipalInfo').each(function (i, n) {
+                        results.push({
+                            AccountName: $('AccountName', n).text(),
+                            UserInfoID: parseInt($('UserInfoID', n).text()),
+                            DisplayName: $('DisplayName', n).text(),
+                            Email: $('Email', n).text(),
+                            Title: $('Title', n).text(),
+                            IsResolved: $('IsResolved', n).text() == 'true' ? !0 : !1,
+                            PrincipalType: $('PrincipalType', n).text()
+                        });
+                    });
+                    d.resolve(results);
+                });
+                return d.promise;
             };
             Datacontext.prototype.getTestData = function () {
                 var d = this.$q.defer();
@@ -614,6 +888,23 @@ var App;
                     return s;
                 }
             };
+            Utils.openSPForm = function (url, title, callback, width, height) {
+                if (title === void 0) { title = "Project Item"; }
+                if (callback === void 0) { callback = function () { }; }
+                if (width === void 0) { width = 300; }
+                if (height === void 0) { height = 400; }
+                var ex = window["ExecuteOrDelayUntilScriptLoaded"];
+                var SP = window["SP"];
+                ex(function () {
+                    SP.UI.ModalDialog.showModalDialog({
+                        title: title,
+                        showClose: true,
+                        url: url,
+                        dialogReturnValueCallback: callback
+                    });
+                }, "sp.js");
+                return false;
+            };
             return Utils;
         })();
         SharePoint.Utils = Utils;
@@ -642,7 +933,7 @@ var App;
         function Utils() {
         }
         Utils.getTimestamp = function () {
-            return '?_=' + new Date().toISOString();
+            return '?_=' + new Date().getTime();
         };
         /**
         * Parse dates in format: "MM/DD/YYYY", "MM-DD-YYYY", "YYYY-MM-DD", "/Date(1442769001000)/", or YYYY-MM-DDTHH:MM:SSZ
@@ -735,8 +1026,33 @@ var App;
             a.length = from < 0 ? a.length + from : from;
             return a.push.apply(a, rest);
         };
+        // https://developer.mozilla.org/en-US/docs/Web/Guide/API/DOM/The_structured_clone_algorithm
+        Utils.clone = function (objectToBeCloned) {
+            // Basis.
+            if (!(objectToBeCloned instanceof Object)) {
+                return objectToBeCloned;
+            }
+            var objectClone;
+            // Filter out special objects.
+            var Constructor = objectToBeCloned.constructor;
+            switch (Constructor) {
+                // Implement other special objects here.
+                case RegExp:
+                    objectClone = new Constructor(objectToBeCloned);
+                    break;
+                case Date:
+                    objectClone = new Constructor(objectToBeCloned.getTime());
+                    break;
+                default:
+                    objectClone = new Constructor();
+            }
+            // Clone each property.
+            for (var prop in objectToBeCloned) {
+                objectClone[prop] = Utils.clone(objectToBeCloned[prop]);
+            }
+            return objectClone;
+        };
         return Utils;
     })();
     App.Utils = Utils;
 })(App || (App = {}));
-//# sourceMappingURL=app.js.map

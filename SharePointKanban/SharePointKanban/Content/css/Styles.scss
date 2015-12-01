@@ -5,6 +5,13 @@
 body {
     height:100%;
 
+    .navbar-brand{
+        background-image:url('../images/samurai.png');
+        background-repeat:no-repeat;
+        background-position:0 center;
+        padding-left:150px;
+    }
+
     .kanban{
 
         .kanban-task, [kanban-task]{

@@ -3,7 +3,7 @@
     export class Dependencies {
 
         static projectList: Array<any> = ['datacontext', function (datacontext: Services.IDatacontext) {
-            return datacontext.getTestData();
+            return datacontext.getProjects();
         }]
 
     }

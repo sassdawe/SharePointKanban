@@ -5,8 +5,6 @@
             restrict: 'A',
             scope: {
                 kanbanTask: '=',
-                column: '=',
-                index: '=',
                 parentScope: '='
             },
             link: function(scope: any, $element: any, attrs: any) {
@@ -16,8 +14,6 @@
                 $element.on('dragstart', function (event) {
                     scope.parentScope.dragging = {
                         task: scope.kanbanTask,
-                        index: scope.index,
-                        col: scope.column
                     };
                 });
             }
@@ -36,14 +32,7 @@
                 // trigger the event handler when a task element is dropped over the Kanban column.
                 $element.on('drop', function (event) {
                     cancel(event);
-
-                    var result = scope.kanbanColumn.tasks.unshift(scope.parentScope.dragging.task);
-
-                    // slice the task off the task list we moved it from
-                    if (result > 0) {
-                        Utils.remove(scope.parentScope.dragging.col.tasks, scope.parentScope.dragging.index);
-                        $element.prepend(document.getElementById('task_' + scope.parentScope.dragging.task.Id));
-                    }
+                    scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
 
                 }).on('dragover', function (event) {
                     cancel(event);
