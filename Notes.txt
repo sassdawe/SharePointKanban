@@ -1,0 +1,15 @@
+http://www.slideshare.net/pawelbrodzinski/kanban-basics-5834758
+
+Backlog
+Todo
+Development [Ongoing, Done]
+Testing [Ongoing, Done]
+Deployment
+Done
+
+Not Started
+In Progress
+Waiting on someone else
+Completed
+Ongoing
+Deferred

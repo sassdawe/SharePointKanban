@@ -1,0 +1,42 @@
+﻿
+
+<div class="row kanban">
+
+    <div class="col-sm-3" ng-repeat="col in vm.columns">
+
+        <div class="{{col.className}}" id="{{col.id}}">
+            <div class="panel-heading">{{col.title}} <span class="badge">{{col.tasks.length}}</span></div>
+
+            <div class="panel-body" kanban-column="col" parent-scope="vm">
+
+                <div ng-repeat="task in col.tasks"
+                     draggable="true"
+                     kanban-task="task"
+                     column="col"
+                     index="$index"
+                     id="task_{{task.Id}}"
+                     parent-scope="vm">
+
+                    <h4>#{{task.Id}}: {{task.Title}}</h4>
+                    <div>
+                        <ul>
+                            <li ng-repeat="person in task.AssignedTo.results">{{person.Name}}</li>
+                        </ul>
+                    </div>
+                    <div class="text-right">
+                        <button class="btn btn-sm btn-info"><span class="glyphicon glyphicon-edit"></span></button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+

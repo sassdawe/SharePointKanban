@@ -1,0 +1,895 @@
+﻿{
+"d" : {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(551)", "etag": "W/\"2\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "EVV Updates for Billing Adjustment Employee Form", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(1)%20High')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(1) High"
+}, "PriorityValue": "(1) High", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Completed')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Completed"
+}, "StatusValue": "Completed", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(551)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass6554FB49D8A94455AF4E3FBF952CF8A1\"><p>\u200b<span style=\"font-size:8pt\">The only offices that we need\r\nrouted to EVV Coordinators are:</span></p>\r\n\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>Amy Cantu \u2013 Beaumont/Houston\r\n(LifeSpan and DSSW)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>Shannon Royal \u2013 San Antonio\r\n(LifeSpan) and Waco (LifeSpan and DSSW)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>Yasmine Kelley \u2013 San Antonio\r\n(DSSW)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>All others offices should bypass\r\nthe EVV Coordinators.</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>As we bring other offices on to\r\nCentralized EVV, we will let you know the office and the EVV Coordinator.</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Laurie Lyssy</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Chief Financial\r\nOfficer</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\" style=\"text-align:justify\"><span style=\"font-size:10pt\">Confidentiality Notice: The information in this e-mail and any\r\nattachments are confidential and may be legally privileged. It is intended\r\nsolely for the addressee. If you are not the intended recipient, any\r\ndisclosure, copying, distribution or any action taken or omitted to be taken in\r\nreliance on it, is prohibited and may be unlawful. If you have received this e-mail\r\nin error, please notify the sender and permanently delete the e-mail, and any\r\nattachments, immediately as you should not retain, copy or use this e-mail or\r\nany attachment for any purpose, nor disclose all or any part of the contents to\r\nany other person.\u00a0 </span><span style=\"font-size:12pt;font-family:'times new roman', serif;color:red\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\">From:</span></b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\"> John Bonfardeci <br />\r\n<b>Sent:</b> Thursday, September 03, 2015 4:40 PM<br />\r\n<b>To:</b> Laurie Lyssy<br />\r\n<b>Cc:</b> Irma Torres; Sadie Peacock<br />\r\n<b>Subject:</b> RE: Change to the Billing Adjustment Form</span></p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Hi Laurie,</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Thank you for the update.</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">If the following EVV coordinators correspond to only the offices\r\nthat are using EVV, I\u2019ll go by this list. Otherwise please tell me which\r\noffices are using EVV. I will develop the workflow logic to exclude the others.\r\n</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Amy Cantu (San Antonio)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Dione Richard (Ft. Worth)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Maria Almaraz (Austin)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Shannon Royal (San Antonio)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Yasmine Kelley (San Antonio)</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">John Bonfardeci</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Senior\r\nDeveloper/Analyst</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Email: </span><span style=\"font-size:12pt\"><a href=\"mailto:jbonfardeci@dsswtx.org\"><span>jbonfardeci@dsswtx.org</span></a></span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Cell Phone:\r\n(210) 838-7575</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">6243 IH-10\r\nWest, Suite 375</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">San Antonio,\r\nTX\u00a078201</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\" style=\"text-align:justify\"><span style=\"font-size:10pt\">Confidentiality Notice: The information in this e-mail and any\r\nattachments are confidential and may be legally privileged. It is intended\r\nsolely for the addressee. If you are not the intended recipient, any\r\ndisclosure, copying, distribution or any action taken or omitted to be taken in\r\nreliance on it, is prohibited and may be unlawful. If you have received this\r\ne-mail in error, please notify the sender and permanently delete the e-mail,\r\nand any attachments, immediately as you should not retain, copy or use this\r\ne-mail or any attachment for any purpose, nor disclose all or any part of the\r\ncontents to any other person. </span><span style=\"font-size:12pt;font-family:'times new roman', serif;color:red\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\">From:</span></b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\"> Laurie Lyssy <br />\r\n<b>Sent:</b> Thursday, September 03, 2015 16:19<br />\r\n<b>To:</b> John Bonfardeci<br />\r\n<b>Cc:</b> Irma Torres; Sadie Peacock<br />\r\n<b>Subject:</b> RE: Change to the Billing Adjustment Form</span></p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\"><span>We need to make the adjustments\r\noffice/location specific.\u00a0 In addition, we don\u2019t need this new area for\r\noffices that have not transitioned to Centralized EVV.</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Laurie Lyssy</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Chief Financial\r\nOfficer</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\" style=\"text-align:justify\"><span style=\"font-size:10pt\">Confidentiality Notice: The information in this e-mail and any\r\nattachments are confidential and may be legally privileged. It is intended\r\nsolely for the addressee. If you are not the intended recipient, any\r\ndisclosure, copying, distribution or any action taken or omitted to be taken in\r\nreliance on it, is prohibited and may be unlawful. If you have received this\r\ne-mail in error, please notify the sender and permanently delete the e-mail,\r\nand any attachments, immediately as you should not retain, copy or use this\r\ne-mail or any attachment for any purpose, nor disclose all or any part of the\r\ncontents to any other person.\u00a0 </span><span style=\"font-size:12pt;font-family:'times new roman', serif;color:red\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\">From:</span></b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\"> John Bonfardeci <br />\r\n<b>Sent:</b> Wednesday, September 02, 2015 4:11 PM<br />\r\n<b>To:</b> Laurie Lyssy<br />\r\n<b>Cc:</b> Irma Torres; Sadie Peacock<br />\r\n<b>Subject:</b> RE: Change to the Billing Adjustment Form</span></p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Good afternoon,</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">I haven\u2019t heard this but I can make these updates. It will\r\ninvolve adding an extra step to the 4 primary workflows, then adding EVV\r\nsections to all 4 billing adjustment forms. It could about a day to add the\r\nupdates and iron out details. How soon are these updates needed?</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">I notice there are 4 employees with the job title \u201cEVV\r\nCoordinator.\u201d Dione Richard (Ft. Worth), Maria Almaraz (Austin), Shannon Royal\r\n(San Antonio) and Yasmine Kelley (San Antonio). </span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Is the EVV routing location specific? Should the adjustments\r\nroute based on office/location or should they route to all of the EVV\r\nCoordinators as a group, letting them handle the adjustments as each is able?</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Would imagine the minimum number of EVV fields on the form would\r\nneed to be: Received by and Status (the status of entry into CM2000). </span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Are there any other routing details I need to know about?</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">Thank you.</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">John Bonfardeci</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Senior\r\nDeveloper/Analyst</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Email: </span><span style=\"font-size:12pt\"><a href=\"mailto:jbonfardeci@dsswtx.org\"><span>jbonfardeci@dsswtx.org</span></a></span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Cell Phone:\r\n(210) 838-7575</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">6243 IH-10\r\nWest, Suite 375</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">San Antonio,\r\nTX\u00a078201</span></p>\r\n\r\n<p class=\"MsoNormal\"><span>\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\" style=\"text-align:justify\"><span style=\"font-size:10pt\">Confidentiality Notice: The information in this e-mail and any\r\nattachments are confidential and may be legally privileged. It is intended\r\nsolely for the addressee. If you are not the intended recipient, any\r\ndisclosure, copying, distribution or any action taken or omitted to be taken in\r\nreliance on it, is prohibited and may be unlawful. If you have received this\r\ne-mail in error, please notify the sender and permanently delete the e-mail,\r\nand any attachments, immediately as you should not retain, copy or use this\r\ne-mail or any attachment for any purpose, nor disclose all or any part of the\r\ncontents to any other person. </span><span style=\"font-size:12pt;font-family:'times new roman', serif;color:red\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:cambria, serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\">From:</span></b><span style=\"font-size:10pt;font-family:tahoma, sans-serif\"> Laurie Lyssy <br />\r\n<b>Sent:</b> Wednesday, September 02, 2015 15:53<br />\r\n<b>To:</b> John Bonfardeci<br />\r\n<b>Cc:</b> Irma Torres; Sadie Peacock<br />\r\n<b>Subject:</b> Change to the Billing Adjustment Form</span></p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\">John,</p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\">In case you haven\u2019t heard, we are centralizing the EVV\r\nfunction for all of the offices.\u00a0 With this change comes changes to our\r\nexisting processes.\u00a0 One of the change that we need to make is to add the\r\nEVV Coordinators as the first stop for Billing Adjustments when the local\r\noffices initiate it.\u00a0 For example, the office initiates a billing adjustment\r\nfor a visit reason change.\u00a0 The EVV Coordinator needs to receive the\r\nbilling adjustment form before it goes to billing to ensure that the changes\r\nare made to CM2000.\u00a0 Once they have completed the visit maintenance in\r\nCM2000, the workflow of the form needs to be routed to the billing department.</p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\">Can you make this change for us?</p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\">Thanks,</p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Laurie Lyssy</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Chief Financial\r\nOfficer</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Email: </span><span style=\"font-size:12pt\"><a href=\"mailto:llyssy@dsswtx.org\"><span>llyssy@dsswtx.org</span></a></span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Telephone:\r\n(210) 785-6603</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">Fax: (210)\r\n798-1135 </span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">6243 IH-10 West,\r\nSuite 375</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt\">San Antonio,\r\nTX\u00a078201</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:'times new roman', serif\">\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:12pt;font-family:'times new roman', serif\">\u00a0</span><a href=\"http://www.dsswtx.org/\"><span style=\"font-size:12pt;font-family:'times new roman', serif;color:windowtext\"><img border=\"0\" width=\"127\" height=\"55\" alt=\"Description: cid:imageba1881.PNG@b5873424.4c9543d8\" /></span></a><span style=\"font-size:12pt;font-family:'times new roman', serif\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0</span><a href=\"http://www.lifespantx.com/\"><span style=\"font-size:12pt;font-family:'times new roman', serif;color:windowtext\"><img border=\"0\" width=\"141\" height=\"48\" alt=\"Description: cid:image2e09f3.PNG@34a70991.45933aad\" /></span></a><span style=\"font-size:12pt;font-family:'times new roman', serif\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span><a href=\"http://www.cdsintexas.com/\"><span style=\"font-size:12pt;font-family:'times new roman', serif;color:windowtext\"><img border=\"0\" width=\"79\" height=\"50\" alt=\"Description: cid:image002.png@01CEEB5F.2B13EE30\" /></span></a><span style=\"font-size:12pt;font-family:'times new roman', serif\"></span></p>\r\n\r\n<p class=\"MsoNormal\"><span style=\"font-size:10pt;font-family:'times new roman', serif\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n\u00a0 </span><span style=\"font-size:12pt;font-family:'times new roman', serif\"><a href=\"http://www.facebook.com/dsswintexas\"><span style=\"font-size:10pt;font-family:calibri, sans-serif\">Facebook</span></a></span><span style=\"font-size:10pt\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"><a href=\"https://www.facebook.com/LifeSpanTX\"><span style=\"font-size:10pt;font-family:calibri, sans-serif\">Facebook</span></a></span><span style=\"font-size:10pt\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span><span style=\"font-size:12pt;font-family:'times new roman', serif\"><a href=\"https://www.facebook.com/CDSinTexas\"><span style=\"font-size:10pt;font-family:calibri, sans-serif\">Facebook</span></a></span><span style=\"font-size:8pt\">\u00a0\u00a0\u00a0\u00a0</span></p>\r\n\r\n<p class=\"MsoNormal\">\u00a0</p>\r\n\r\n<p class=\"MsoNormal\" style=\"text-align:justify\"><span style=\"font-size:10pt\">Confidentiality Notice: The information in this e-mail and any\r\nattachments are confidential and may be legally privileged. It is intended\r\nsolely for the addressee. If you are not the intended recipient, any\r\ndisclosure, copying, distribution or any action taken or omitted to be taken in\r\nreliance on it, is prohibited and may be unlawful. If you have received this\r\ne-mail in error, please notify the sender and permanently delete the e-mail,\r\nand any attachments, immediately as you should not retain, copy or use this\r\ne-mail or any attachment for any purpose, nor disclose all or any part of the\r\ncontents to any other person.\u00a0 </span><span style=\"font-size:12pt;font-family:'times new roman', serif;color:red\"></span></p>\r\n\r\n<p class=\"MsoNormal\">\u00a0\u200b</p></div>", "StartDate": "\/Date(1441238400000)\/", "EndDueDate": "\/Date(1441670400000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(551)/Category"
+}
+}, "CategoryValue": "Project", "Comments": null, "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(551)/Predecessors"
+}
+}, "TotalHours": 2, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 551, "ContentType": "Task", "Modified": "\/Date(1441708087000)\/", "Created": "\/Date(1441299754000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 2, "Version": "2.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(544)", "etag": "W/\"2\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "MCN to SharePoint Library", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('In%20Progress')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "In Progress"
+}, "StatusValue": "In Progress", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(544)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass3D3C0A77160A495787969A9B3D1A23D6\"><p>\u200bSee attached for requirements. We're moving the MCN policy documents into a SharePoint library with document set approval workflows, version control, search scopes, and permission groups.</p></div>", "StartDate": "\/Date(1439337600000)\/", "EndDueDate": "\/Date(1446336000000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(544)/Category"
+}
+}, "CategoryValue": "Project", "Comments": null, "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(544)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 544, "ContentType": "Task", "Modified": "\/Date(1445851032000)\/", "Created": "\/Date(1439385424000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 2, "Version": "2.0", "Attachments": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Attachments(EntitySet='Projects',ItemId=544,Name='MCN_SharePoint_Requirements.pdf')", "type": "Microsoft.SharePoint.DataService.AttachmentsItem", "edit_media": "http://webster/media/_vti_bin/listdata.svc/Attachments(EntitySet='Projects',ItemId=544,Name='MCN_SharePoint_Requirements.pdf')/$value", "media_src": "http://webster/media/Lists/Projects/Attachments/544/MCN_SharePoint_Requirements.pdf", "content_type": "application/octetstream", "media_etag": "\"{68F3EAA4-0AA8-4940-B10C-BF11692F3D87},1\""
+}, "EntitySet": "Projects", "ItemId": 544, "Name": "MCN_SharePoint_Requirements.pdf"
+}
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(541)", "etag": "W/\"2\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "SharePOint Training Materials", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(1)%20High')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(1) High"
+}, "PriorityValue": "(1) High", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Completed')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Completed"
+}, "StatusValue": "Completed", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(541)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClassE2054E595C534CEBA0B47B3A8B59372C\"><p>\u200bD<span style=\"font-family:cambria, serif;font-size:12pt\">ocument the processes and provide screen capture videos of the\r\nfollowing which would fall under essential SharePoint competencies starting\r\nwith:</span></p>\r\n\r\n\r\n<p class=\"MsoListParagraphCxSpFirst\" style=\"margin-left:0.75in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">1)<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">Document management</span></p>\r\n\r\n<p class=\"MsoListParagraphCxSpMiddle\" style=\"margin-left:1.25in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">a.<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">CRUD \u2013 create, update, and delete</span></p>\r\n\r\n<p class=\"MsoListParagraphCxSpMiddle\" style=\"margin-left:1.25in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">b.<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">Check out/in process</span></p>\r\n\r\n<p class=\"MsoListParagraphCxSpMiddle\" style=\"margin-left:1.25in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">c.<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">Version control</span></p>\r\n\r\n<p class=\"MsoListParagraphCxSpMiddle\" style=\"margin-left:1.25in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">d.<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">Office Web Apps: Word, Excel,\r\nPowerPoint</span></p>\r\n\r\n<p class=\"MsoListParagraphCxSpMiddle\" style=\"margin-left:0.75in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">2)<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">Calendar synchronization between\r\nSharePoint and Outlook</span></p>\r\n\r\n<p class=\"MsoListParagraphCxSpLast\" style=\"margin-left:0.75in;text-indent:-0.25in\"><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">3)<span style=\"font-stretch:normal;font-size:7pt;line-height:normal;font-family:'times new roman'\">\u00a0\u00a0\u00a0\u00a0\r\n</span></span><span style=\"font-size:12pt;line-height:115%;font-family:cambria, serif\">Webster forms and how workflows\r\nroute forms according to company, site, and person submitting\u200b</span></p></div>", "StartDate": "\/Date(1438905600000)\/", "EndDueDate": "\/Date(1440720000000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(541)/Category"
+}
+}, "CategoryValue": "Project", "Comments": "<div class=\"ExternalClass8FB9D6C85C5C4B68AC7384F8A770EFCB\"><p>\u200bCompleted on 10/12</p></div>", "OrderBy": 0, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(541)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 541, "ContentType": "Task", "Modified": "\/Date(1445851022000)\/", "Created": "\/Date(1438939541000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 2, "Version": "2.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(498)", "etag": "W/\"2\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "Convert Billing Adjustment Forms", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(1)%20High')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(1) High"
+}, "PriorityValue": "(1) High", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Completed')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Completed"
+}, "StatusValue": "Completed", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(498)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClassDFA335E58B214747A95F5FE6B6899CE8\"><p>\u200bWe'll need to convert all 5 Billing Adjustment\u00a0forms before the SP 2013 upgrade can take place. All of the forms Robert M.\u00a0built will break above IE8 mode - <a href=\"/billing/SitePages/BillingAdjustmentsDashboard.aspx\">http://webster/billing/SitePages/BillingAdjustmentsDashboard.aspx</a></p>\r\n<p>\u00a0</p>\r\n<p>\u00a0</p></div>", "StartDate": "\/Date(1425600000000)\/", "EndDueDate": "\/Date(1427414400000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(498)/Category"
+}
+}, "CategoryValue": "Project", "Comments": "<div class=\"ExternalClassA63200CCCAFC4B64B4A89FD4D18006C5\"><p>\u200bErrors with all of the Billing Adjustment forms were occurring on 3/10. No updates to these forms have been made since last year, so the error can be attributed to no tangible cause at this time. Furthermore the error was crashing my debugging tools. I had planned to convert these forms to my\u00a0latest web form framework anyway, so I determined it would save more time to convert them now rather than put a band aid on dysfunctional codebase. I converted Employee, Contractor, and Req. Fee forms; Bill the AAHMD form. I updated the documentation with new screenshots and blurred\u00a0out patient names to avoid further HIPAA violations.</p>\r\n<p><span style=\"font-size:8pt\">The menu items are now external lists that anyone in the Billing department can add to or edit. Before, the list items were duplicated by Robert multiple times within the same form and among the other forms. This made any updates to the menu items a repetative and\u00a0error-prone mess. I created all of these list items as centralized external lists that all of the forms pull from. If a change is made to any of these menu lists, then that change is reflected in all the forms instantly.\u00a0</span><br /></p></div>", "OrderBy": 3, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(498)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 498, "ContentType": "Task", "Modified": "\/Date(1426190023000)\/", "Created": "\/Date(1425632595000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 2, "Version": "2.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(496)", "etag": "W/\"1\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "Employee Job Satisfaction Survey 2015", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Completed')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Completed"
+}, "StatusValue": "Completed", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(496)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass33C506446F5A4CDCA760FF90922C3C09\"><p>Tests, bug fixes and\u00a0stability upgrade\u00a0to survey framework I wrote last year; created new\u00a0surevy list from template adn new workflow;\u00a0created updated workflow flowchart in Visio for employees to see how the anonymous workflow functions; updates to server-side code that handles survey creation and submission\u00a0that impersonates the\u00a0System Account. Ran survey and task creation program</p></div>", "StartDate": "\/Date(1424908800000)\/", "EndDueDate": "\/Date(1424995200000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(496)/Category"
+}
+}, "CategoryValue": "Project", "Comments": null, "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(496)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 496, "ContentType": "Task", "Modified": "\/Date(1425278023000)\/", "Created": "\/Date(1425278023000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 1, "Version": "1.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(492)", "etag": "W/\"4\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "Review SQL Server Cluster Plan by IC", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Deferred')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Deferred"
+}, "StatusValue": "Deferred", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(492)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass015D372B8EB2482097FEC79D207CFD3B\"><p>\u200bReview feasability and cost of Denton's plan to implement a SQL Server cluster. This plan leaves much to question - why treat virtual servers like old rackmount servers when you can assign as many cores and memory to a single server running a single SQL server running all of our databases? What are the advantages of running 4 separate virtual servers acting as one, and in a virtual environment? We must put together a report to support or contest IC's plan based on research findings -\u00a0performing our due dilligence.</p></div>", "StartDate": "\/Date(1424390400000)\/", "EndDueDate": "\/Date(1424995200000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(492)/Category"
+}
+}, "CategoryValue": "Project", "Comments": "<div class=\"ExternalClass491664DB4E7C43C98EF1DBDB6FBBBAFE\"><p>\u200bPlan was cancelled by IC</p></div>", "OrderBy": 2, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(492)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 492, "ContentType": "Task", "Modified": "\/Date(1445850911000)\/", "Created": "\/Date(1424451092000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 4, "Version": "4.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(487)", "etag": "W/\"3\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "Mileage Log Form Conversion to New Framework", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('In%20Progress')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "In Progress"
+}, "StatusValue": "In Progress", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(487)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass2745FF3BF8484E2E8B400F33FCE7A8C8\"><p>\u200b</p>\r\n<div style=\"margin:0in 0in 0pt\"><font face=\"Calibri\">Mileage Log InfoPath Conversion Requirements</font></div>\r\n<div style=\"margin:0in 0in 0pt 0.5in;text-indent:-0.25in\"><span><span><font face=\"Calibri\">1)</font><span style=\"font:7pt &quot;times new roman&quot;\">\u00a0\u00a0\u00a0\u00a0\u00a0 </span></span></span><font face=\"Calibri\">Create new SP list on </font><a href=\"/hr/_layouts/viewlsts.aspx\"><font color=\"#0000ff\" face=\"Calibri\">HR</font></a><font face=\"Calibri\"> site named \u201cMileage Logs\u201d</font></div>\r\n<div style=\"margin:0in 0in 0pt 0.5in;text-indent:-0.25in\"><span><span><font face=\"Calibri\">2)</font><span style=\"font:7pt &quot;times new roman&quot;\">\u00a0\u00a0\u00a0\u00a0\u00a0 </span></span></span><font face=\"Calibri\">Refer to original InfoPath form at </font><a href=\"/hr/SitePages/MileageLogs.aspx\"><font color=\"#0000ff\" face=\"Calibri\">http://webster/hr/SitePages/MileageLogs.aspx</font></a></div>\r\n<div style=\"margin:0in 0in 0pt 0.5in;text-indent:-0.25in\"><span><span><font face=\"Calibri\">3)</font><span style=\"font:7pt &quot;times new roman&quot;\">\u00a0\u00a0\u00a0\u00a0\u00a0 </span></span></span><font face=\"Calibri\">On post render: get latest mileage reimbursement rate from the </font><a href=\"/Lists/Mileage%20Rate/AllItems.aspx\"><font color=\"#0000ff\" face=\"Calibri\">Mileage Rate table</font></a><font face=\"Calibri\">; store in KO observable - see attached JavaScript snippet</font></div>\r\n<div style=\"margin:0in 0in 0pt 0.25in\"><b><span style=\"font-size:10pt\"><font face=\"Calibri\">\u00a0</font></span></b></div>\r\n<div style=\"margin:0in 0in 0pt 0.5in;line-height:normal;text-indent:-0.25in\"><span style=\"font-size:10pt\"><span><font face=\"Calibri\">4)</font><span style=\"font:7pt &quot;times new roman&quot;\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 </span></span></span><span style=\"font-size:10pt\"><font face=\"Calibri\">Must store mileage line items as JSON. Good example on Purchase Requisition - </font><a href=\"/Forms/PurchaseRequisition.aspx\"><font color=\"#0000ff\" face=\"Calibri\">http://webster/Forms/PurchaseRequisition.aspx</font></a></span></div>\r\n<div style=\"margin:0in 0in 0pt 1in;line-height:normal;text-indent:-0.25in\"><span style=\"font-size:10pt\"><span><font face=\"Calibri\">a.</font><span style=\"font:7pt &quot;times new roman&quot;\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 </span></span></span><span style=\"font-size:10pt\"><font face=\"Calibri\">Convert mileage line items to string on pre-save with JSON.stringify()</font></span></div>\r\n<div style=\"margin:0in 0in 0pt 0.5in;line-height:normal;text-indent:-0.25in\"><span style=\"font-size:10pt\"><span><font face=\"Calibri\">5)</font><span style=\"font:7pt &quot;times new roman&quot;\">\u00a0\u00a0\u00a0\u00a0\u00a0\u00a0 </span></span></span><span style=\"font-size:10pt\"><font face=\"Calibri\">Workflow: build new workflow for the PS list with same steps as original</font></span></div></div>", "StartDate": "\/Date(1423094400000)\/", "EndDueDate": null, "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(487)/Category"
+}
+}, "CategoryValue": "Project", "Comments": null, "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(487)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 487, "ContentType": "Task", "Modified": "\/Date(1424075046000)\/", "Created": "\/Date(1422956851000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1252, "Owshiddenversion": 3, "Version": "3.0", "Attachments": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Attachments(EntitySet='Projects',ItemId=487,Name='GetMileageRateSnippet.js.txt')", "type": "Microsoft.SharePoint.DataService.AttachmentsItem", "edit_media": "http://webster/media/_vti_bin/listdata.svc/Attachments(EntitySet='Projects',ItemId=487,Name='GetMileageRateSnippet.js.txt')/$value", "media_src": "http://webster/media/Lists/Projects/Attachments/487/GetMileageRateSnippet.js.txt", "content_type": "text/plain", "media_etag": "\"{BD777863-D372-42E0-90F0-E98349EB394F},1\""
+}, "EntitySet": "Projects", "ItemId": 487, "Name": "GetMileageRateSnippet.js.txt"
+}
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(484)", "etag": "W/\"3\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "Upgrade SA-Data5 to SQL Server 2014 Business Intelligence", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Completed')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Completed"
+}, "StatusValue": "Completed", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(484)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClassFB16A4B23D3848AEB59A4EA49AACD245\"><p>\u200bPrerequisite for SharePoint 2013 Enterprise\u00a0features</p>\r\n<p>$825\u00a0from techSoup.org</p>\r\n<p><a href=\"http://www.techsoup.org/products/sql-server-2014-business-intelligence-edition-%28server/cal-licensing%29--LVS-47560\">http://www.techsoup.org/products/sql-server-2014-business-intelligence-edition-(server/cal-licensing)--LVS-47560</a>--</p>\r\n<p>\u00a0</p></div>", "StartDate": "\/Date(1426809600000)\/", "EndDueDate": "\/Date(1426982400000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(484)/Category"
+}
+}, "CategoryValue": "Project", "Comments": null, "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(484)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 484, "ContentType": "Task", "Modified": "\/Date(1445850854000)\/", "Created": "\/Date(1422608827000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)", "etag": "W/\"7\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "System Account", "Account": "SHAREPOINT\\system", "WorkEMail": "webster@dsswtx.org", "AboutMe": "<div></div>", "SIPAddress": null, "IsSiteAdmin": false, "Deleted": false, "Picture": null, "Department": null, "Title": "Intranet Developer", "MobilePhone": null, "FirstName": null, "LastName": null, "WorkPhone": null, "UserName": null, "WebSite": null, "AskMeAbout": null, "Office": null, "Id": 1073741823, "ContentType": "Person", "Modified": "\/Date(1420187604000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 7, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1073741823, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 3, "Version": "3.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(483)", "etag": "W/\"3\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "Upgrade SharePoint Server to Server 2012", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('Completed')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "Completed"
+}, "StatusValue": "Completed", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(483)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass04BE46BB5E5B4478AADDE035291C1145\"><p>Prerequisite\u00a0for upgrade to SharePoint 2013</p>\r\n<p>$370 from TechSoup.org - <a href=\"http://www.techsoup.org/products/windows-server-2012-r2-datacenter-edition--LVS-47823\">http://www.techsoup.org/products/windows-server-2012-r2-datacenter-edition--LVS-47823</a>--</p></div>", "StartDate": "\/Date(1426809600000)\/", "EndDueDate": "\/Date(1426982400000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(483)/Category"
+}
+}, "CategoryValue": "Project", "Comments": null, "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(483)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 483, "ContentType": "Task", "Modified": "\/Date(1445850867000)\/", "Created": "\/Date(1422608707000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)", "etag": "W/\"7\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "System Account", "Account": "SHAREPOINT\\system", "WorkEMail": "webster@dsswtx.org", "AboutMe": "<div></div>", "SIPAddress": null, "IsSiteAdmin": false, "Deleted": false, "Picture": null, "Department": null, "Title": "Intranet Developer", "MobilePhone": null, "FirstName": null, "LastName": null, "WorkPhone": null, "UserName": null, "WebSite": null, "AskMeAbout": null, "Office": null, "Id": 1073741823, "ContentType": "Person", "Modified": "\/Date(1420187604000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 7, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1073741823, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 3, "Version": "3.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(482)", "etag": "W/\"4\"", "type": "Microsoft.SharePoint.DataService.ProjectsItem"
+}, "ContentTypeID": "0x01080094F37FEF3B3DE945A84D44BF0B6ACD44", "Title": "SharePoint 2013 Upgrade", "Priority": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsPriority('(2)%20Normal')", "type": "Microsoft.SharePoint.DataService.ProjectsPriorityValue"
+}, "Value": "(2) Normal"
+}, "PriorityValue": "(2) Normal", "Status": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/ProjectsStatus('In%20Progress')", "type": "Microsoft.SharePoint.DataService.ProjectsStatusValue"
+}, "Value": "In Progress"
+}, "StatusValue": "In Progress", "Complete": null, "AssignedTo": {
+"results": [
+{
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)", "etag": "W/\"28\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "William Cochran", "Account": "DSSWTX\\wcochran", "WorkEMail": "wcochran@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_wcochran_MThumb.jpg", "Department": "Media", "Title": "SharePoint Developer", "MobilePhone": null, "FirstName": "William", "LastName": "Cochran", "WorkPhone": null, "UserName": "wcochran", "WebSite": null, "AskMeAbout": "Webster, websites, SharePoint", "Office": null, "Id": 1252, "ContentType": "Person", "Modified": "\/Date(1445623203000)\/", "Created": "\/Date(1414492942000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/CreatedBy"
+}
+}, "CreatedById": 1252, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 28, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}
+]
+}, "TaskGroup": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(482)/TaskGroup"
+}
+}, "TaskGroupId": null, "Description": "<div class=\"ExternalClass1BD20919EC4F4F99ACA95B072E854E08\"><p>\u200b1. Perform test migration on development\u00a0virtual machine. Find out what's goign to break and develop solutions</p>\r\n<p>2. Communicate with all employees what to expect with 2013: example videos, screenshots, etc.</p>\r\n<p>3. Perform upgrade on\u00a0production servers\u00a0over\u00a0weekend of 3/28-3/29, live by Monday morning 3/30</p>\r\n<p>\u00a0</p></div>", "StartDate": "\/Date(1427587200000)\/", "EndDueDate": "\/Date(1430697600000)\/", "Category": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(482)/Category"
+}
+}, "CategoryValue": "Project", "Comments": "<div class=\"ExternalClass1B2F1549FA714620A5B07BAFDEDD0FE4\"><p><span style=\"font-size:12pt;font-family:&quot;cambria&quot;, &quot;serif&quot;\">I had Internet Contrasts set up 2 virtual servers with trial versions of Windows Server 2012 Datacenter. These are going to be test servers for both employees to try out SP 2013 features and for Tim and Justin to host their PowerPivot 2013 BI site. They will be able to start using this site sometime between 3-24\u00a0and 3/27. When Webster is upgraded to SP 2013, I\u2019ll relocate their BI site from the test server to the new Webster 2013 server. </span></p></div>", "OrderBy": null, "Predecessors": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(482)/Predecessors"
+}
+}, "TotalHours": null, "RelatedContent": null, "ExternalParticipant": null, "ExternalParticipantReason": null, "Outcome": null, "WorkflowName": null, "Id": 482, "ContentType": "Task", "Modified": "\/Date(1427095444000)\/", "Created": "\/Date(1422608494000)\/", "CreatedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)", "etag": "W/\"7\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "System Account", "Account": "SHAREPOINT\\system", "WorkEMail": "webster@dsswtx.org", "AboutMe": "<div></div>", "SIPAddress": null, "IsSiteAdmin": false, "Deleted": false, "Picture": null, "Department": null, "Title": "Intranet Developer", "MobilePhone": null, "FirstName": null, "LastName": null, "WorkPhone": null, "UserName": null, "WebSite": null, "AskMeAbout": null, "Office": null, "Id": 1073741823, "ContentType": "Person", "Modified": "\/Date(1420187604000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 7, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1073741823)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "CreatedById": 1073741823, "ModifiedBy": {
+"__metadata": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)", "etag": "W/\"314\"", "type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+}, "ContentTypeID": "0x010A003F93EC420DC53A4C89DA50CB97771B8E", "Name": "John Bonfardeci", "Account": "DSSWTX\\jbonfardeci", "WorkEMail": "jbonfardeci@dsswtx.org", "AboutMe": null, "SIPAddress": null, "IsSiteAdmin": true, "Deleted": false, "Picture": "http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg, http://sa-sp1:29871/User%20Photos/Profile%20Pictures/dsswtx_jbonfardeci_MThumb.jpg", "Department": null, "Title": "Senior Developer/Analyst", "MobilePhone": "979-412-2286", "FirstName": "John", "LastName": "Bonfardeci", "WorkPhone": "979-412-2286", "UserName": "jbonfardeci", "WebSite": null, "AskMeAbout": "Webster, SharePoint, websites, NOD, HealthWyse data, UltiPro data, CDS Budgeting application", "Office": "San Antonio", "Id": 1, "ContentType": "Person", "Modified": "\/Date(1447074005000)\/", "Created": "\/Date(1237296851000)\/", "CreatedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/CreatedBy"
+}
+}, "CreatedById": 1, "ModifiedBy": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/ModifiedBy"
+}
+}, "ModifiedById": 1073741823, "Owshiddenversion": 314, "Version": "1.0", "Attachments": {
+"__deferred": {
+"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)/Attachments"
+}
+}, "Path": "/_catalogs/users"
+}, "ModifiedById": 1, "Owshiddenversion": 4, "Version": "4.0", "Attachments": {
+"results": [
+
+]
+}, "Path": "/media/Lists/Projects"
+}
+]
+}
+}
