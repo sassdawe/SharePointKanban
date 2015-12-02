@@ -119,8 +119,8 @@
 
             var today = new Date();
             var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
-            var filter = 'CategoryValue eq \'Project\' and Created gt datetime\'' + dateFilter + '\'';
-            var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate';
+            var filter = 'CategoryValue ne \'Log\' and Created gt datetime\'' + dateFilter + '\'';
+            var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate,OrderBy';
             var orderBy = 'PriorityValue asc,Created asc';
             var expand = 'AssignedTo,Attachments,Priority,Status';
 

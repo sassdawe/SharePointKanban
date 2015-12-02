@@ -9,13 +9,19 @@
             },
             link: function(scope: any, $element: any, attrs: any) {
 
-                // Store in parent scope a reference to the task being dragged, 
-                // its parent column array, and its index number.
-                $element.on('dragstart', function (event) {
-                    scope.parentScope.dragging = {
-                        task: scope.kanbanTask,
-                    };
+                scope.$watch(function (scope) {
+
+                    // Store in parent scope a reference to the task being dragged, 
+                    // its parent column array, and its index number.
+                    $element.on('dragstart', function (ev) {
+                        //console.info(ev.target.id);
+                        scope.parentScope.dragging = {
+                            task: scope.kanbanTask,
+                        };
+                    });
+
                 });
+
             }
         }
     });
@@ -29,13 +35,21 @@
             },
             link: function(scope: any, $element: any, attrs: any) {
 
-                // trigger the event handler when a task element is dropped over the Kanban column.
-                $element.on('drop', function (event) {
-                    cancel(event);
-                    scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
+                scope.$watch(function (scope) {
 
-                }).on('dragover', function (event) {
-                    cancel(event);
+                    // trigger the event handler when a task element is dropped over the Kanban column.
+                    $element.on('drop', function (event) {
+                        cancel(event);
+
+                        if (!!scope.parentScope.dragging.task) {
+                            scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
+                            scope.parentScope.dragging.task = undefined; //clear the referene so we know we're no longer dragging
+                        }
+
+                    }).on('dragover', function (event) {
+                        cancel(event);
+                    });
+
                 });
 
                 // Cross-browser method to prevent the default event when dropping an element.

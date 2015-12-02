@@ -13,9 +13,9 @@ module App.Controllers{
 
         private pristineProjectsData: Array<SharePoint.ISpTaskItem>;
 
-        private priorities: Array<string> = ['(1) High', '(2) Normal', '(3) Low'];
+        private priorities: Array<string>;
 
-        private statuses: Array<string> = ['Not Started', 'In Progress', 'Testing', 'Completed'];
+        private statuses: Array<string>;
 
         private currentUser: SharePoint.ISpUser;
 
@@ -37,13 +37,14 @@ module App.Controllers{
             private $stateParams: IAppStateParams,
             private datacontext: Services.IDatacontext) {
 
-            this.refreshData();
-
+            this.statuses = this.config.projectStatuses;
+            this.priorities = this.config.priorities;
             this.$parent = this.$scope.$parent.shell;
             this.changeQueue = [];      
             this.currentUser = this.$parent.currentUser;
-            this.updateColumns();
             this.userIsEditor = Utils.userIsEditor(this.currentUser, this.config.editGroups);
+
+            this.refreshData();
         }
 
         private saveChanges(): boolean {
@@ -55,8 +56,6 @@ module App.Controllers{
             // update the list item on the server
             this.datacontext.updateSoapListItems(this.changeQueue, this.config.projectSiteUrl, this.config.projectListName).then(
                 (response: ng.IHttpPromiseCallbackArg<any>): void => {
-                    //console.info(response);
-                    //console.info('updated task ' + this.projects[i].Id + ' to ' + status);
                     var xmlDoc = response.data;
 
                     if (!!xmlDoc) {
@@ -86,24 +85,12 @@ module App.Controllers{
             return false;
         }
 
-        private updateTaskStatus(taskId: number, status: string, priority: string = undefined): number {
+        private updateTask(taskId: number, field: ISpUpdateField): number {
 
             for (var i = 0; i < this.projects.length; i++) {
                 if (this.projects[i].Id == taskId) {
 
-                    var fields = [];
-
-                    if (!!status) {
-                        this.projects[i].Status.Value = status; //Update the project in memory.
-
-                        fields.push({ name: 'Status', value: status });
-                    }
-
-                    if (!!priority) {
-                        this.projects[i].Priority.Value = priority; //Update the project in memory.
-
-                        fields.push({ name: 'Priority', value: priority });
-                    }
+                    //var fields = [];//{ name: 'Status', value: status }
 
                     //If the change is already qeued, update its fields.
                     var change = this.changeQueue.filter((t: ISpUpdateItem): boolean => {
@@ -111,16 +98,30 @@ module App.Controllers{
                     });
 
                     if (change.length > 0) { //Update qeued change.
-                        change[0].fields = fields;
+
+                        // update existing field changes
+                        var fields = change[0].fields.filter((f: ISpUpdateField): boolean => {
+                            return f.name == field.name;
+                        });
+
+                        if (fields.length > 0) {
+                            fields[0].value = field.value;
+                        } else {
+                            change[0].fields.push(field);
+                        }
 
                     } else { //Add new change to qeue.
                         this.changeQueue.push({
                             Id: taskId,
-                            fields: fields
+                            fields: [field]
                         });
                     }
 
-                    this.updateColumns(true);
+                    //if (this.config.debug) {
+                    //    console.log(this.changeQueue);
+                    //}
+
+                    this.updateColumns();
                     return i;
                 }
             }
@@ -167,8 +168,9 @@ module App.Controllers{
                     })
                 }
             ];
-            
-            if (apply) {
+
+            //force a redraw of the columns if dragging projects around
+            if (!!this.dragging.task) {
                 this.$scope.$apply();
             }
         }
@@ -208,6 +210,14 @@ module App.Controllers{
             });
 
             return false;
+        }
+
+        private range(end: number): Array<number> {
+            var a = [];
+            for (var i = 1; i <= end; i++) {
+                a.push(i);
+            }
+            return a;
         }
     }
 

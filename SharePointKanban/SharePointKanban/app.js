@@ -128,9 +128,11 @@ var App;
             this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management']; // list of SharePoint group names who's members are allowed to edit 
             this.orgName = ''; //the name of your organization, shown in Copyright
             this.previousMonths = 18; //how far back to show project tasks
+            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
             this.projectSiteUrl = '/media'; //the SharePoint subsite relative URL
             this.projectListName = 'Projects'; //the SharePoint list name
-            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site 
+            this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
+            this.projectStatuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
             this.serverHostname = '//' + window.location.hostname;
             this.testUser = {
                 Account: null,
@@ -166,12 +168,15 @@ var App;
                 parentScope: '='
             },
             link: function (scope, $element, attrs) {
-                // Store in parent scope a reference to the task being dragged, 
-                // its parent column array, and its index number.
-                $element.on('dragstart', function (event) {
-                    scope.parentScope.dragging = {
-                        task: scope.kanbanTask,
-                    };
+                scope.$watch(function (scope) {
+                    // Store in parent scope a reference to the task being dragged, 
+                    // its parent column array, and its index number.
+                    $element.on('dragstart', function (ev) {
+                        //console.info(ev.target.id);
+                        scope.parentScope.dragging = {
+                            task: scope.kanbanTask,
+                        };
+                    });
                 });
             }
         };
@@ -184,12 +189,17 @@ var App;
                 parentScope: '='
             },
             link: function (scope, $element, attrs) {
-                // trigger the event handler when a task element is dropped over the Kanban column.
-                $element.on('drop', function (event) {
-                    cancel(event);
-                    scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
-                }).on('dragover', function (event) {
-                    cancel(event);
+                scope.$watch(function (scope) {
+                    // trigger the event handler when a task element is dropped over the Kanban column.
+                    $element.on('drop', function (event) {
+                        cancel(event);
+                        if (!!scope.parentScope.dragging.task) {
+                            scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
+                            scope.parentScope.dragging.task = undefined; //clear the referene so we know we're no longer dragging
+                        }
+                    }).on('dragover', function (event) {
+                        cancel(event);
+                    });
                 });
                 // Cross-browser method to prevent the default event when dropping an element.
                 function cancel(event) {
@@ -359,19 +369,18 @@ var App;
                 this.config = config;
                 this.$stateParams = $stateParams;
                 this.datacontext = datacontext;
-                this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
-                this.statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                 this.projects = [];
                 // used by directive, `kanbanColumn`, to reference the current task being dragged over it.
                 this.dragging = {
                     task: null
                 };
-                this.refreshData();
+                this.statuses = this.config.projectStatuses;
+                this.priorities = this.config.priorities;
                 this.$parent = this.$scope.$parent.shell;
                 this.changeQueue = [];
                 this.currentUser = this.$parent.currentUser;
-                this.updateColumns();
                 this.userIsEditor = App.Utils.userIsEditor(this.currentUser, this.config.editGroups);
+                this.refreshData();
             }
             HomeController.prototype.saveChanges = function () {
                 if (!confirm('Are you sure you want to save changes to ' + this.changeQueue.length + ' projects?')) {
@@ -380,8 +389,6 @@ var App;
                 var self = this;
                 // update the list item on the server
                 this.datacontext.updateSoapListItems(this.changeQueue, this.config.projectSiteUrl, this.config.projectListName).then(function (response) {
-                    //console.info(response);
-                    //console.info('updated task ' + this.projects[i].Id + ' to ' + status);
                     var xmlDoc = response.data;
                     if (!!xmlDoc) {
                         //<ErrorCode>0x00000000</ErrorCode>
@@ -405,33 +412,36 @@ var App;
                 this.changeQueue = [];
                 return false;
             };
-            HomeController.prototype.updateTaskStatus = function (taskId, status, priority) {
-                if (priority === void 0) { priority = undefined; }
+            HomeController.prototype.updateTask = function (taskId, field) {
                 for (var i = 0; i < this.projects.length; i++) {
                     if (this.projects[i].Id == taskId) {
-                        var fields = [];
-                        if (!!status) {
-                            this.projects[i].Status.Value = status; //Update the project in memory.
-                            fields.push({ name: 'Status', value: status });
-                        }
-                        if (!!priority) {
-                            this.projects[i].Priority.Value = priority; //Update the project in memory.
-                            fields.push({ name: 'Priority', value: priority });
-                        }
+                        //var fields = [];//{ name: 'Status', value: status }
                         //If the change is already qeued, update its fields.
                         var change = this.changeQueue.filter(function (t) {
                             return t.Id == taskId;
                         });
                         if (change.length > 0) {
-                            change[0].fields = fields;
+                            // update existing field changes
+                            var fields = change[0].fields.filter(function (f) {
+                                return f.name == field.name;
+                            });
+                            if (fields.length > 0) {
+                                fields[0].value = field.value;
+                            }
+                            else {
+                                change[0].fields.push(field);
+                            }
                         }
                         else {
                             this.changeQueue.push({
                                 Id: taskId,
-                                fields: fields
+                                fields: [field]
                             });
                         }
-                        this.updateColumns(true);
+                        //if (this.config.debug) {
+                        //    console.log(this.changeQueue);
+                        //}
+                        this.updateColumns();
                         return i;
                     }
                 }
@@ -477,7 +487,8 @@ var App;
                         })
                     }
                 ];
-                if (apply) {
+                //force a redraw of the columns if dragging projects around
+                if (!!this.dragging.task) {
                     this.$scope.$apply();
                 }
             };
@@ -507,6 +518,13 @@ var App;
                 App.SharePoint.Utils.openSPForm(itemUrl, task.Title, function (result, target) {
                 });
                 return false;
+            };
+            HomeController.prototype.range = function (end) {
+                var a = [];
+                for (var i = 1; i <= end; i++) {
+                    a.push(i);
+                }
+                return a;
             };
             HomeController.Id = "homeController";
             HomeController.$inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext'];
@@ -643,8 +661,8 @@ var App;
                 }
                 var today = new Date();
                 var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
-                var filter = 'CategoryValue eq \'Project\' and Created gt datetime\'' + dateFilter + '\'';
-                var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate';
+                var filter = 'CategoryValue ne \'Log\' and Created gt datetime\'' + dateFilter + '\'';
+                var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate,OrderBy';
                 var orderBy = 'PriorityValue asc,Created asc';
                 var expand = 'AssignedTo,Attachments,Priority,Status';
                 return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, filter, select, orderBy, expand, 100);

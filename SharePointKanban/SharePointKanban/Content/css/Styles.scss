@@ -7,6 +7,10 @@ body {
 
     select{color:#000;}
 
+    input.short{
+        width:40px;
+    }
+
     .navbar-brand{
         background-image:url('../images/samurai.png');
         background-repeat:no-repeat;

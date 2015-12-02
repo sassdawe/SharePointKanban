@@ -11,7 +11,9 @@ module App {
         previousMonths: number;
         projectSiteUrl: string;
         projectListName: string;
+        priorities: Array<string>;
         productionHostname: string;
+        projectStatuses: Array<string>;
         serverHostname: string;
         testUser: SharePoint.ISpUser;
         version: string;
@@ -28,9 +30,11 @@ module App {
         public isProduction: boolean; //if this isn't the production site, get test data
         public orgName: string = ''; //the name of your organization, shown in Copyright
         public previousMonths: number = 18; //how far back to show project tasks
+        public productionHostname: string = 'webster'; //the hostname of the live production SharePoint site
         public projectSiteUrl: string = '/media'; //the SharePoint subsite relative URL
         public projectListName: string = 'Projects'; //the SharePoint list name
-        public productionHostname: string = 'webster'; //the hostname of the live production SharePoint site 
+        public priorities: Array<string> = ['(1) High', '(2) Normal', '(3) Low'];
+        public projectStatuses: Array<string> = ['Not Started', 'In Progress', 'Testing', 'Completed'];      
         public serverHostname: string = '//' + window.location.hostname;
         public testUser: SharePoint.ISpUser = {
             Account: null,
