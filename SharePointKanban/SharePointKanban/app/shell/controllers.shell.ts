@@ -1,15 +1,21 @@
 ﻿
 module App.Controllers
 {
-    export class ShellController
+    export interface IShellController {
+        currentUser: SharePoint.ISpUser;
+    }
+
+    export class ShellController implements IShellController
     {
         public static Id = 'shellController';
 
-        static $inject = ['$rootScope'];
+        static $inject = ['$rootScope', 'config', 'currentUser'];
 
-        constructor(private $rootScope: ng.IRootScopeService)
+        public currentUser: SharePoint.ISpUser;
+
+        constructor(private $rootScope: ng.IRootScopeService, private config: IConfiguration, currentUser: SharePoint.ISpUser)
         {
-
+            this.currentUser = currentUser;
         }
 
     }

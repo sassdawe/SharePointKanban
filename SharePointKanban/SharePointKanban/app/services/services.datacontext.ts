@@ -6,7 +6,7 @@
 
         // REST Methods
         getSpListItems(siteUrl: string, listName: string, filter?: string, select?: string, orderby?: string, expand?: string, top?: number): ng.IPromise<any>;
-        getProjects(prevMonths?: number): ng.IPromise<Array<SharePoint.ISpTaskItem>>;
+        getProjects(force?: boolean, prevMonths?: number): ng.IPromise<Array<SharePoint.ISpTaskItem>>;
         insertListItem(url: string, data?: any): ng.IPromise<any>;
         updateListItem(item: SharePoint.ISpItem, data?: any): ng.IPromise<any>;
         deleteListItem(item: SharePoint.ISpItem): ng.IPromise<any>;
@@ -15,8 +15,10 @@
         // SOAP Methods
         executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl?: string, cache?: boolean, headers?: any, service?: string): ng.IPromise<any>
         updateSoapListItems(fields: Array<ISpUpdateItem>, siteUrl: string, listName: string): ng.IPromise<any>;
-        getSoapListItems(siteUrl: string, listName: string, viewFields: string, query: string, rowLimit?: number): ng.IPromise<any>;
+        getSoapListItems(siteUrl: string, listName: string, viewFields: string, query: string, cache?: boolean, rowLimit?: number): ng.IPromise<any>;
         searchPrincipals(term: string, maxResults?: number, principalType?: string): ng.IPromise<any>;
+        getCurrentUser(): ng.IPromise<SharePoint.ISpUser>;
+        getUsersGroups(loginName: string): ng.IPromise<Array<SharePoint.ISpGroup>>;
 
         getTestData(): ng.IPromise<Array<SharePoint.ISpTaskItem>>;
 
@@ -26,8 +28,10 @@
 
         static Id: string = 'datacontext';
 
-        constructor(private $http: any, private $q: ng.IQService, private common: ICommon, private config: IConfiguration) {
+        public cache: any;
 
+        constructor(private $http: any, private $q: ng.IQService, private common: ICommon, private config: IConfiguration) {
+            this.cache = {};
         }
 
         /**
@@ -102,7 +106,12 @@
             return d.promise;
         }
 
-        public getProjects(prevMonths: number = 12): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
+        public getProjects(force: boolean = false, prevMonths: number = undefined): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
+            var self = this;
+
+            // Show how many previous months of projects to request.
+            // Change this variable in App.Config;
+            prevMonths = prevMonths || this.config.previousMonths;
 
             if (!this.config.isProduction) {
                 return this.getTestData();
@@ -112,7 +121,7 @@
             var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
             var filter = 'CategoryValue eq \'Project\' and Created gt datetime\'' + dateFilter + '\'';
             var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate';
-            var orderBy = 'PriorityValue desc,Created asc';
+            var orderBy = 'PriorityValue asc,Created asc';
             var expand = 'AssignedTo,Attachments,Priority,Status';
 
             return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, filter, select, orderBy, expand, 100);
@@ -264,7 +273,7 @@
             return this.executeSoapRequest(action, packet, null, siteUrl);
         }
 
-        public getSoapListItems(siteUrl: string, listName: string, viewFields: string, query: string, rowLimit: number = 25): ng.IPromise<any> {
+        public getSoapListItems(siteUrl: string, listName: string, viewFields: string, query: string, cache: boolean = false, rowLimit: number = 25): ng.IPromise<any> {
 
             var packet = '<?xml version="1.0" encoding="utf-8"?>' +
                 '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
@@ -278,7 +287,7 @@
                 '</soap:Body>' +
                 '</soap:Envelope>';
 
-            return this.executeSoapRequest('http://schemas.microsoft.com/sharepoint/soap/GetListItems', packet, null, siteUrl); 
+            return this.executeSoapRequest('http://schemas.microsoft.com/sharepoint/soap/GetListItems', packet, null, siteUrl, cache); 
         }
 
         public searchPrincipals(term: string, maxResults: number = 10, principalType: string = 'User'): ng.IPromise<any> {
@@ -320,9 +329,147 @@
             return d.promise;
         }
 
+        public getCurrentUser(): ng.IPromise<SharePoint.ISpUser> {
+            var d = this.$q.defer();
+            var self = this;
+
+            if (!!this.cache.currentUser) {
+                d.resolve(this.cache.currentUser);
+                return d.promise;
+            }
+
+            var user: SharePoint.ISpUser = {
+                ID: null,
+                Title: null,
+                Name: null,
+                EMail: null,
+                JobTitle: null,
+                Department: null,
+                Account: null,
+                UserName: null,
+                Office: null,
+                Groups: []
+            };
+
+            if (!this.config.isProduction) {
+
+                this.$http({ url: '/testuser.xml', method: 'GET', dataType: 'xml' }).then((response: ng.IHttpPromiseCallbackArg<any>): void => {
+
+                    var xmlDoc = response.data;
+
+                    var $zrows = $(xmlDoc).find('*').filter(function () {
+                        return this.nodeName.toLowerCase() == 'z:row';
+                    });
+
+                    $zrows.each(function () {
+                        user.ID = parseInt($(this).attr('ows_ID'));
+                        user.Title = $(this).attr('ows_Title');
+                        user.Name = $(this).attr('ows_Name');
+                        user.EMail = $(this).attr('ows_EMail');
+                        user.JobTitle = $(this).attr('ows_JobTitle');
+                        user.Department = $(this).attr('ows_Department');
+                        user.Account = user.ID + ';#' + user.Title;
+                        user.Groups = self.config.testUser.Groups;
+                    });
+
+                    d.resolve(user);
+
+                });
+
+                self.cache.currentUser = user;
+                return d.promise;
+            }
+
+            var self = this;
+            
+            var query = '<Query><Where><Eq><FieldRef Name="ID" /><Value Type="Counter"><UserID /></Value></Eq></Where></Query>';
+            var viewFields = '<ViewFields><FieldRef Name="ID" /><FieldRef Name="Name" /><FieldRef Name="EMail" /><FieldRef Name="Department" /><FieldRef Name="JobTitle" /><FieldRef Name="UserName" /><FieldRef Name="Office" /></ViewFields>';
+
+            this.getSoapListItems('', 'User Information List', viewFields, query, true).then(
+                (response: ng.IHttpPromiseCallbackArg<any>): void => {
+
+                    var xmlDoc = response.data;
+
+                    var $zrows = $(xmlDoc).find('*').filter(function () {
+                        return this.nodeName.toLowerCase() == 'z:row';
+                    });
+
+                    $zrows.each(function () {
+                        user.ID = parseInt($(this).attr('ows_ID'));
+                        user.Title = $(this).attr('ows_Title');
+                        user.Name = $(this).attr('ows_Name');
+                        user.EMail = $(this).attr('ows_EMail');
+                        user.JobTitle = $(this).attr('ows_JobTitle');
+                        user.Department = $(this).attr('ows_Department');
+                        user.Account = user.ID + ';#' + user.Title;
+                        user.Groups = [];
+                    });
+
+                    if (!!user.Name) {
+                        self.getUsersGroups(user.Name).then(
+                            (groups: Array<SharePoint.ISpGroup>): void => {
+                                user.Groups = groups;
+
+                                self.cache.currentUser = user;
+                                d.resolve(user);
+                            });
+                    } else {
+
+                        self.cache.currentUser = user;
+                        d.resolve(user);
+                    }
+                });
+
+            return d.promise;
+        }
+
+        public getUsersGroups(loginName: string): ng.IPromise<Array<SharePoint.ISpGroup>> {
+            var d = this.$q.defer();
+
+            var packet = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                '<soap:Body>' +
+                '<GetGroupCollectionFromUser xmlns="http://schemas.microsoft.com/sharepoint/soap/directory/">' +
+                '<userLoginName>' + loginName + '</userLoginName>' +
+                '</GetGroupCollectionFromUser>' +
+                '</soap:Body>' +
+                '</soap:Envelope>';
+
+            var action = 'http://schemas.microsoft.com/sharepoint/soap/directory/GetGroupCollectionFromUser';
+
+            this.executeSoapRequest(action, packet, null, '', true, null, 'usergroup.asmx').then(
+                (response: ng.IHttpPromiseCallbackArg<any>): void => {
+                    var xmlDoc = response.data;
+                    var $errorText = $(xmlDoc).find('errorstring');
+
+                    // catch and handle returned error
+                    if (!!$errorText && $errorText.text() != "") {
+                        d.reject($errorText.text());
+                        return;
+                    }
+
+                    var groups: Array<SharePoint.ISpGroup> = [];
+
+                    $(xmlDoc).find("Group").each(function (i: number, el: HTMLElement) {
+                        groups.push({
+                            id: parseInt($(el).attr("ID")),
+                            name: $(el).attr("Name")
+                        });
+                    });
+
+                    d.resolve(groups);
+                });
+
+            return d.promise;
+        }
+
         public getTestData(): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
             var d = this.$q.defer();
             var self = this;
+
+            if (!!this.cache.projects) {
+                d.resolve(this.cache.projects);
+                return d.promise;
+            }
 
             self.$http({
                 url: '/testdata.txt',
@@ -335,7 +482,9 @@
                     return;
                 }
 
-                d.resolve(response.data.d.results);
+                var projects = response.data.d.results;
+                self.cache.projects = response.data.d.results;
+                d.resolve(projects);
 
             }).finally((): void => {
                 self.common.hideLoader();

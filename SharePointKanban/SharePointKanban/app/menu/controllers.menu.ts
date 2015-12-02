@@ -5,13 +5,17 @@ module App.Controllers {
 
         static Id = 'menuController';
 
-        static $inject = ['config', '$state', '$stateParams'];
+        static $inject = ['$scope', 'config', '$state', '$stateParams'];
 
         private appTitle: string;
+        private currentUser: SharePoint.ISpUser;
 
-        constructor(private config: IConfiguration, private $state: ng.ui.IStateService, private $stateParams: IAppStateParams) {
+        constructor(private $scope: any, private config: IConfiguration, private $state: ng.ui.IStateService, private $stateParams: IAppStateParams) {
 
+            var $parent = this.$scope.$parent.shell;
+            this.currentUser = $parent.currentUser;
             this.appTitle = config.appTitle;
+
         }
 
     }

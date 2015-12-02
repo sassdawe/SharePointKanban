@@ -123,13 +123,27 @@ var App;
     var Config = (function () {
         function Config() {
             this.debug = true;
-            this.appPath = 'app/';
-            this.orgName = '';
-            this.projectSiteUrl = '/media';
-            this.projectListName = 'Projects';
-            this.productionHostname = 'webster';
+            this.appPath = 'app/'; //path to Angular app template files
+            this.appTitle = 'Dev Projects Kanban'; //display title of the app
+            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management']; // list of SharePoint group names who's members are allowed to edit 
+            this.orgName = ''; //the name of your organization, shown in Copyright
+            this.previousMonths = 18; //how far back to show project tasks
+            this.projectSiteUrl = '/media'; //the SharePoint subsite relative URL
+            this.projectListName = 'Projects'; //the SharePoint list name
+            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site 
             this.serverHostname = '//' + window.location.hostname;
-            this.appTitle = 'Dev Projects Kanban';
+            this.testUser = {
+                Account: null,
+                Department: 'Vogon Affairs',
+                EMail: 'hitchiker@galaxy.org',
+                Groups: [{ id: 42, name: 'testers' }],
+                ID: 42,
+                JobTitle: 'Tester',
+                Name: 'domain\testadmin',
+                Office: 'Some Office',
+                Title: 'Test Admin',
+                UserName: 'testadmin'
+            };
             this.version = '0.0.1';
             this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
         }
@@ -199,6 +213,9 @@ var App;
         Dependencies.projectList = ['datacontext', function (datacontext) {
                 return datacontext.getProjects();
             }];
+        Dependencies.currentUser = ['datacontext', function (datacontext) {
+                return datacontext.getCurrentUser();
+            }];
         return Dependencies;
     })();
     App.Dependencies = Dependencies;
@@ -225,7 +242,10 @@ var App;
                 // This is the top level state, so this template file will be loaded and then inserted into the ui-view within index.html.
                 templateUrl: 'app/shell/shell.htm',
                 controller: App.Controllers.ShellController.Id,
-                controllerAs: 'vm'
+                controllerAs: 'shell',
+                resolve: {
+                    currentUser: App.Dependencies.currentUser
+                }
             });
             //////////////
             // Shell > Home
@@ -289,19 +309,11 @@ var App;
         Views.home = {
             templateUrl: 'app/home/home.htm' + Views.ts(),
             controller: 'homeController',
-            controllerAs: 'vm',
-            resolve: {
-                projects: App.Dependencies.projectList
-            }
+            controllerAs: 'vm'
         };
         Views.footer = {
             templateUrl: 'app/footer/footer.htm' + Views.ts(),
             controller: 'footerController',
-            controllerAs: 'vm'
-        };
-        Views.kanban = {
-            templateUrl: 'app/kanban/index.htm' + Views.ts(),
-            controller: 'kanbanController',
             controllerAs: 'vm'
         };
         return Views;
@@ -341,22 +353,25 @@ var App;
     var Controllers;
     (function (Controllers) {
         var HomeController = (function () {
-            function HomeController($scope, common, config, $stateParams, datacontext, projects) {
+            function HomeController($scope, common, config, $stateParams, datacontext) {
                 this.$scope = $scope;
                 this.common = common;
                 this.config = config;
                 this.$stateParams = $stateParams;
                 this.datacontext = datacontext;
-                this.projects = projects;
+                this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
+                this.statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
+                this.projects = [];
                 // used by directive, `kanbanColumn`, to reference the current task being dragged over it.
                 this.dragging = {
                     task: null
                 };
+                this.refreshData();
+                this.$parent = this.$scope.$parent.shell;
                 this.changeQueue = [];
-                this.$scope = $scope;
-                this.projects = projects;
-                this.pristineProjectsData = App.Utils.clone(this.projects);
+                this.currentUser = this.$parent.currentUser;
                 this.updateColumns();
+                this.userIsEditor = App.Utils.userIsEditor(this.currentUser, this.config.editGroups);
             }
             HomeController.prototype.saveChanges = function () {
                 if (!confirm('Are you sure you want to save changes to ' + this.changeQueue.length + ' projects?')) {
@@ -376,8 +391,8 @@ var App;
                         //    console.warn($errorNode.text());
                         //    return;
                         //}
-                        console.info($(xmlDoc).find('UpdateListItemsResult'));
-                        console.info('Saved ' + self.changeQueue.length + ' changes.');
+                        //console.info($(xmlDoc).find('UpdateListItemsResult'));
+                        //console.info('Saved ' + self.changeQueue.length + ' changes.');
                         self.changeQueue = [];
                     }
                 });
@@ -390,14 +405,32 @@ var App;
                 this.changeQueue = [];
                 return false;
             };
-            HomeController.prototype.updateTaskStatus = function (taskId, status) {
+            HomeController.prototype.updateTaskStatus = function (taskId, status, priority) {
+                if (priority === void 0) { priority = undefined; }
                 for (var i = 0; i < this.projects.length; i++) {
                     if (this.projects[i].Id == taskId) {
-                        this.projects[i].Status.Value = status;
-                        this.changeQueue.push({
-                            Id: taskId,
-                            fields: [{ name: 'Status', value: status }]
+                        var fields = [];
+                        if (!!status) {
+                            this.projects[i].Status.Value = status; //Update the project in memory.
+                            fields.push({ name: 'Status', value: status });
+                        }
+                        if (!!priority) {
+                            this.projects[i].Priority.Value = priority; //Update the project in memory.
+                            fields.push({ name: 'Priority', value: priority });
+                        }
+                        //If the change is already qeued, update its fields.
+                        var change = this.changeQueue.filter(function (t) {
+                            return t.Id == taskId;
                         });
+                        if (change.length > 0) {
+                            change[0].fields = fields;
+                        }
+                        else {
+                            this.changeQueue.push({
+                                Id: taskId,
+                                fields: fields
+                            });
+                        }
                         this.updateColumns(true);
                         return i;
                     }
@@ -464,20 +497,19 @@ var App;
                 this.datacontext.getProjects().then(function (projects) {
                     self.projects = projects;
                     self.updateColumns();
+                    self.pristineProjectsData = App.Utils.clone(self.projects);
                 });
                 return false;
             };
             HomeController.prototype.viewItem = function (task) {
                 var self = this;
                 var itemUrl = this.config.projectSiteUrl + '/Lists/' + this.config.projectListName.replace(/\s/g, '%20') + '/DispForm.aspx?ID=' + task.Id;
-                //console.info(itemUrl);
-                //return false;
                 App.SharePoint.Utils.openSPForm(itemUrl, task.Title, function (result, target) {
                 });
                 return false;
             };
             HomeController.Id = "homeController";
-            HomeController.$inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext', 'projects'];
+            HomeController.$inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext'];
             return HomeController;
         })();
         Controllers.HomeController = HomeController;
@@ -489,14 +521,17 @@ var App;
     var Controllers;
     (function (Controllers) {
         var MenuController = (function () {
-            function MenuController(config, $state, $stateParams) {
+            function MenuController($scope, config, $state, $stateParams) {
+                this.$scope = $scope;
                 this.config = config;
                 this.$state = $state;
                 this.$stateParams = $stateParams;
+                var $parent = this.$scope.$parent.shell;
+                this.currentUser = $parent.currentUser;
                 this.appTitle = config.appTitle;
             }
             MenuController.Id = 'menuController';
-            MenuController.$inject = ['config', '$state', '$stateParams'];
+            MenuController.$inject = ['$scope', 'config', '$state', '$stateParams'];
             return MenuController;
         })();
         Controllers.MenuController = MenuController;
@@ -522,6 +557,7 @@ var App;
                 this.$q = $q;
                 this.common = common;
                 this.config = config;
+                this.cache = {};
             }
             /**
             * Execute a REST request.
@@ -595,8 +631,13 @@ var App;
                 });
                 return d.promise;
             };
-            Datacontext.prototype.getProjects = function (prevMonths) {
-                if (prevMonths === void 0) { prevMonths = 12; }
+            Datacontext.prototype.getProjects = function (force, prevMonths) {
+                if (force === void 0) { force = false; }
+                if (prevMonths === void 0) { prevMonths = undefined; }
+                var self = this;
+                // Show how many previous months of projects to request.
+                // Change this variable in App.Config;
+                prevMonths = prevMonths || this.config.previousMonths;
                 if (!this.config.isProduction) {
                     return this.getTestData();
                 }
@@ -604,7 +645,7 @@ var App;
                 var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
                 var filter = 'CategoryValue eq \'Project\' and Created gt datetime\'' + dateFilter + '\'';
                 var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate';
-                var orderBy = 'PriorityValue desc,Created asc';
+                var orderBy = 'PriorityValue asc,Created asc';
                 var expand = 'AssignedTo,Attachments,Priority,Status';
                 return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, filter, select, orderBy, expand, 100);
             };
@@ -737,7 +778,8 @@ var App;
                 packet = packet.replace(/\{0\}/, listName).replace(/\{1\}/, batch.join());
                 return this.executeSoapRequest(action, packet, null, siteUrl);
             };
-            Datacontext.prototype.getSoapListItems = function (siteUrl, listName, viewFields, query, rowLimit) {
+            Datacontext.prototype.getSoapListItems = function (siteUrl, listName, viewFields, query, cache, rowLimit) {
+                if (cache === void 0) { cache = false; }
                 if (rowLimit === void 0) { rowLimit = 25; }
                 var packet = '<?xml version="1.0" encoding="utf-8"?>' +
                     '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
@@ -750,7 +792,7 @@ var App;
                     '</GetListItems>' +
                     '</soap:Body>' +
                     '</soap:Envelope>';
-                return this.executeSoapRequest('http://schemas.microsoft.com/sharepoint/soap/GetListItems', packet, null, siteUrl);
+                return this.executeSoapRequest('http://schemas.microsoft.com/sharepoint/soap/GetListItems', packet, null, siteUrl, cache);
             };
             Datacontext.prototype.searchPrincipals = function (term, maxResults, principalType) {
                 if (maxResults === void 0) { maxResults = 10; }
@@ -786,9 +828,114 @@ var App;
                 });
                 return d.promise;
             };
+            Datacontext.prototype.getCurrentUser = function () {
+                var d = this.$q.defer();
+                var self = this;
+                if (!!this.cache.currentUser) {
+                    d.resolve(this.cache.currentUser);
+                    return d.promise;
+                }
+                var user = {
+                    ID: null,
+                    Title: null,
+                    Name: null,
+                    EMail: null,
+                    JobTitle: null,
+                    Department: null,
+                    Account: null,
+                    UserName: null,
+                    Office: null,
+                    Groups: []
+                };
+                if (!this.config.isProduction) {
+                    this.$http({ url: '/testuser.xml', method: 'GET', dataType: 'xml' }).then(function (response) {
+                        var xmlDoc = response.data;
+                        var $zrows = $(xmlDoc).find('*').filter(function () {
+                            return this.nodeName.toLowerCase() == 'z:row';
+                        });
+                        $zrows.each(function () {
+                            user.ID = parseInt($(this).attr('ows_ID'));
+                            user.Title = $(this).attr('ows_Title');
+                            user.Name = $(this).attr('ows_Name');
+                            user.EMail = $(this).attr('ows_EMail');
+                            user.JobTitle = $(this).attr('ows_JobTitle');
+                            user.Department = $(this).attr('ows_Department');
+                            user.Account = user.ID + ';#' + user.Title;
+                            user.Groups = self.config.testUser.Groups;
+                        });
+                        d.resolve(user);
+                    });
+                    self.cache.currentUser = user;
+                    return d.promise;
+                }
+                var self = this;
+                var query = '<Query><Where><Eq><FieldRef Name="ID" /><Value Type="Counter"><UserID /></Value></Eq></Where></Query>';
+                var viewFields = '<ViewFields><FieldRef Name="ID" /><FieldRef Name="Name" /><FieldRef Name="EMail" /><FieldRef Name="Department" /><FieldRef Name="JobTitle" /><FieldRef Name="UserName" /><FieldRef Name="Office" /></ViewFields>';
+                this.getSoapListItems('', 'User Information List', viewFields, query, true).then(function (response) {
+                    var xmlDoc = response.data;
+                    var $zrows = $(xmlDoc).find('*').filter(function () {
+                        return this.nodeName.toLowerCase() == 'z:row';
+                    });
+                    $zrows.each(function () {
+                        user.ID = parseInt($(this).attr('ows_ID'));
+                        user.Title = $(this).attr('ows_Title');
+                        user.Name = $(this).attr('ows_Name');
+                        user.EMail = $(this).attr('ows_EMail');
+                        user.JobTitle = $(this).attr('ows_JobTitle');
+                        user.Department = $(this).attr('ows_Department');
+                        user.Account = user.ID + ';#' + user.Title;
+                        user.Groups = [];
+                    });
+                    if (!!user.Name) {
+                        self.getUsersGroups(user.Name).then(function (groups) {
+                            user.Groups = groups;
+                            self.cache.currentUser = user;
+                            d.resolve(user);
+                        });
+                    }
+                    else {
+                        self.cache.currentUser = user;
+                        d.resolve(user);
+                    }
+                });
+                return d.promise;
+            };
+            Datacontext.prototype.getUsersGroups = function (loginName) {
+                var d = this.$q.defer();
+                var packet = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<GetGroupCollectionFromUser xmlns="http://schemas.microsoft.com/sharepoint/soap/directory/">' +
+                    '<userLoginName>' + loginName + '</userLoginName>' +
+                    '</GetGroupCollectionFromUser>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
+                var action = 'http://schemas.microsoft.com/sharepoint/soap/directory/GetGroupCollectionFromUser';
+                this.executeSoapRequest(action, packet, null, '', true, null, 'usergroup.asmx').then(function (response) {
+                    var xmlDoc = response.data;
+                    var $errorText = $(xmlDoc).find('errorstring');
+                    // catch and handle returned error
+                    if (!!$errorText && $errorText.text() != "") {
+                        d.reject($errorText.text());
+                        return;
+                    }
+                    var groups = [];
+                    $(xmlDoc).find("Group").each(function (i, el) {
+                        groups.push({
+                            id: parseInt($(el).attr("ID")),
+                            name: $(el).attr("Name")
+                        });
+                    });
+                    d.resolve(groups);
+                });
+                return d.promise;
+            };
             Datacontext.prototype.getTestData = function () {
                 var d = this.$q.defer();
                 var self = this;
+                if (!!this.cache.projects) {
+                    d.resolve(this.cache.projects);
+                    return d.promise;
+                }
                 self.$http({
                     url: '/testdata.txt',
                     method: 'GET'
@@ -798,7 +945,9 @@ var App;
                         d.reject(response.statusText);
                         return;
                     }
-                    d.resolve(response.data.d.results);
+                    var projects = response.data.d.results;
+                    self.cache.projects = response.data.d.results;
+                    d.resolve(projects);
                 }).finally(function () {
                     self.common.hideLoader();
                 });
@@ -915,11 +1064,13 @@ var App;
     var Controllers;
     (function (Controllers) {
         var ShellController = (function () {
-            function ShellController($rootScope) {
+            function ShellController($rootScope, config, currentUser) {
                 this.$rootScope = $rootScope;
+                this.config = config;
+                this.currentUser = currentUser;
             }
             ShellController.Id = 'shellController';
-            ShellController.$inject = ['$rootScope'];
+            ShellController.$inject = ['$rootScope', 'config', 'currentUser'];
             return ShellController;
         })();
         Controllers.ShellController = ShellController;
@@ -932,6 +1083,34 @@ var App;
     var Utils = (function () {
         function Utils() {
         }
+        Utils.userIsEditor = function (user, targetGroups) {
+            for (var i = 0; i < targetGroups.length; i++) {
+                for (var j = 0; j < user.Groups.length; j++) {
+                    if (targetGroups[i] == user.Groups[j].name) {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        };
+        /**
+        * Returns the index of a value in an array. Returns -1 if not found. Use for IE8 browser compatibility.
+        * @param a: Array<any>
+        * @param value: any
+        * @return number
+        */
+        Utils.indexOf = function (a, value) {
+            // use the native Array.indexOf method if exists
+            if (!!Array.prototype.indexOf) {
+                return Array.prototype.indexOf.apply(a, [value]);
+            }
+            for (var i = 0; i < a.length; i++) {
+                if (a[i] === value) {
+                    return i;
+                }
+            }
+            return -1;
+        };
         Utils.getTimestamp = function () {
             return '?_=' + new Date().getTime();
         };

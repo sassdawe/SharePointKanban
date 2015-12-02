@@ -35,7 +35,10 @@ module App{
                 // This is the top level state, so this template file will be loaded and then inserted into the ui-view within index.html.
                 templateUrl: 'app/shell/shell.htm',
                 controller: Controllers.ShellController.Id,
-                controllerAs: 'vm'
+                controllerAs: 'shell',
+                resolve: {
+                    currentUser: Dependencies.currentUser
+                }
             });
 
             //////////////

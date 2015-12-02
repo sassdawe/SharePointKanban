@@ -10,6 +10,12 @@
         Title: string;
         Department: string;
         Account: string;
+        Groups: Array<ISpGroup>;
+    }
+
+    export interface ISpGroup {
+        id: number;
+        name: string;
     }
 
     /**

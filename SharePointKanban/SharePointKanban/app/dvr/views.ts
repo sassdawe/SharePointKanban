@@ -22,21 +22,12 @@
         public static home: any = {
             templateUrl: 'app/home/home.htm' + Views.ts(),
             controller: 'homeController',
-            controllerAs: 'vm',
-            resolve: {
-                projects: Dependencies.projectList
-            }
+            controllerAs: 'vm'
         }
 
         public static footer: any = {
             templateUrl: 'app/footer/footer.htm' + Views.ts(),
             controller: 'footerController',
-            controllerAs: 'vm'
-        }
-
-        public static kanban: any = {
-            templateUrl: 'app/kanban/index.htm' + Views.ts(),
-            controller: 'kanbanController',
             controllerAs: 'vm'
         }
 
