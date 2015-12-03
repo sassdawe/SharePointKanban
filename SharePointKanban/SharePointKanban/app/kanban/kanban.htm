@@ -20,6 +20,8 @@
         <button class="btn btn-sm btn-default" ng-mousedown="vm.resetData()" ng-show="vm.changeQueue.length > 0">
             <span>Reset Changes</span> <span class="glyphicon glyphicon-fast-backward"></span>
         </button>
+
+        <p class="" style="padding:.4em;"><strong>Showing items for the last <input type="number" ng-model="vm.kanbanConfig.previousMonths" class="short" /> months.</strong></p>
     </div>
 </div>
 
@@ -46,9 +48,6 @@
 
             </li>
         </ul>       
-    </div>
-    <div class="col-sm-6">
-        <strong>Showing items for the last {{vm.kanbanConfig.previousMonths}} months.</strong>
     </div>
 </div>
 
