@@ -125,14 +125,10 @@ var App;
             this.debug = true;
             this.appPath = 'app/'; //path to Angular app template files
             this.appTitle = 'Dev Projects Kanban'; //display title of the app
-            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management']; // list of SharePoint group names who's members are allowed to edit 
+            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 
             this.orgName = ''; //the name of your organization, shown in Copyright
-            this.previousMonths = 18; //how far back to show project tasks
             this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
-            this.projectSiteUrl = '/media'; //the SharePoint subsite relative URL
-            this.projectListName = 'Projects'; //the SharePoint list name
             this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
-            this.projectStatuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
             this.serverHostname = '//' + window.location.hostname;
             this.testUser = {
                 Account: null,
@@ -146,7 +142,75 @@ var App;
                 Title: 'Test Admin',
                 UserName: 'testadmin'
             };
+            this.timeLogSiteUrl = '/media';
+            this.timeLogListName = 'Time Log';
             this.version = '0.0.1';
+            // Kanban board configs
+            this.projectsKanbanConfig = {
+                siteUrl: '/media',
+                listName: 'Projects',
+                previousMonths: 18,
+                timeLogListName: 'Time Log',
+                columns: [
+                    {
+                        title: 'Backlog',
+                        id: 'backlog-tasks',
+                        className: 'panel panel-info',
+                        status: 'Not Started',
+                        tasks: []
+                    },
+                    {
+                        title: 'In Progress',
+                        id: 'in-progress-tasks',
+                        className: 'panel panel-danger',
+                        status: 'In Progress',
+                        tasks: []
+                    },
+                    {
+                        title: 'Testing',
+                        id: 'testing-tasks',
+                        className: 'panel panel-warning',
+                        status: 'Testing',
+                        tasks: []
+                    },
+                    {
+                        title: 'Done',
+                        id: 'completed-tasks',
+                        className: 'panel panel-success',
+                        status: 'Completed',
+                        tasks: []
+                    }
+                ]
+            };
+            this.heldpeskKanbanConfig = {
+                siteUrl: '/ws',
+                listName: 'Tasks',
+                previousMonths: 6,
+                timeLogListName: 'Time Log',
+                columns: [
+                    {
+                        title: 'Backlog',
+                        id: 'backlog-tasks',
+                        className: 'panel panel-info',
+                        status: 'Not Started',
+                        tasks: []
+                    },
+                    {
+                        title: 'In Progress',
+                        id: 'in-progress-tasks',
+                        className: 'panel panel-danger',
+                        status: 'In Progress',
+                        tasks: []
+                    },
+                    {
+                        title: 'Done',
+                        id: 'completed-tasks',
+                        className: 'panel panel-success',
+                        status: 'Completed',
+                        tasks: []
+                    }
+                ]
+            };
             this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
         }
         Config.Id = 'config';
@@ -193,9 +257,17 @@ var App;
                     // trigger the event handler when a task element is dropped over the Kanban column.
                     $element.on('drop', function (event) {
                         cancel(event);
-                        if (!!scope.parentScope.dragging.task) {
-                            scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
-                            scope.parentScope.dragging.task = undefined; //clear the referene so we know we're no longer dragging
+                        var controller = scope.parentScope;
+                        var task = scope.parentScope.dragging.task;
+                        var col = scope.kanbanColumn;
+                        if (!!task) {
+                            var field = {
+                                name: 'Status',
+                                value: col.status
+                            };
+                            task.Status.Value = col.status;
+                            controller.updateTask(task.Id, field);
+                            controller.dragging.task = undefined; //clear the referene so we know we're no longer dragging
                         }
                     }).on('dragover', function (event) {
                         cancel(event);
@@ -220,11 +292,14 @@ var App;
     var Dependencies = (function () {
         function Dependencies() {
         }
-        Dependencies.projectList = ['datacontext', function (datacontext) {
-                return datacontext.getProjects();
-            }];
         Dependencies.currentUser = ['datacontext', function (datacontext) {
                 return datacontext.getCurrentUser();
+            }];
+        Dependencies.projectsKanbanConfig = ['config', function (config) {
+                return config.projectsKanbanConfig;
+            }];
+        Dependencies.helpdeskKanbanConfig = ['config', function (config) {
+                return config.heldpeskKanbanConfig;
             }];
         return Dependencies;
     })();
@@ -283,11 +358,17 @@ var App;
                     ////////////
                     // Home
                     ////////////
-                    'main@app': App.Views.home,
+                    'main@app': App.Views.projects,
                     ////////////
                     // Footer
                     ////////////
                     'footer@app': App.Views.footer
+                }
+            });
+            $stateProvider.state('app.home.helpdesk', {
+                url: 'helpdesk',
+                views: {
+                    'main@app': App.Views.helpdesk,
                 }
             });
         }
@@ -308,21 +389,32 @@ var App;
     var Views = (function () {
         function Views() {
         }
-        Views.ts = function () {
+        Views.getTs = function () {
             return '?_=' + new Date().getTime();
         };
+        Views.projects = {
+            templateUrl: 'app/kanban/kanban.htm' + Views.getTs(),
+            controller: 'kanbanController',
+            controllerAs: 'vm',
+            resolve: {
+                kanbanConfig: App.Dependencies.projectsKanbanConfig
+            }
+        };
+        Views.helpdesk = {
+            templateUrl: 'app/kanban/kanban.htm' + Views.getTs(),
+            controller: 'kanbanController',
+            controllerAs: 'vm',
+            resolve: {
+                kanbanConfig: App.Dependencies.helpdeskKanbanConfig
+            }
+        };
         Views.menu = {
-            templateUrl: 'app/menu/menu.htm' + Views.ts(),
+            templateUrl: 'app/menu/menu.htm' + Views.getTs(),
             controller: 'menuController',
             controllerAs: 'vm' // the alias of the Angular controller in the HTML templates; `vm` short for 'View Model'
         };
-        Views.home = {
-            templateUrl: 'app/home/home.htm' + Views.ts(),
-            controller: 'homeController',
-            controllerAs: 'vm'
-        };
         Views.footer = {
-            templateUrl: 'app/footer/footer.htm' + Views.ts(),
+            templateUrl: 'app/footer/footer.htm' + Views.getTs(),
             controller: 'footerController',
             controllerAs: 'vm'
         };
@@ -337,8 +429,45 @@ var App;
         return App.Utils.filterByProperty;
     });
     App.app.filter('sp_date', function () {
-        App.Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
-        return App.Utils.parseDate;
+        function fn(val) {
+            if (!!!val) {
+                return val;
+            }
+            return App.Utils.parseDate(val).toLocaleDateString();
+        }
+        ;
+        //fn['$stateful'] = true;
+        return fn;
+    });
+    App.app.filter('datetime', function () {
+        function fn(val) {
+            if (!!!val) {
+                return val;
+            }
+            return App.Utils.parseDate(val).toLocaleString();
+        }
+        ;
+        //fn['$stateful'] = true;
+        return fn;
+    });
+    App.app.filter('active_tasks', function () {
+        function fn(cols) {
+            var active = [];
+            if (!!!cols) {
+                return active;
+            }
+            for (var i = 0; i < cols.length; i++) {
+                for (var j = 0; j < cols[i].tasks.length; j++) {
+                    if (cols[i].tasks[j].LastTimeOut == null && cols[i].tasks[j].LastTimeIn != null) {
+                        active.push(cols[i].tasks[j]);
+                    }
+                }
+            }
+            return active;
+        }
+        ;
+        //fn['$stateful'] = true;
+        return fn;
     });
 })(App || (App = {}));
 var App;
@@ -362,33 +491,43 @@ var App;
 (function (App) {
     var Controllers;
     (function (Controllers) {
-        var HomeController = (function () {
-            function HomeController($scope, common, config, $stateParams, datacontext) {
+        var KanbanController = (function () {
+            function KanbanController($scope, common, config, $stateParams, datacontext, kanbanConfig) {
                 this.$scope = $scope;
                 this.common = common;
                 this.config = config;
                 this.$stateParams = $stateParams;
                 this.datacontext = datacontext;
+                this.kanbanConfig = kanbanConfig;
                 this.projects = [];
                 // used by directive, `kanbanColumn`, to reference the current task being dragged over it.
                 this.dragging = {
                     task: null
                 };
-                this.statuses = this.config.projectStatuses;
+                this.siteUrl = kanbanConfig.siteUrl;
+                this.listName = kanbanConfig.listName;
+                this.columns = kanbanConfig.columns;
+                this.statuses = [];
+                for (var i = 0; i < this.columns.length; i++) {
+                    if (this.statuses.indexOf(this.columns[i].status) < 0) {
+                        this.statuses.push(this.columns[i].status);
+                    }
+                }
                 this.priorities = this.config.priorities;
                 this.$parent = this.$scope.$parent.shell;
                 this.changeQueue = [];
                 this.currentUser = this.$parent.currentUser;
                 this.userIsEditor = App.Utils.userIsEditor(this.currentUser, this.config.editGroups);
+                this.now = new Date();
                 this.refreshData();
             }
-            HomeController.prototype.saveChanges = function () {
-                if (!confirm('Are you sure you want to save changes to ' + this.changeQueue.length + ' projects?')) {
+            KanbanController.prototype.saveChanges = function () {
+                if (!confirm('Are you sure you want to save changes to ' + this.changeQueue.length + ' items?')) {
                     return false;
                 }
                 var self = this;
                 // update the list item on the server
-                this.datacontext.updateSoapListItems(this.changeQueue, this.config.projectSiteUrl, this.config.projectListName).then(function (response) {
+                this.datacontext.updateSoapListItems(this.changeQueue, this.siteUrl, this.listName).then(function (response) {
                     var xmlDoc = response.data;
                     if (!!xmlDoc) {
                         //<ErrorCode>0x00000000</ErrorCode>
@@ -405,96 +544,97 @@ var App;
                 });
                 return false;
             };
-            HomeController.prototype.resetData = function () {
+            KanbanController.prototype.resetData = function () {
                 this.projects = [];
-                this.projects = App.Utils.clone(this.pristineProjectsData);
+                this.projects = angular.copy(this.pristineProjectsData, this.projects);
                 this.updateColumns();
                 this.changeQueue = [];
                 return false;
             };
-            HomeController.prototype.updateTask = function (taskId, field) {
+            KanbanController.prototype.updateTask = function (taskId, field, index) {
+                if (index === void 0) { index = undefined; }
                 for (var i = 0; i < this.projects.length; i++) {
-                    if (this.projects[i].Id == taskId) {
-                        //var fields = [];//{ name: 'Status', value: status }
-                        //If the change is already qeued, update its fields.
-                        var change = this.changeQueue.filter(function (t) {
-                            return t.Id == taskId;
+                    if (this.projects[i].Id != taskId) {
+                        continue;
+                    }
+                    var task = this.projects[i];
+                    //If the change is already qeued, update its fields.
+                    var change = this.changeQueue.filter(function (t) {
+                        return t.Id == taskId;
+                    });
+                    switch (field.name) {
+                        case 'Status':
+                            task.Status.Value = field.value;
+                            // Clock out the task if clocked in and not working.
+                            if (/(not started|completed)/i.test(field.value) && task.LastTimeOut == null) {
+                                this.clockOut(task);
+                            }
+                            break;
+                        case 'OrderBy':
+                            //update the order if an OrderBy change
+                            if (!!!index) {
+                                break;
+                            }
+                            //TODO
+                            // Switch places with the task that has the same OrderBy value.
+                            // If the OrderBy value is 5, for example, find the task that is set to 5 and change to the task's index+1;
+                            //var orderBy: number = field.value;
+                            //for (var i = 0; i < this.projects.length; i++){
+                            //    if (this.projects[i].OrderBy == orderBy && this.projects[i].Status.Value == task.Status.Value) {
+                            //        this.projects[i].OrderBy = index+1;
+                            //    }
+                            //}
+                            break;
+                        default:
+                            break;
+                    }
+                    if (change.length > 0) {
+                        // update existing field changes
+                        var fields = change[0].fields.filter(function (f) {
+                            return f.name == field.name;
                         });
-                        if (change.length > 0) {
-                            // update existing field changes
-                            var fields = change[0].fields.filter(function (f) {
-                                return f.name == field.name;
-                            });
-                            if (fields.length > 0) {
-                                fields[0].value = field.value;
-                            }
-                            else {
-                                change[0].fields.push(field);
-                            }
+                        if (fields.length > 0) {
+                            fields[0].value = field.value;
                         }
                         else {
-                            this.changeQueue.push({
-                                Id: taskId,
-                                fields: [field]
-                            });
+                            change[0].fields.push(field);
                         }
-                        //if (this.config.debug) {
-                        //    console.log(this.changeQueue);
-                        //}
-                        this.updateColumns();
-                        return i;
                     }
+                    else {
+                        this.changeQueue.push({
+                            Id: taskId,
+                            fields: [field]
+                        });
+                    }
+                    if (this.config.debug) {
+                        console.log(this.changeQueue);
+                    }
+                    this.updateColumns();
+                    return i;
                 }
                 return -1;
             };
-            HomeController.prototype.updateColumns = function (apply) {
+            KanbanController.prototype.updateColumns = function (apply) {
                 if (apply === void 0) { apply = false; }
-                this.columns = [
-                    {
-                        title: 'Backlog',
-                        id: 'backlog-tasks',
-                        className: 'panel panel-info',
-                        status: 'Not Started',
-                        tasks: this.projects.filter(function (task) {
-                            return task.Status.Value == 'Not Started';
-                        })
-                    },
-                    {
-                        title: 'In Progress',
-                        id: 'in-progress-tasks',
-                        className: 'panel panel-danger',
-                        status: 'In Progress',
-                        tasks: this.projects.filter(function (task) {
-                            return task.Status.Value == 'In Progress';
-                        })
-                    },
-                    {
-                        title: 'Testing',
-                        id: 'testing-tasks',
-                        className: 'panel panel-warning',
-                        status: 'Testing',
-                        tasks: this.projects.filter(function (task) {
-                            return task.Status.Value == 'Testing';
-                        })
-                    },
-                    {
-                        title: 'Done',
-                        id: 'completed-tasks',
-                        className: 'panel panel-success',
-                        status: 'Completed',
-                        tasks: this.projects.filter(function (task) {
-                            return task.Status.Value == 'Completed';
-                        })
-                    }
-                ];
+                var self = this;
+                for (var i = 0; i < this.columns.length; i++) {
+                    var col = this.columns[i];
+                    this.statuses.push(col.status);
+                    col.tasks = self.projects.filter(function (task) {
+                        return task.Status.Value == col.status;
+                    });
+                }
                 //force a redraw of the columns if dragging projects around
-                if (!!this.dragging.task) {
+                if (!!this.dragging.task || apply) {
                     this.$scope.$apply();
+                    if (this.config.debug) {
+                        console.info('redraw');
+                    }
                 }
             };
-            HomeController.prototype.deleteTask = function (task, index) {
+            KanbanController.prototype.deleteTask = function (task, index) {
                 var self = this;
-                if (!confirm('Are you sure you want to delete the project with ID# ' + task.Id + '?')) {
+                if (!confirm('Are you sure you want to delete the item with ID# ' + task.Id + '?')) {
                     return;
                 }
                 this.datacontext.deleteListItem(task).then(function (response) {
@@ -503,35 +643,57 @@ var App;
                 });
                 return false;
             };
-            HomeController.prototype.refreshData = function () {
+            KanbanController.prototype.refreshData = function () {
                 var self = this;
-                this.datacontext.getProjects().then(function (projects) {
+                this.datacontext.getProjects(this.siteUrl, this.listName, true, this.kanbanConfig.previousMonths).then(function (projects) {
                     self.projects = projects;
                     self.updateColumns();
-                    self.pristineProjectsData = App.Utils.clone(self.projects);
+                    self.pristineProjectsData = angular.copy(self.projects, self.pristineProjectsData);
                 });
                 return false;
             };
-            HomeController.prototype.viewItem = function (task) {
+            KanbanController.prototype.viewItem = function (task) {
                 var self = this;
-                var itemUrl = this.config.projectSiteUrl + '/Lists/' + this.config.projectListName.replace(/\s/g, '%20') + '/DispForm.aspx?ID=' + task.Id;
-                App.SharePoint.Utils.openSPForm(itemUrl, task.Title, function (result, target) {
+                App.SharePoint.Utils.openSpDisplayForm(this.siteUrl, this.listName, task);
+                return false;
+            };
+            KanbanController.prototype.newItem = function () {
+                var self = this;
+                App.SharePoint.Utils.openSpNewForm(this.siteUrl, this.listName, 'New Item', function () {
+                    console.info(arguments);
+                    self.refreshData();
                 });
                 return false;
             };
-            HomeController.prototype.range = function (end) {
+            KanbanController.prototype.range = function (end) {
                 var a = [];
                 for (var i = 1; i <= end; i++) {
                     a.push(i);
                 }
                 return a;
             };
-            HomeController.Id = "homeController";
-            HomeController.$inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext'];
-            return HomeController;
+            KanbanController.prototype.clockIn = function (task) {
+                this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(function (timeIn) {
+                    task.LastTimeIn = timeIn;
+                    task.LastTimeOut = null;
+                });
+                return false;
+            };
+            KanbanController.prototype.clockOut = function (task) {
+                this.datacontext.clockOut(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(function (timeOut) {
+                    task.LastTimeOut = timeOut;
+                });
+                return false;
+            };
+            KanbanController.prototype.isActive = function (task) {
+                return task.LastTimeOut == null && task.LastTimeIn != null;
+            };
+            KanbanController.Id = 'kanbanController';
+            KanbanController.$inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext', 'kanbanConfig'];
+            return KanbanController;
         })();
-        Controllers.HomeController = HomeController;
-        App.app.controller(HomeController.Id, HomeController);
+        Controllers.KanbanController = KanbanController;
+        App.app.controller(KanbanController.Id, KanbanController);
     })(Controllers = App.Controllers || (App.Controllers = {}));
 })(App || (App = {}));
 var App;
@@ -645,43 +807,68 @@ var App;
                 }
                 url.push('$top=' + top);
                 this.executeRestRequest(url.join('&').replace(/\&/, '\?')).then(function (response) {
-                    d.resolve(response.data.d.results);
+                    if (response.status != 200) {
+                        d.reject(response.statusText);
+                        console.warn(response);
+                        return;
+                    }
+                    if (!!response.data.d.results) {
+                        d.resolve(response.data.d.results);
+                    }
+                    else {
+                        d.resolve(response.data.d);
+                    }
                 });
                 return d.promise;
             };
-            Datacontext.prototype.getProjects = function (force, prevMonths) {
+            Datacontext.prototype.getProjects = function (siteUrl, listName, force, prevMonths) {
                 if (force === void 0) { force = false; }
-                if (prevMonths === void 0) { prevMonths = undefined; }
+                if (prevMonths === void 0) { prevMonths = 6; }
+                var d = this.$q.defer();
                 var self = this;
                 // Show how many previous months of projects to request.
                 // Change this variable in App.Config;
-                prevMonths = prevMonths || this.config.previousMonths;
                 if (!this.config.isProduction) {
                     return this.getTestData();
                 }
                 var today = new Date();
                 var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
                 var filter = 'CategoryValue ne \'Log\' and Created gt datetime\'' + dateFilter + '\'';
-                var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate,OrderBy';
+                var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,DueDate,OrderBy,LastTimeIn,LastTimeOut';
                 var orderBy = 'PriorityValue asc,Created asc';
                 var expand = 'AssignedTo,Attachments,Priority,Status';
-                return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, filter, select, orderBy, expand, 100);
+                this.getSpListItems(siteUrl, listName, filter, select, orderBy, expand, 100).then(function (projects) {
+                    // parse all the dates
+                    projects.forEach(function (p) {
+                        p.LastTimeIn = App.Utils.parseMsDateTicks(p.LastTimeIn);
+                        p.LastTimeOut = App.Utils.parseMsDateTicks(p.LastTimeOut);
+                        p.Created = App.Utils.parseMsDateTicks(p.Created);
+                        p.Modified = App.Utils.parseMsDateTicks(p.Modified);
+                        if (!!p.StartDate) {
+                            p.StartDate = App.Utils.parseMsDateTicks(p.StartDate);
+                        }
+                        if (!!p.EndDueDate) {
+                            p.EndDueDate = App.Utils.parseMsDateTicks(p.EndDueDate);
+                        }
+                    });
+                    d.resolve(projects);
+                });
+                return d.promise;
             };
             Datacontext.prototype.getProject = function (siteUrl, listName, itemId) {
                 return this.executeRestRequest(siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName) + '(' + itemId + ')');
             };
             Datacontext.prototype.insertListItem = function (url, data) {
                 if (data === void 0) { data = undefined; }
-                return this.executeRestRequest(url, data, false, 'POST');
+                return this.executeRestRequest(url, JSON.stringify(data), false, 'POST');
             };
             Datacontext.prototype.updateListItem = function (item, data) {
-                if (data === void 0) { data = undefined; }
                 var headers = {
                     'Accept': 'application/json;odata=verbose',
                     'X-HTTP-Method': 'MERGE',
-                    'If-Match': item.__metadata.etag
+                    'If-Match': JSON.stringify(item.__metadata.etag)
                 };
-                return this.executeRestRequest(item.__metadata.uri, data, false, 'POST', headers);
+                return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
             };
             /**
             * Delete the list item.
@@ -947,15 +1134,85 @@ var App;
                 });
                 return d.promise;
             };
+            /**
+            * Log the date and time a project was started; INSERTS new row in SharePoint list "Time Log".
+            * The TimeInWorkflow will update the related project item's LastTimeIn to the current time and the LastTimeOut field to NULL.
+            *
+            * @param item: SP List Item with fields LastTimeIn and LastTimeOut
+            * @return ng.IPromise<Date>
+            */
+            Datacontext.prototype.clockIn = function (item, siteUrl, listName) {
+                var d = this.$q.defer();
+                if (!this.config.isProduction) {
+                    d.resolve(new Date());
+                    return d.promise;
+                }
+                // TODO: We'll need to clock in other projects that might be open - you can only have one active project at a time.
+                var now = new Date();
+                var url = siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName);
+                var data = { ItemId: item.Id, TimeIn: now.toISOString() };
+                this.insertListItem(url, data).then(function (response) {
+                    if (response.status != 200) {
+                        d.reject(response.statusText);
+                        console.warn(response);
+                    }
+                    d.resolve(now);
+                });
+                return d.promise;
+            };
+            /**
+            * Log the date and time a project was stopped (not completed); UPDATES existing row in SharePoint list "Time Log" where `ItemId == itemId && CreatedById == userId`.
+            * The TimeOutWorkflow will update the related project item's LastTimeOut field to the current time.
+            *
+            * @param itemId: number
+            * @return ng.IPromise<Date>
+            */
+            Datacontext.prototype.clockOut = function (item, siteUrl, listName) {
+                var d = this.$q.defer();
+                var self = this;
+                if (!this.config.isProduction) {
+                    d.resolve(new Date());
+                    return d.promise;
+                }
+                this.common.showLoader();
+                var now = new Date();
+                //Query the last time entry to get the ID, then update the TimeOut field to now.
+                this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(function (items) {
+                    var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
+                    var timeLogId = timeLog.Id;
+                    var iso = now.toISOString();
+                    function beforeSendFunction(xhr) {
+                        xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
+                        // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
+                        xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
+                    }
+                    // Angular's $http does not work for this!
+                    var $jqXhr = $.ajax({
+                        url: timeLog.__metadata.uri,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        processData: false,
+                        beforeSend: beforeSendFunction,
+                        data: JSON.stringify({ TimeOut: iso })
+                    });
+                    $jqXhr.fail(function (jqXhr, status, error) {
+                        console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
+                    });
+                    d.resolve(now);
+                }).finally(function () {
+                    self.common.hideLoader();
+                });
+                return d.promise;
+            };
             Datacontext.prototype.getTestData = function () {
                 var d = this.$q.defer();
                 var self = this;
-                if (!!this.cache.projects) {
-                    d.resolve(this.cache.projects);
-                    return d.promise;
-                }
+                //if (!!this.cache.projects) {
+                //    d.resolve(this.cache.projects);
+                //    return d.promise;
+                //}
                 self.$http({
-                    url: '/testdata.txt',
+                    url: '/testdata.txt?_=' + App.Utils.getTimestamp(),
                     method: 'GET'
                 }).then(function (response) {
                     if (response.status != 200) {
@@ -964,7 +1221,7 @@ var App;
                         return;
                     }
                     var projects = response.data.d.results;
-                    self.cache.projects = response.data.d.results;
+                    //self.cache.projects = response.data.d.results;
                     d.resolve(projects);
                 }).finally(function () {
                     self.common.hideLoader();
@@ -1055,7 +1312,7 @@ var App;
                     return s;
                 }
             };
-            Utils.openSPForm = function (url, title, callback, width, height) {
+            Utils.openSpForm = function (url, title, callback, width, height) {
                 if (title === void 0) { title = "Project Item"; }
                 if (callback === void 0) { callback = function () { }; }
                 if (width === void 0) { width = 300; }
@@ -1070,6 +1327,20 @@ var App;
                         dialogReturnValueCallback: callback
                     });
                 }, "sp.js");
+                return false;
+            };
+            Utils.openSpDisplayForm = function (siteUrl, listName, item, isEdit, callback) {
+                if (isEdit === void 0) { isEdit = false; }
+                if (callback === void 0) { callback = function () { }; }
+                var itemUrl = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/' + (isEdit ? 'Edit' : 'Disp') + 'Form.aspx?ID=' + item.Id;
+                SharePoint.Utils.openSpForm(itemUrl, item.Title, callback);
+                return false;
+            };
+            Utils.openSpNewForm = function (siteUrl, listName, title, callback) {
+                if (title === void 0) { title = 'New Item'; }
+                if (callback === void 0) { callback = function () { }; }
+                var url = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/NewForm.aspx';
+                SharePoint.Utils.openSpForm(url, title, callback);
                 return false;
             };
             return Utils;
@@ -1131,6 +1402,12 @@ var App;
         };
         Utils.getTimestamp = function () {
             return '?_=' + new Date().getTime();
+        };
+        Utils.parseMsDateTicks = function (val) {
+            if (val == null) {
+                return val;
+            }
+            return new Date(parseInt(val.replace(/\D/g, '')));
         };
         /**
         * Parse dates in format: "MM/DD/YYYY", "MM-DD-YYYY", "YYYY-MM-DD", "/Date(1442769001000)/", or YYYY-MM-DDTHH:MM:SSZ

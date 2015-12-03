@@ -1,5 +1,13 @@
 ﻿module App {
     
+    export interface IKanbanConfig {
+        siteUrl: string;
+        listName: string;
+        timeLogListName: string;
+        columns: Array<IKanbanColumn>;
+        previousMonths: number;
+    }
+
     export interface IKanbanColumn {
         title: string;
         id: string;
@@ -17,5 +25,6 @@
         name: string;
         value: any;
     }
+
 
 }

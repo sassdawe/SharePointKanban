@@ -36,7 +36,7 @@
             }
         }
 
-        public static openSPForm(url: string, title: string = "Project Item", callback: Function = function () { }, width: number = 300, height: number = 400): boolean {
+        public static openSpForm(url: string, title: string = "Project Item", callback: Function = function () { }, width: number = 300, height: number = 400): boolean {
             var ex = window["ExecuteOrDelayUntilScriptLoaded"];
             var SP = window["SP"];
 
@@ -51,7 +51,19 @@
 
             return false;
         }
-        
+
+        public static openSpDisplayForm(siteUrl: string, listName: string, item: SharePoint.ISpItem, isEdit: boolean = false, callback: Function = function () { }): boolean {
+            var itemUrl = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/' + (isEdit ? 'Edit' : 'Disp') + 'Form.aspx?ID=' + item.Id;
+            SharePoint.Utils.openSpForm(itemUrl, item.Title, callback);
+            return false;
+        }
+
+        public static openSpNewForm(siteUrl: string, listName: string, title: string = 'New Item', callback: Function = function () { }): boolean {
+            var url = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/NewForm.aspx';
+            SharePoint.Utils.openSpForm(url, title, callback);
+            return false;
+        }
+      
     }
 
 }

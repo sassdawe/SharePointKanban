@@ -6,11 +6,13 @@
 
         // REST Methods
         getSpListItems(siteUrl: string, listName: string, filter?: string, select?: string, orderby?: string, expand?: string, top?: number): ng.IPromise<any>;
-        getProjects(force?: boolean, prevMonths?: number): ng.IPromise<Array<SharePoint.ISpTaskItem>>;
+        getProjects(siteUrl: string, listName: string, force?: boolean, prevMonths?: number): ng.IPromise<Array<SharePoint.ISpTaskItem>>;
         insertListItem(url: string, data?: any): ng.IPromise<any>;
-        updateListItem(item: SharePoint.ISpItem, data?: any): ng.IPromise<any>;
+        updateListItem(item: SharePoint.ISpItem, data: any): ng.IPromise<any>;
         deleteListItem(item: SharePoint.ISpItem): ng.IPromise<any>;
         deleteAttachment(att: SharePoint.ISpAttachment): ng.IPromise<any>;
+        clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date>;
+        clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date>;
 
         // SOAP Methods
         executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl?: string, cache?: boolean, headers?: any, service?: string): ng.IPromise<any>
@@ -100,18 +102,30 @@
 
             this.executeRestRequest(url.join('&').replace(/\&/, '\?')).then(
                 (response: ng.IHttpPromiseCallbackArg<SharePoint.ISpCollectionWrapper<any>>): void => {
-                    d.resolve(response.data.d.results);
+
+                    if (response.status != 200) {
+                        d.reject(response.statusText);
+                        console.warn(response);
+                        return;
+                    }
+
+                    if (!!response.data.d.results) {
+                        d.resolve(response.data.d.results);
+                    } else {
+                        d.resolve(response.data.d);
+                    }
                 });
 
             return d.promise;
         }
 
-        public getProjects(force: boolean = false, prevMonths: number = undefined): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
+        public getProjects(siteUrl: string, listName: string, force: boolean = false, prevMonths: number = 6): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
+            var d = this.$q.defer();
+
             var self = this;
 
             // Show how many previous months of projects to request.
             // Change this variable in App.Config;
-            prevMonths = prevMonths || this.config.previousMonths;
 
             if (!this.config.isProduction) {
                 return this.getTestData();
@@ -120,28 +134,48 @@
             var today = new Date();
             var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
             var filter = 'CategoryValue ne \'Log\' and Created gt datetime\'' + dateFilter + '\'';
-            var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,EndDueDate,OrderBy';
+            var select = 'Id,Title,AssignedTo,Attachments,Priority,Status,StartDate,DueDate,OrderBy,LastTimeIn,LastTimeOut';
             var orderBy = 'PriorityValue asc,Created asc';
             var expand = 'AssignedTo,Attachments,Priority,Status';
 
-            return this.getSpListItems(this.config.projectSiteUrl, this.config.projectListName, filter, select, orderBy, expand, 100);
+            this.getSpListItems(siteUrl, listName, filter, select, orderBy, expand, 100).then(
+                (projects: Array<SharePoint.ISpTaskItem>): void => {
+
+                    // parse all the dates
+                    projects.forEach((p: SharePoint.ISpTaskItem): void => {                      
+                        p.LastTimeIn = Utils.parseMsDateTicks(p.LastTimeIn);
+                        p.LastTimeOut = Utils.parseMsDateTicks(p.LastTimeOut);
+                        p.Created = Utils.parseMsDateTicks(p.Created);
+                        p.Modified = Utils.parseMsDateTicks(p.Modified);
+                        if (!!p.StartDate) {
+                            p.StartDate = Utils.parseMsDateTicks(p.StartDate);
+                        }
+                        if (!!p.EndDueDate) {
+                            p.EndDueDate = Utils.parseMsDateTicks(p.EndDueDate);
+                        }
+                    });
+
+                    d.resolve(projects);
+                });
+
+            return d.promise;
         }
 
         public getProject(siteUrl: string, listName: string, itemId: number): ng.IPromise<SharePoint.ISpTaskItem> {
             return this.executeRestRequest(siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName) + '(' + itemId + ')');
         }
 
-        public insertListItem(url: string, data: any = undefined): ng.IPromise<any> {
-            return this.executeRestRequest(url, data, false, 'POST');
+        public insertListItem(url: string, data: any = undefined): ng.IPromise<ng.IHttpPromiseCallbackArg<any>> {
+            return this.executeRestRequest(url, JSON.stringify(data), false, 'POST');
         }
 
-        public updateListItem(item: SharePoint.ISpItem, data: any = undefined): ng.IPromise<any> {
+        public updateListItem(item: SharePoint.ISpItem, data): ng.IPromise<ng.IHttpPromiseCallbackArg<any>> {
             var headers = {
                 'Accept': 'application/json;odata=verbose',
                 'X-HTTP-Method': 'MERGE',
-                'If-Match': item.__metadata.etag
+                'If-Match': JSON.stringify(item.__metadata.etag)
             };
-            return this.executeRestRequest(item.__metadata.uri, data, false, 'POST', headers);
+            return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
         }
 
         /**
@@ -462,17 +496,109 @@
             return d.promise;
         }
 
+        /**
+        * Log the date and time a project was started; INSERTS new row in SharePoint list "Time Log".
+        * The TimeInWorkflow will update the related project item's LastTimeIn to the current time and the LastTimeOut field to NULL. 
+        *
+        * @param item: SP List Item with fields LastTimeIn and LastTimeOut
+        * @return ng.IPromise<Date>
+        */
+        public clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date> {
+            var d = this.$q.defer();
+
+            if (!this.config.isProduction) {
+                d.resolve(new Date());
+                return d.promise;
+            }
+
+            // TODO: We'll need to clock in other projects that might be open - you can only have one active project at a time.
+
+            var now = new Date();
+            var url = siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName);
+            var data = { ItemId: item.Id, TimeIn: now.toISOString() };
+
+            this.insertListItem(url, data).then(
+                (response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
+
+                    if (response.status != 200) {
+                        d.reject(response.statusText);
+                        console.warn(response);
+                    }
+
+                    d.resolve(now);
+                });
+
+            return d.promise;
+        }
+
+        /**
+        * Log the date and time a project was stopped (not completed); UPDATES existing row in SharePoint list "Time Log" where `ItemId == itemId && CreatedById == userId`.
+        * The TimeOutWorkflow will update the related project item's LastTimeOut field to the current time.
+        *
+        * @param itemId: number
+        * @return ng.IPromise<Date>
+        */
+        public clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date> {
+            var d = this.$q.defer();
+            var self = this;
+
+            if (!this.config.isProduction) {
+                d.resolve(new Date());
+                return d.promise;
+            }
+
+            this.common.showLoader();
+
+            var now = new Date();
+
+            //Query the last time entry to get the ID, then update the TimeOut field to now.
+            this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(
+                (items: Array<SharePoint.ISpItem>): void => {
+
+                    var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
+                    var timeLogId: number = timeLog.Id;                  
+                    var iso = now.toISOString();
+
+                    function beforeSendFunction(xhr) {
+                        xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
+                        // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
+                        xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
+                    }
+
+                    // Angular's $http does not work for this!
+                    var $jqXhr: JQueryXHR = $.ajax({
+                        url: timeLog.__metadata.uri,
+                        type: 'POST',
+                        contentType: 'application/json',
+                        processData: false,
+                        beforeSend: beforeSendFunction,
+                        data: JSON.stringify({ TimeOut: iso })
+                    });
+
+                    $jqXhr.fail(function (jqXhr: JQueryXHR, status: string, error: string) {
+                        console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
+                    });
+
+                    d.resolve(now);
+
+                }).finally((): void => {
+                    self.common.hideLoader();
+                });
+
+            return d.promise;
+        }
+
         public getTestData(): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
             var d = this.$q.defer();
             var self = this;
 
-            if (!!this.cache.projects) {
-                d.resolve(this.cache.projects);
-                return d.promise;
-            }
+            //if (!!this.cache.projects) {
+            //    d.resolve(this.cache.projects);
+            //    return d.promise;
+            //}
 
             self.$http({
-                url: '/testdata.txt',
+                url: '/testdata.txt?_=' + Utils.getTimestamp(),
                 method: 'GET'
             }).then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpCollectionWrapper<SharePoint.ISpTaskItem>>): void => {
 
@@ -483,7 +609,7 @@
                 }
 
                 var projects = response.data.d.results;
-                self.cache.projects = response.data.d.results;
+                //self.cache.projects = response.data.d.results;
                 d.resolve(projects);
 
             }).finally((): void => {

@@ -24,7 +24,7 @@
   <ItemGroup>
     <Content Include="app.js" />
     <Content Include="app\footer\footer.htm" />
-    <Content Include="app\home\home.htm" />
+    <Content Include="app\kanban\kanban.htm" />
     <Content Include="app\menu\menu.htm" />
     <Content Include="app\shell\shell.htm" />
     <Content Include="Content\css\bootstrap-theme.css" />
@@ -89,7 +89,7 @@
     <TypeScriptCompile Include="app\dvr\routes.ts" />
     <TypeScriptCompile Include="app\dvr\views.ts" />
     <TypeScriptCompile Include="app\footer\controllers.footer.ts" />
-    <TypeScriptCompile Include="app\home\controllers.home.ts" />
+    <TypeScriptCompile Include="app\kanban\controllers.kanban.ts" />
     <TypeScriptCompile Include="app\menu\controllers.menu.ts" />
     <TypeScriptCompile Include="app\run.ts" />
     <TypeScriptCompile Include="app\services\services.datacontext.ts" />

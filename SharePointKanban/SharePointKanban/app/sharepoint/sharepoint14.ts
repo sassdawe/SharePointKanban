@@ -198,6 +198,9 @@
         EndDueDate: Date;
         Priority: ISpChoiceValue;
         Status: ISpChoiceValue;
-        StartDate: Date;     
+        StartDate: Date;
+        LastTimeIn: Date;
+        LastTimeOut: Date;
+        OrderBy: number;     
     }
 }

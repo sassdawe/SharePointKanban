@@ -2,12 +2,16 @@
 
     export class Dependencies {
 
-        static projectList: Array<any> = ['datacontext', function (datacontext: Services.IDatacontext) {
-            return datacontext.getProjects();
+        static currentUser = ['datacontext', function (datacontext: Services.IDatacontext) {
+            return datacontext.getCurrentUser();
         }]
 
-        static currentUser: Array<any> = ['datacontext', function (datacontext: Services.IDatacontext) {
-            return datacontext.getCurrentUser();
+        static projectsKanbanConfig = ['config', function (config: IConfiguration): IKanbanConfig {
+            return config.projectsKanbanConfig;
+        }]
+
+        static helpdeskKanbanConfig = ['config', function (config: IConfiguration): IKanbanConfig {
+            return config.heldpeskKanbanConfig;
         }]
 
     }

@@ -71,12 +71,19 @@ module App{
                     ////////////
                     // Home
                     ////////////
-                    'main@app': Views.home,
+                    'main@app': Views.projects,
 
                     ////////////
                     // Footer
                     ////////////
                     'footer@app': Views.footer
+                }
+            });
+
+            $stateProvider.state('app.home.helpdesk', {
+                url: 'helpdesk',
+                views: {
+                    'main@app': Views.helpdesk,
                 }
             });
 

@@ -6,8 +6,38 @@
     });
 
     app.filter('sp_date', function () {
-        Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
-        return Utils.parseDate;
+        function fn(val) {
+            if (!!!val) { return val; }
+            return Utils.parseDate(val).toLocaleDateString();
+        };
+        //fn['$stateful'] = true;
+        return fn;
+    });
+
+    app.filter('datetime', function () {
+        function fn (val) {
+            if (!!!val) { return val; }
+            return Utils.parseDate(val).toLocaleString();
+        };
+        //fn['$stateful'] = true;
+        return fn;
+    });
+
+    app.filter('active_tasks', function () {
+        function fn(cols: Array<IKanbanColumn>): Array<SharePoint.ISpTaskItem> {
+            var active = [];
+            if (!!!cols) { return active; }
+            for (var i = 0; i < cols.length; i++) {
+                for (var j = 0; j < cols[i].tasks.length; j++) {
+                    if (cols[i].tasks[j].LastTimeOut == null && cols[i].tasks[j].LastTimeIn != null) {
+                        active.push(cols[i].tasks[j]);
+                    }
+                }
+            }
+            return active;
+        };
+        //fn['$stateful'] = true;
+        return fn;
     });
 
 }

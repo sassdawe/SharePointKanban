@@ -41,9 +41,18 @@
                     $element.on('drop', function (event) {
                         cancel(event);
 
-                        if (!!scope.parentScope.dragging.task) {
-                            scope.parentScope.updateTaskStatus(scope.parentScope.dragging.task.Id, scope.kanbanColumn.status);
-                            scope.parentScope.dragging.task = undefined; //clear the referene so we know we're no longer dragging
+                        var controller: Controllers.IKanbanController = scope.parentScope;
+                        var task: SharePoint.ISpTaskItem = scope.parentScope.dragging.task;
+                        var col: IKanbanColumn = scope.kanbanColumn;
+
+                        if (!!task) {
+                            var field: ISpUpdateField = {
+                                name: 'Status',
+                                value: col.status
+                            };
+                            task.Status.Value = col.status;
+                            controller.updateTask(task.Id, field);
+                            controller.dragging.task = undefined; //clear the referene so we know we're no longer dragging
                         }
 
                     }).on('dragover', function (event) {

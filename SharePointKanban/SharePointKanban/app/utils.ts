@@ -39,6 +39,11 @@
             return '?_=' + new Date().getTime();
         }
 
+        public static parseMsDateTicks(val: any): Date {
+            if (val == null) { return val; }
+            return new Date(parseInt(val.replace(/\D/g, '')));
+        }
+
         /**
         * Parse dates in format: "MM/DD/YYYY", "MM-DD-YYYY", "YYYY-MM-DD", "/Date(1442769001000)/", or YYYY-MM-DDTHH:MM:SSZ
         * @param val: string

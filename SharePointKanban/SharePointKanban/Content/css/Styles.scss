@@ -2,13 +2,23 @@
     height:100%;
 }
 
+$red: #f00;
+$green: #21b111;
+
 body {
     height:100%;
 
     select{color:#000;}
 
+    .red{color: $red}
+    .green{color: $green;}
+
     input.short{
         width:40px;
+    }
+
+    .inline-block{
+        display:inline-block;
     }
 
     .navbar-brand{
@@ -18,9 +28,7 @@ body {
         padding-left:150px;
     }
 
-    .kanban{
-
-        .kanban-task, [kanban-task]{
+    .kanban-task, [kanban-task]{
             padding:1em;
             margin:.5em 0;
             height:auto;
@@ -31,6 +39,9 @@ body {
         .kanban-task:hover, [kanban-task]:hover{
             cursor:move;
         }
+
+    .kanban-task.active, [kanban-task].active{
+        border:1px solid $red;
     }
 
     .ajax-loader{
