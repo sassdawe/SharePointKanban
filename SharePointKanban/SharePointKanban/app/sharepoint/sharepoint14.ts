@@ -195,7 +195,7 @@
         Comments: string;
         Complete: number;
         Description: string;
-        EndDueDate: Date;
+        DueDate: Date;
         Priority: ISpChoiceValue;
         Status: ISpChoiceValue;
         StartDate: Date;

@@ -66,7 +66,7 @@
                 }
             }
 
-            self.$http(params).then((response: ng.IHttpPromiseCallbackArg<any>): void => {
+            this.$http(params).then((response: ng.IHttpPromiseCallbackArg<any>): void => {
                 d.resolve(response);
             }).finally((): void => {
                 self.common.hideLoader();
@@ -142,16 +142,20 @@
                 (projects: Array<SharePoint.ISpTaskItem>): void => {
 
                     // parse all the dates
-                    projects.forEach((p: SharePoint.ISpTaskItem): void => {                      
-                        p.LastTimeIn = Utils.parseMsDateTicks(p.LastTimeIn);
-                        p.LastTimeOut = Utils.parseMsDateTicks(p.LastTimeOut);
+                    projects.forEach((p: SharePoint.ISpTaskItem): void => {    
                         p.Created = Utils.parseMsDateTicks(p.Created);
                         p.Modified = Utils.parseMsDateTicks(p.Modified);
+                        if (!!p.LastTimeIn) {
+                            p.LastTimeIn = Utils.parseMsDateTicks(p.LastTimeIn);
+                        }
+                        if (!!p.LastTimeOut) {
+                            p.LastTimeOut = Utils.parseMsDateTicks(p.LastTimeOut);
+                        }
                         if (!!p.StartDate) {
                             p.StartDate = Utils.parseMsDateTicks(p.StartDate);
                         }
-                        if (!!p.EndDueDate) {
-                            p.EndDueDate = Utils.parseMsDateTicks(p.EndDueDate);
+                        if (!!p.DueDate) {
+                            p.DueDate = Utils.parseMsDateTicks(p.DueDate);
                         }
                     });
 
@@ -170,12 +174,23 @@
         }
 
         public updateListItem(item: SharePoint.ISpItem, data): ng.IPromise<ng.IHttpPromiseCallbackArg<any>> {
-            var headers = {
-                'Accept': 'application/json;odata=verbose',
-                'X-HTTP-Method': 'MERGE',
-                'If-Match': JSON.stringify(item.__metadata.etag)
-            };
-            return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
+            var req = {
+                method: 'POST',
+                url: 'http://example.com',
+                processData: false,
+                headers: {
+                    'Accept': 'application/json;odata=verbose',
+                    'Access-Control-Allow-Origin': '*',
+                    'Origin': window.location.protocol + '//' + this.config.productionHostname + '/',
+                    'X-HTTP-Method': 'MERGE',
+                    'If-Match': JSON.stringify(item.__metadata.etag)
+                },
+                data: JSON.stringify(data)
+            }
+
+            return this.$http(req);
+
+            //return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
         }
 
         /**
@@ -517,18 +532,7 @@
             var url = siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName);
             var data = { ItemId: item.Id, TimeIn: now.toISOString() };
 
-            this.insertListItem(url, data).then(
-                (response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
-
-                    if (response.status != 200) {
-                        d.reject(response.statusText);
-                        console.warn(response);
-                    }
-
-                    d.resolve(now);
-                });
-
-            return d.promise;
+            return this.insertListItem(url, data);
         }
 
         /**
@@ -541,23 +545,26 @@
         public clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date> {
             var d = this.$q.defer();
             var self = this;
+            var now = new Date();
 
             if (!this.config.isProduction) {
-                d.resolve(new Date());
+                d.resolve(now);
                 return d.promise;
             }
 
             this.common.showLoader();
-
-            var now = new Date();
 
             //Query the last time entry to get the ID, then update the TimeOut field to now.
             this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(
                 (items: Array<SharePoint.ISpItem>): void => {
 
                     var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
-                    var timeLogId: number = timeLog.Id;                  
-                    var iso = now.toISOString();
+
+                    //self.updateListItem(item, { TimeOut: now.toISOString() })
+                    //    .finally((): void => {
+                    //        d.resolve(now);
+                    //        self.common.hideLoader();
+                    //    });
 
                     function beforeSendFunction(xhr) {
                         xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
@@ -572,17 +579,17 @@
                         contentType: 'application/json',
                         processData: false,
                         beforeSend: beforeSendFunction,
-                        data: JSON.stringify({ TimeOut: iso })
+                        data: JSON.stringify({ TimeOut: now.toISOString() })
+                    });
+
+                    $jqXhr.always(function () {
+                        d.resolve(now);
                     });
 
                     $jqXhr.fail(function (jqXhr: JQueryXHR, status: string, error: string) {
                         console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
                     });
 
-                    d.resolve(now);
-
-                }).finally((): void => {
-                    self.common.hideLoader();
                 });
 
             return d.promise;

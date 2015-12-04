@@ -10,16 +10,15 @@
             if (!!!val) { return val; }
             return Utils.parseDate(val).toLocaleDateString();
         };
-        //fn['$stateful'] = true;
+        fn['$stateful'] = true;
         return fn;
     });
 
-    app.filter('datetime', function () {
+    app.filter('sp_datetime', function () {
         function fn (val) {
-            if (!!!val) { return val; }
-            return Utils.parseDate(val).toLocaleString();
+            return Utils.toUTCDateTime(val);
         };
-        //fn['$stateful'] = true;
+        fn['$stateful'] = true;
         return fn;
     });
 
@@ -36,7 +35,7 @@
             }
             return active;
         };
-        //fn['$stateful'] = true;
+        fn['$stateful'] = true;
         return fn;
     });
 

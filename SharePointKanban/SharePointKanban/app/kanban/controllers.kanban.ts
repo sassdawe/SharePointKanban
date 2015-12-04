@@ -54,14 +54,7 @@ module App.Controllers{
             this.siteUrl = kanbanConfig.siteUrl;
             this.listName = kanbanConfig.listName;
             this.columns = kanbanConfig.columns;
-            this.statuses = [];
-
-            for (var i = 0; i < this.columns.length; i++) {
-                if (this.statuses.indexOf(this.columns[i].status) < 0) {
-                    this.statuses.push(this.columns[i].status);
-                }
-            }
-
+            this.statuses = kanbanConfig.statuses;
             this.priorities = this.config.priorities;
             this.$parent = this.$scope.$parent.shell;
             this.changeQueue = [];      
@@ -187,7 +180,6 @@ module App.Controllers{
 
             for (var i = 0; i < this.columns.length; i++){
                 var col: IKanbanColumn = this.columns[i];
-                this.statuses.push(col.status);
                 col.tasks = self.projects.filter((task: SharePoint.ISpTaskItem): boolean => {
                     return task.Status.Value == col.status;
                 });
@@ -252,10 +244,15 @@ module App.Controllers{
         }
 
         public clockIn(task: SharePoint.ISpTaskItem): boolean {
-            this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then((timeIn: Date): void => {
-                task.LastTimeIn = timeIn;
-                task.LastTimeOut = null;
-            });
+            this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(
+                (response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
+                    if (response.statusText != 'Created') {
+                        console.warn(response);
+                        return;
+                    }
+                    task.LastTimeIn = Utils.parseMsDateTicks(response.data.d.TimeIn);
+                    task.LastTimeOut = null;
+                });
             return false;
         }
 

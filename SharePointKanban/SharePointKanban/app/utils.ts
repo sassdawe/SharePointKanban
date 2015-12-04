@@ -44,6 +44,20 @@
             return new Date(parseInt(val.replace(/\D/g, '')));
         }
 
+        public static toUTCDateTime(date: Date): string {
+            if (!!!date) { return <any>date; }
+            else if (date.constructor === String) {
+                date = Utils.parseMsDateTicks(date);
+            }
+            var m = date.getUTCMinutes(),
+                h = date.getUTCHours(),
+                s = date.getUTCSeconds();
+            return date.toLocaleDateString()
+                + ' ' + (h < 10 ? '0' + h : h)
+                + ':' + (m < 10 ? '0' + m : m)
+                + ':' + (s < 10 ? '0' + s : s);
+        }
+
         /**
         * Parse dates in format: "MM/DD/YYYY", "MM-DD-YYYY", "YYYY-MM-DD", "/Date(1442769001000)/", or YYYY-MM-DDTHH:MM:SSZ
         * @param val: string

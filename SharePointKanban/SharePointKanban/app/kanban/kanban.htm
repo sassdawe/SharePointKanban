@@ -64,12 +64,8 @@
                 <div ng-repeat="task in col.tasks | orderBy : ['OrderBy', 'Id']" kanban-task="task" draggable="true" id="task_{{task.Id}}" parent-scope="vm" ng-class="{'active': vm.isActive(task)}">
                     <h5>#{{task.Id}}: {{task.Title}}</h5>
 
-                    <!--
-                    <div ng-class="{'label label-danger': task.Priority.Value == '(1) High', 'label label-success': task.Priority.Value == '(2) Normal', 'label label-indo': task.Priority.Value == '(3) Low'}">{{task.Priority.Value}}</div>
-                    -->
-
                     <div class="form-group">
-                        <small>Order By:</small>
+                        <small>Priority:</small>
                         <select ng-model="task.OrderBy" ng-options="opt for opt in vm.range(col.tasks.length)" ng-change="vm.updateTask(task.Id, {'name': 'OrderBy', 'value': task.OrderBy}, $index)"></select>
                     </div>
 
@@ -84,19 +80,19 @@
                         <a href="mailto:{{person.WorkEMail}}?subject=#{{task.Id}}: {{task.Title}}" class="btn btn-link"><span class="glyphicon glyphicon-user"></span> {{person.Name}}</a>
                     </div>
 
-                    <div ng-show="!!task.EndDueDate">
+                    <div ng-show="!!task.DueDate">
                         <small>Due:</small>
-                        <small>{{task.EndDueDate | sp_date}}</small>
+                        <small>{{task.DueDate | sp_datetime}}</small>
                     </div>
 
                     <div ng-show="!!task.LastTimeIn">
                         <small>Last Start:</small>
-                        <small>{{task.LastTimeIn | datetime}}</small>
+                        <small>{{task.LastTimeIn | sp_datetime}}</small>
                     </div>
 
                     <div ng-show="!!task.LastTimeOut">
                         <small>Last Stop:</small>
-                        <small>{{task.LastTimeOut | datetime}}</small>
+                        <small>{{task.LastTimeOut | sp_datetime}}</small>
                     </div>
 
                     <!--Start/Stop buttons-->
@@ -107,7 +103,7 @@
 
                     <div class="form-group">
                         <small>Status:</small>
-                        <select ng-options="opt for opt in vm.statuses" ng-model="task.Status.Value" ng-change="vm.updateTask(task.Id, {'name': 'Status', 'value': task.Status.Value})"></select>
+                        <select ng-options="opt for opt in vm.kanbanConfig.statuses" ng-model="task.Status.Value" ng-change="vm.updateTask(task.Id, {'name': 'Status', 'value': task.Status.Value})"></select>
                     </div>
 
                     <div class="row">

@@ -5,6 +5,7 @@
         listName: string;
         timeLogListName: string;
         columns: Array<IKanbanColumn>;
+        statuses: Array<string>;
         previousMonths: number;
     }
 

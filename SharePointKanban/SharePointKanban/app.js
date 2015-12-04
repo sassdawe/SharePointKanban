@@ -7,13 +7,287 @@
 var App;
 (function (App) {
     App.app = angular.module("app", [
+        // Angular modules 
         'ngSanitize',
+        // Custom modules 
         'config',
         'common',
         'common.bootstrap',
+        // 3rd Party Modules
         'ui.bootstrap',
         'ui.router'
     ]);
+})(App || (App = {}));
+var App;
+(function (App) {
+    var BootstrapDialog = (function () {
+        function BootstrapDialog($modal, $templateCache) {
+            this.$modal = $modal;
+            this.$templateCache = $templateCache;
+            this.setTemplate();
+        }
+        BootstrapDialog.prototype.deleteDialog = function (itemName) {
+            var title = 'Confirm Delete';
+            itemName = itemName || 'item';
+            var msg = 'Delete ' + itemName + '?';
+            return this.confirmationDialog(title, msg);
+        };
+        BootstrapDialog.prototype.confirmationDialog = function (title, msg, okText, cancelText) {
+            var modalOptions = {
+                templateUrl: 'modalDialog.tpl.html',
+                controller: [
+                    '$scope', '$modalInstance', 'options',
+                    function ($s, $mI, o) { return new ModalCtrl($s, $mI, o); }],
+                keyboard: true,
+                resolve: {
+                    options: function () {
+                        return {
+                            title: title,
+                            message: msg,
+                            okText: okText,
+                            cancelText: cancelText
+                        };
+                    }
+                }
+            };
+            return this.$modal.open(modalOptions).result;
+        };
+        BootstrapDialog.prototype.setTemplate = function () {
+            this.$templateCache.put('modalDialog.tpl.html', '<div>' +
+                '    <div class="modal-header">' +
+                '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">&times;</button>' +
+                '        <h3>{{title}}</h3>' +
+                '    </div>' +
+                '    <div class="modal-body">' +
+                '        <p>{{message}}</p>' +
+                '    </div>' +
+                '    <div class="modal-footer">' +
+                '        <button class="btn btn-primary" data-ng-click="ok()">{{okText}}</button>' +
+                '        <button class="btn btn-info" data-ng-click="cancel()">{{cancelText}}</button>' +
+                '    </div>' +
+                '</div>');
+        };
+        BootstrapDialog.Id = 'bootstrap.dialog';
+        BootstrapDialog.$inject = ['$modal', '$templateCache'];
+        return BootstrapDialog;
+    })();
+    var ModalCtrl = (function () {
+        function ModalCtrl($scope, $modalInstance, options) {
+            $scope.title = options.title || 'Title';
+            $scope.message = options.message || '';
+            $scope.okText = options.okText || 'OK';
+            $scope.cancelText = options.cancelText || 'Cancel';
+            $scope.ok = function () { $modalInstance.close('ok'); };
+            $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+        }
+        return ModalCtrl;
+    })();
+    // Register bootstrap.dialog service
+    //#region explanation
+    //-------STARTING COMMON MODULE----------
+    // THIS CREATES THE ANGULAR CONTAINER NAMED 'common', A BAG THAT HOLDS SERVICES
+    // CREATION OF A MODULE IS DONE USING ...module('moduleName', []) => retrieved using ...module.('...')
+    // Contains services:
+    //  - common
+    //  - logger
+    //  - spinner
+    //#endregion
+    App.bootstrapModule = angular.module('common.bootstrap', [])
+        .factory(BootstrapDialog.Id, BootstrapDialog);
+})(App || (App = {}));
+var App;
+(function (App) {
+    var Common = (function () {
+        function Common($q, $rootScope) {
+            this.$rootScope = $rootScope;
+            this.$q = $q;
+            this.$loader = $('.ajax-loader');
+        }
+        Common.prototype.showLoader = function () {
+            this.$loader.show();
+        };
+        Common.prototype.hideLoader = function () {
+            this.$loader.hide();
+        };
+        Common.Id = "common";
+        return Common;
+    })();
+    App.Common = Common;
+    App.commonModule = angular.module('common', []);
+    App.commonModule.factory(Common.Id, ['$q', '$rootScope', function ($q, $rootScope) {
+            return new Common($q, $rootScope);
+        }]);
+})(App || (App = {}));
+var App;
+(function (App) {
+    var Config = (function () {
+        function Config() {
+            this.debug = true;
+            this.appPath = 'app/'; //path to Angular app template files
+            this.appTitle = 'Dev Projects Kanban'; //display title of the app
+            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 
+            this.orgName = ''; //the name of your organization, shown in Copyright
+            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
+            this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
+            this.serverHostname = '//' + window.location.hostname;
+            this.testUser = {
+                Account: null,
+                Department: 'Vogon Affairs',
+                EMail: 'hitchiker@galaxy.org',
+                Groups: [{ id: 42, name: 'testers' }],
+                ID: 42,
+                JobTitle: 'Tester',
+                Name: 'domain\testadmin',
+                Office: 'Some Office',
+                Title: 'Test Admin',
+                UserName: 'testadmin'
+            };
+            this.timeLogSiteUrl = '/media';
+            this.timeLogListName = 'Time Log';
+            this.version = '0.0.1';
+            // Kanban board configs
+            this.projectsKanbanConfig = {
+                siteUrl: '/media',
+                listName: 'Projects',
+                previousMonths: 18,
+                timeLogListName: 'Time Log',
+                statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
+                columns: [
+                    {
+                        title: 'Backlog',
+                        id: 'backlog-tasks',
+                        className: 'panel panel-info',
+                        status: 'Not Started',
+                        tasks: []
+                    },
+                    {
+                        title: 'In Progress',
+                        id: 'in-progress-tasks',
+                        className: 'panel panel-danger',
+                        status: 'In Progress',
+                        tasks: []
+                    },
+                    {
+                        title: 'Testing',
+                        id: 'testing-tasks',
+                        className: 'panel panel-warning',
+                        status: 'Testing',
+                        tasks: []
+                    },
+                    {
+                        title: 'Done',
+                        id: 'completed-tasks',
+                        className: 'panel panel-success',
+                        status: 'Completed',
+                        tasks: []
+                    }
+                ]
+            };
+            this.heldpeskKanbanConfig = {
+                siteUrl: '/ws',
+                listName: 'Tasks',
+                previousMonths: 1,
+                timeLogListName: 'Time Log',
+                statuses: ['Not Started', 'In Progress', 'Completed'],
+                columns: [
+                    {
+                        title: 'Backlog',
+                        id: 'backlog-tasks',
+                        className: 'panel panel-info',
+                        status: 'Not Started',
+                        tasks: []
+                    },
+                    {
+                        title: 'In Progress',
+                        id: 'in-progress-tasks',
+                        className: 'panel panel-danger',
+                        status: 'In Progress',
+                        tasks: []
+                    },
+                    {
+                        title: 'Done',
+                        id: 'completed-tasks',
+                        className: 'panel panel-success',
+                        status: 'Completed',
+                        tasks: []
+                    }
+                ]
+            };
+            this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
+        }
+        Config.Id = 'config';
+        return Config;
+    })();
+    App.Config = Config;
+    App.configModule = angular.module('config', []);
+    App.configModule.factory(Config.Id, [function () {
+            return new Config();
+        }]);
+})(App || (App = {}));
+var App;
+(function (App) {
+    App.app.directive('kanbanTask', function () {
+        return {
+            restrict: 'A',
+            scope: {
+                kanbanTask: '=',
+                parentScope: '='
+            },
+            link: function (scope, $element, attrs) {
+                scope.$watch(function (scope) {
+                    // Store in parent scope a reference to the task being dragged, 
+                    // its parent column array, and its index number.
+                    $element.on('dragstart', function (ev) {
+                        //console.info(ev.target.id);
+                        scope.parentScope.dragging = {
+                            task: scope.kanbanTask,
+                        };
+                    });
+                });
+            }
+        };
+    });
+    App.app.directive('kanbanColumn', function () {
+        return {
+            restrict: 'A',
+            scope: {
+                kanbanColumn: '=',
+                parentScope: '='
+            },
+            link: function (scope, $element, attrs) {
+                scope.$watch(function (scope) {
+                    // trigger the event handler when a task element is dropped over the Kanban column.
+                    $element.on('drop', function (event) {
+                        cancel(event);
+                        var controller = scope.parentScope;
+                        var task = scope.parentScope.dragging.task;
+                        var col = scope.kanbanColumn;
+                        if (!!task) {
+                            var field = {
+                                name: 'Status',
+                                value: col.status
+                            };
+                            task.Status.Value = col.status;
+                            controller.updateTask(task.Id, field);
+                            controller.dragging.task = undefined; //clear the referene so we know we're no longer dragging
+                        }
+                    }).on('dragover', function (event) {
+                        cancel(event);
+                    });
+                });
+                // Cross-browser method to prevent the default event when dropping an element.
+                function cancel(event) {
+                    if (event.preventDefault) {
+                        event.preventDefault();
+                    }
+                    if (event.stopPropagation) {
+                        event.stopPropagation();
+                    }
+                    return false;
+                }
+            }
+        };
+    });
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -21,14 +295,14 @@ var App;
         function Dependencies() {
         }
         Dependencies.currentUser = ['datacontext', function (datacontext) {
-            return datacontext.getCurrentUser();
-        }];
+                return datacontext.getCurrentUser();
+            }];
         Dependencies.projectsKanbanConfig = ['config', function (config) {
-            return config.projectsKanbanConfig;
-        }];
+                return config.projectsKanbanConfig;
+            }];
         Dependencies.helpdeskKanbanConfig = ['config', function (config) {
-            return config.heldpeskKanbanConfig;
-        }];
+                return config.heldpeskKanbanConfig;
+            }];
         return Dependencies;
     })();
     App.Dependencies = Dependencies;
@@ -152,6 +426,51 @@ var App;
 })(App || (App = {}));
 var App;
 (function (App) {
+    App.app.filter('by_prop', function () {
+        App.Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
+        return App.Utils.filterByProperty;
+    });
+    App.app.filter('sp_date', function () {
+        function fn(val) {
+            if (!!!val) {
+                return val;
+            }
+            return App.Utils.parseDate(val).toLocaleDateString();
+        }
+        ;
+        fn['$stateful'] = true;
+        return fn;
+    });
+    App.app.filter('sp_datetime', function () {
+        function fn(val) {
+            return App.Utils.toUTCDateTime(val);
+        }
+        ;
+        fn['$stateful'] = true;
+        return fn;
+    });
+    App.app.filter('active_tasks', function () {
+        function fn(cols) {
+            var active = [];
+            if (!!!cols) {
+                return active;
+            }
+            for (var i = 0; i < cols.length; i++) {
+                for (var j = 0; j < cols[i].tasks.length; j++) {
+                    if (cols[i].tasks[j].LastTimeOut == null && cols[i].tasks[j].LastTimeIn != null) {
+                        active.push(cols[i].tasks[j]);
+                    }
+                }
+            }
+            return active;
+        }
+        ;
+        fn['$stateful'] = true;
+        return fn;
+    });
+})(App || (App = {}));
+var App;
+(function (App) {
     var Controllers;
     (function (Controllers) {
         var FooterController = (function () {
@@ -187,12 +506,7 @@ var App;
                 this.siteUrl = kanbanConfig.siteUrl;
                 this.listName = kanbanConfig.listName;
                 this.columns = kanbanConfig.columns;
-                this.statuses = [];
-                for (var i = 0; i < this.columns.length; i++) {
-                    if (this.statuses.indexOf(this.columns[i].status) < 0) {
-                        this.statuses.push(this.columns[i].status);
-                    }
-                }
+                this.statuses = kanbanConfig.statuses;
                 this.priorities = this.config.priorities;
                 this.$parent = this.$scope.$parent.shell;
                 this.changeQueue = [];
@@ -255,6 +569,15 @@ var App;
                             if (!!!index) {
                                 break;
                             }
+                            //TODO
+                            // Switch places with the task that has the same OrderBy value.
+                            // If the OrderBy value is 5, for example, find the task that is set to 5 and change to the task's index+1;
+                            //var orderBy: number = field.value;
+                            //for (var i = 0; i < this.projects.length; i++){
+                            //    if (this.projects[i].OrderBy == orderBy && this.projects[i].Status.Value == task.Status.Value) {
+                            //        this.projects[i].OrderBy = index+1;
+                            //    }
+                            //}
                             break;
                         default:
                             break;
@@ -290,7 +613,6 @@ var App;
                 var self = this;
                 for (var i = 0; i < this.columns.length; i++) {
                     var col = this.columns[i];
-                    this.statuses.push(col.status);
                     col.tasks = self.projects.filter(function (task) {
                         return task.Status.Value == col.status;
                     });
@@ -344,8 +666,12 @@ var App;
                 return a;
             };
             KanbanController.prototype.clockIn = function (task) {
-                this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(function (timeIn) {
-                    task.LastTimeIn = timeIn;
+                this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(function (response) {
+                    if (response.statusText != 'Created') {
+                        console.warn(response);
+                        return;
+                    }
+                    task.LastTimeIn = App.Utils.parseMsDateTicks(response.data.d.TimeIn);
                     task.LastTimeOut = null;
                 });
                 return false;
@@ -392,11 +718,11 @@ var App;
 var App;
 (function (App) {
     App.app.run(['$rootScope', '$state', '$stateParams', function run($rootScope, $state, $stateParams) {
-        $rootScope.$state = $state;
-        $rootScope.$stateParams = $stateParams;
-        // jumpstart the routes
-        $state.go('app.home');
-    }]);
+            $rootScope.$state = $state;
+            $rootScope.$stateParams = $stateParams;
+            // jumpstart the routes
+            $state.go('app.home');
+        }]);
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -439,7 +765,7 @@ var App;
                         params.headers[p] = headers[p];
                     }
                 }
-                self.$http(params).then(function (response) {
+                this.$http(params).then(function (response) {
                     d.resolve(response);
                 }).finally(function () {
                     self.common.hideLoader();
@@ -511,15 +837,19 @@ var App;
                 this.getSpListItems(siteUrl, listName, filter, select, orderBy, expand, 100).then(function (projects) {
                     // parse all the dates
                     projects.forEach(function (p) {
-                        p.LastTimeIn = App.Utils.parseMsDateTicks(p.LastTimeIn);
-                        p.LastTimeOut = App.Utils.parseMsDateTicks(p.LastTimeOut);
                         p.Created = App.Utils.parseMsDateTicks(p.Created);
                         p.Modified = App.Utils.parseMsDateTicks(p.Modified);
+                        if (!!p.LastTimeIn) {
+                            p.LastTimeIn = App.Utils.parseMsDateTicks(p.LastTimeIn);
+                        }
+                        if (!!p.LastTimeOut) {
+                            p.LastTimeOut = App.Utils.parseMsDateTicks(p.LastTimeOut);
+                        }
                         if (!!p.StartDate) {
                             p.StartDate = App.Utils.parseMsDateTicks(p.StartDate);
                         }
-                        if (!!p.EndDueDate) {
-                            p.EndDueDate = App.Utils.parseMsDateTicks(p.EndDueDate);
+                        if (!!p.DueDate) {
+                            p.DueDate = App.Utils.parseMsDateTicks(p.DueDate);
                         }
                     });
                     d.resolve(projects);
@@ -534,12 +864,21 @@ var App;
                 return this.executeRestRequest(url, JSON.stringify(data), false, 'POST');
             };
             Datacontext.prototype.updateListItem = function (item, data) {
-                var headers = {
-                    'Accept': 'application/json;odata=verbose',
-                    'X-HTTP-Method': 'MERGE',
-                    'If-Match': JSON.stringify(item.__metadata.etag)
+                var req = {
+                    method: 'POST',
+                    url: 'http://example.com',
+                    processData: false,
+                    headers: {
+                        'Accept': 'application/json;odata=verbose',
+                        'Access-Control-Allow-Origin': '*',
+                        'Origin': window.location.protocol + '//' + this.config.productionHostname + '/',
+                        'X-HTTP-Method': 'MERGE',
+                        'If-Match': JSON.stringify(item.__metadata.etag)
+                    },
+                    data: JSON.stringify(data)
                 };
-                return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
+                return this.$http(req);
+                //return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
             };
             /**
             * Delete the list item.
@@ -632,7 +971,15 @@ var App;
                     return d.promise;
                 }
                 var action = 'http://schemas.microsoft.com/sharepoint/soap/UpdateListItems';
-                var packet = '<?xml version="1.0" encoding="utf-8"?>' + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' + '<soap:Body>' + '<UpdateListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/">' + '<listName>{0}</listName>' + '<updates>{1}</updates>' + '</UpdateListItems>' + '</soap:Body>' + '</soap:Envelope>';
+                var packet = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<UpdateListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/">' +
+                    '<listName>{0}</listName>' +
+                    '<updates>{1}</updates>' +
+                    '</UpdateListItems>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
                 var batch = ["<Batch OnError='Continue'>"];
                 for (var i = 0; i < fields.length; i++) {
                     batch.push("<Method ID='1' Cmd='Update'>");
@@ -649,7 +996,17 @@ var App;
             Datacontext.prototype.getSoapListItems = function (siteUrl, listName, viewFields, query, cache, rowLimit) {
                 if (cache === void 0) { cache = false; }
                 if (rowLimit === void 0) { rowLimit = 25; }
-                var packet = '<?xml version="1.0" encoding="utf-8"?>' + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' + '<soap:Body>' + '<GetListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/">' + '<listName>' + listName + '</listName>' + '<query>' + query + '</query>' + '<viewFields>' + viewFields + '</viewFields>' + '<rowLimit>' + rowLimit + '</rowLimit>' + '</GetListItems>' + '</soap:Body>' + '</soap:Envelope>';
+                var packet = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<GetListItems xmlns="http://schemas.microsoft.com/sharepoint/soap/">' +
+                    '<listName>' + listName + '</listName>' +
+                    '<query>' + query + '</query>' +
+                    '<viewFields>' + viewFields + '</viewFields>' +
+                    '<rowLimit>' + rowLimit + '</rowLimit>' +
+                    '</GetListItems>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
                 return this.executeSoapRequest('http://schemas.microsoft.com/sharepoint/soap/GetListItems', packet, null, siteUrl, cache);
             };
             Datacontext.prototype.searchPrincipals = function (term, maxResults, principalType) {
@@ -658,7 +1015,16 @@ var App;
                 var d = this.$q.defer();
                 var action = 'http://schemas.microsoft.com/sharepoint/soap/SearchPrincipals';
                 var params = [term, maxResults, principalType];
-                var packet = '<?xml version="1.0" encoding="utf-8"?>' + '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' + '<soap:Body>' + '<SearchPrincipals xmlns="http://schemas.microsoft.com/sharepoint/soap/">' + '<searchText>{0}</searchText>' + '<maxResults>{1}</maxResults>' + '<principalType>{2}</principalType>' + '</SearchPrincipals>' + '</soap:Body>' + '</soap:Envelope>';
+                var packet = '<?xml version="1.0" encoding="utf-8"?>' +
+                    '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<SearchPrincipals xmlns="http://schemas.microsoft.com/sharepoint/soap/">' +
+                    '<searchText>{0}</searchText>' +
+                    '<maxResults>{1}</maxResults>' +
+                    '<principalType>{2}</principalType>' +
+                    '</SearchPrincipals>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
                 this.executeSoapRequest(action, packet, params, '', true, null, 'People.asmx').then(function (response) {
                     var xmlDoc = response.data;
                     var results = [];
@@ -751,7 +1117,13 @@ var App;
             };
             Datacontext.prototype.getUsersGroups = function (loginName) {
                 var d = this.$q.defer();
-                var packet = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' + '<soap:Body>' + '<GetGroupCollectionFromUser xmlns="http://schemas.microsoft.com/sharepoint/soap/directory/">' + '<userLoginName>' + loginName + '</userLoginName>' + '</GetGroupCollectionFromUser>' + '</soap:Body>' + '</soap:Envelope>';
+                var packet = '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
+                    '<soap:Body>' +
+                    '<GetGroupCollectionFromUser xmlns="http://schemas.microsoft.com/sharepoint/soap/directory/">' +
+                    '<userLoginName>' + loginName + '</userLoginName>' +
+                    '</GetGroupCollectionFromUser>' +
+                    '</soap:Body>' +
+                    '</soap:Envelope>';
                 var action = 'http://schemas.microsoft.com/sharepoint/soap/directory/GetGroupCollectionFromUser';
                 this.executeSoapRequest(action, packet, null, '', true, null, 'usergroup.asmx').then(function (response) {
                     var xmlDoc = response.data;
@@ -789,14 +1161,7 @@ var App;
                 var now = new Date();
                 var url = siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName);
                 var data = { ItemId: item.Id, TimeIn: now.toISOString() };
-                this.insertListItem(url, data).then(function (response) {
-                    if (response.status != 200) {
-                        d.reject(response.statusText);
-                        console.warn(response);
-                    }
-                    d.resolve(now);
-                });
-                return d.promise;
+                return this.insertListItem(url, data);
             };
             /**
             * Log the date and time a project was stopped (not completed); UPDATES existing row in SharePoint list "Time Log" where `ItemId == itemId && CreatedById == userId`.
@@ -808,17 +1173,20 @@ var App;
             Datacontext.prototype.clockOut = function (item, siteUrl, listName) {
                 var d = this.$q.defer();
                 var self = this;
+                var now = new Date();
                 if (!this.config.isProduction) {
-                    d.resolve(new Date());
+                    d.resolve(now);
                     return d.promise;
                 }
                 this.common.showLoader();
-                var now = new Date();
                 //Query the last time entry to get the ID, then update the TimeOut field to now.
                 this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(function (items) {
                     var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
-                    var timeLogId = timeLog.Id;
-                    var iso = now.toISOString();
+                    //self.updateListItem(item, { TimeOut: now.toISOString() })
+                    //    .finally((): void => {
+                    //        d.resolve(now);
+                    //        self.common.hideLoader();
+                    //    });
                     function beforeSendFunction(xhr) {
                         xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
                         // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
@@ -831,14 +1199,14 @@ var App;
                         contentType: 'application/json',
                         processData: false,
                         beforeSend: beforeSendFunction,
-                        data: JSON.stringify({ TimeOut: iso })
+                        data: JSON.stringify({ TimeOut: now.toISOString() })
+                    });
+                    $jqXhr.always(function () {
+                        d.resolve(now);
                     });
                     $jqXhr.fail(function (jqXhr, status, error) {
                         console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
                     });
-                    d.resolve(now);
-                }).finally(function () {
-                    self.common.hideLoader();
                 });
                 return d.promise;
             };
@@ -872,320 +1240,138 @@ var App;
         Services.Datacontext = Datacontext;
         // Register with angular
         App.app.factory(Datacontext.Id, ['$http', '$q', 'common', 'config', function factory($http, $q, common, config) {
-            return new Datacontext($http, $q, common, config);
-        }]);
+                return new Datacontext($http, $q, common, config);
+            }]);
     })(Services = App.Services || (App.Services = {}));
 })(App || (App = {}));
 var App;
 (function (App) {
-    var BootstrapDialog = (function () {
-        function BootstrapDialog($modal, $templateCache) {
-            this.$modal = $modal;
-            this.$templateCache = $templateCache;
-            this.setTemplate();
-        }
-        BootstrapDialog.prototype.deleteDialog = function (itemName) {
-            var title = 'Confirm Delete';
-            itemName = itemName || 'item';
-            var msg = 'Delete ' + itemName + '?';
-            return this.confirmationDialog(title, msg);
-        };
-        BootstrapDialog.prototype.confirmationDialog = function (title, msg, okText, cancelText) {
-            var modalOptions = {
-                templateUrl: 'modalDialog.tpl.html',
-                controller: [
-                    '$scope',
-                    '$modalInstance',
-                    'options',
-                    function ($s, $mI, o) { return new ModalCtrl($s, $mI, o); }
-                ],
-                keyboard: true,
-                resolve: {
-                    options: function () {
-                        return {
-                            title: title,
-                            message: msg,
-                            okText: okText,
-                            cancelText: cancelText
-                        };
-                    }
+    var SharePoint;
+    (function (SharePoint) {
+        // recreate the SP REST object for an attachment
+        var SpAttachment = (function () {
+            function SpAttachment(rootUrl, siteUrl, listName, itemId, fileName) {
+                var entitySet = listName.replace(/\s/g, '');
+                siteUrl = SharePoint.Utils.formatSubsiteUrl(siteUrl);
+                var uri = rootUrl + siteUrl + "_vti_bin/listdata.svc/Attachments(EntitySet='{0}',ItemId={1},Name='{2}')";
+                uri = uri.replace(/\{0\}/, entitySet).replace(/\{1\}/, itemId + '').replace(/\{2\}/, fileName);
+                this.__metadata = {
+                    uri: uri,
+                    content_type: "application/octetstream",
+                    edit_media: uri + "/$value",
+                    media_etag: null,
+                    media_src: rootUrl + siteUrl + "/Lists/" + listName + "/Attachments/" + itemId + "/" + fileName,
+                    type: "Microsoft.SharePoint.DataService.AttachmentsItem"
+                };
+                this.EntitySet = entitySet;
+                this.ItemId = itemId;
+                this.Name = fileName;
+            }
+            return SpAttachment;
+        })();
+        SharePoint.SpAttachment = SpAttachment;
+        var SpItem = (function () {
+            function SpItem() {
+            }
+            return SpItem;
+        })();
+        SharePoint.SpItem = SpItem;
+    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
+})(App || (App = {}));
+var App;
+(function (App) {
+    var SharePoint;
+    (function (SharePoint) {
+        var Utils = (function () {
+            function Utils() {
+            }
+            /**
+            * Ensure site url is or ends with '/'
+            * @param url: string
+            * @return string
+            */
+            Utils.formatSubsiteUrl = function (url) {
+                return !!!url ? '/' : !/\/$/.test(url) ? url + '/' : url;
+            };
+            /**
+            * Convert a name to REST camel case format
+            * @param str: string
+            * @return string
+            */
+            Utils.toCamelCase = function (str) {
+                return str.toString()
+                    .replace(/\s*\b\w/g, function (x) {
+                    return (x[1] || x[0]).toUpperCase();
+                }).replace(/\s/g, '')
+                    .replace(/\'s/, 'S')
+                    .replace(/[^A-Za-z0-9\s]/g, '');
+            };
+            /**
+            * Escape column values
+            * http://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/155/
+            */
+            Utils.escapeColumnValue = function (s) {
+                if (typeof s === "string") {
+                    return s.replace(/&(?![a-zA-Z]{1,8};)/g, "&amp;");
+                }
+                else {
+                    return s;
                 }
             };
-            return this.$modal.open(modalOptions).result;
-        };
-        BootstrapDialog.prototype.setTemplate = function () {
-            this.$templateCache.put('modalDialog.tpl.html', '<div>' + '    <div class="modal-header">' + '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">&times;</button>' + '        <h3>{{title}}</h3>' + '    </div>' + '    <div class="modal-body">' + '        <p>{{message}}</p>' + '    </div>' + '    <div class="modal-footer">' + '        <button class="btn btn-primary" data-ng-click="ok()">{{okText}}</button>' + '        <button class="btn btn-info" data-ng-click="cancel()">{{cancelText}}</button>' + '    </div>' + '</div>');
-        };
-        BootstrapDialog.Id = 'bootstrap.dialog';
-        BootstrapDialog.$inject = ['$modal', '$templateCache'];
-        return BootstrapDialog;
-    })();
-    var ModalCtrl = (function () {
-        function ModalCtrl($scope, $modalInstance, options) {
-            $scope.title = options.title || 'Title';
-            $scope.message = options.message || '';
-            $scope.okText = options.okText || 'OK';
-            $scope.cancelText = options.cancelText || 'Cancel';
-            $scope.ok = function () {
-                $modalInstance.close('ok');
-            };
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
-        }
-        return ModalCtrl;
-    })();
-    // Register bootstrap.dialog service
-    //#region explanation
-    //-------STARTING COMMON MODULE----------
-    // THIS CREATES THE ANGULAR CONTAINER NAMED 'common', A BAG THAT HOLDS SERVICES
-    // CREATION OF A MODULE IS DONE USING ...module('moduleName', []) => retrieved using ...module.('...')
-    // Contains services:
-    //  - common
-    //  - logger
-    //  - spinner
-    //#endregion
-    App.bootstrapModule = angular.module('common.bootstrap', []).factory(BootstrapDialog.Id, BootstrapDialog);
-})(App || (App = {}));
-var App;
-(function (App) {
-    var Common = (function () {
-        function Common($q, $rootScope) {
-            this.$rootScope = $rootScope;
-            this.$q = $q;
-            this.$loader = $('.ajax-loader');
-        }
-        Common.prototype.showLoader = function () {
-            this.$loader.show();
-        };
-        Common.prototype.hideLoader = function () {
-            this.$loader.hide();
-        };
-        Common.Id = "common";
-        return Common;
-    })();
-    App.Common = Common;
-    App.commonModule = angular.module('common', []);
-    App.commonModule.factory(Common.Id, ['$q', '$rootScope', function ($q, $rootScope) {
-        return new Common($q, $rootScope);
-    }]);
-})(App || (App = {}));
-var App;
-(function (App) {
-    var Config = (function () {
-        function Config() {
-            this.debug = true;
-            this.appPath = 'app/'; //path to Angular app template files
-            this.appTitle = 'Dev Projects Kanban'; //display title of the app
-            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 
-            this.orgName = ''; //the name of your organization, shown in Copyright
-            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
-            this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
-            this.serverHostname = '//' + window.location.hostname;
-            this.testUser = {
-                Account: null,
-                Department: 'Vogon Affairs',
-                EMail: 'hitchiker@galaxy.org',
-                Groups: [{ id: 42, name: 'testers' }],
-                ID: 42,
-                JobTitle: 'Tester',
-                Name: 'domain\testadmin',
-                Office: 'Some Office',
-                Title: 'Test Admin',
-                UserName: 'testadmin'
-            };
-            this.timeLogSiteUrl = '/media';
-            this.timeLogListName = 'Time Log';
-            this.version = '0.0.1';
-            // Kanban board configs
-            this.projectsKanbanConfig = {
-                siteUrl: '/media',
-                listName: 'Projects',
-                previousMonths: 18,
-                timeLogListName: 'Time Log',
-                columns: [
-                    {
-                        title: 'Backlog',
-                        id: 'backlog-tasks',
-                        className: 'panel panel-info',
-                        status: 'Not Started',
-                        tasks: []
-                    },
-                    {
-                        title: 'In Progress',
-                        id: 'in-progress-tasks',
-                        className: 'panel panel-danger',
-                        status: 'In Progress',
-                        tasks: []
-                    },
-                    {
-                        title: 'Testing',
-                        id: 'testing-tasks',
-                        className: 'panel panel-warning',
-                        status: 'Testing',
-                        tasks: []
-                    },
-                    {
-                        title: 'Done',
-                        id: 'completed-tasks',
-                        className: 'panel panel-success',
-                        status: 'Completed',
-                        tasks: []
-                    }
-                ]
-            };
-            this.heldpeskKanbanConfig = {
-                siteUrl: '/ws',
-                listName: 'Tasks',
-                previousMonths: 6,
-                timeLogListName: 'Time Log',
-                columns: [
-                    {
-                        title: 'Backlog',
-                        id: 'backlog-tasks',
-                        className: 'panel panel-info',
-                        status: 'Not Started',
-                        tasks: []
-                    },
-                    {
-                        title: 'In Progress',
-                        id: 'in-progress-tasks',
-                        className: 'panel panel-danger',
-                        status: 'In Progress',
-                        tasks: []
-                    },
-                    {
-                        title: 'Done',
-                        id: 'completed-tasks',
-                        className: 'panel panel-success',
-                        status: 'Completed',
-                        tasks: []
-                    }
-                ]
-            };
-            this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
-        }
-        Config.Id = 'config';
-        return Config;
-    })();
-    App.Config = Config;
-    App.configModule = angular.module('config', []);
-    App.configModule.factory(Config.Id, [function () {
-        return new Config();
-    }]);
-})(App || (App = {}));
-var App;
-(function (App) {
-    App.app.directive('kanbanTask', function () {
-        return {
-            restrict: 'A',
-            scope: {
-                kanbanTask: '=',
-                parentScope: '='
-            },
-            link: function (scope, $element, attrs) {
-                scope.$watch(function (scope) {
-                    // Store in parent scope a reference to the task being dragged, 
-                    // its parent column array, and its index number.
-                    $element.on('dragstart', function (ev) {
-                        //console.info(ev.target.id);
-                        scope.parentScope.dragging = {
-                            task: scope.kanbanTask,
-                        };
+            Utils.openSpForm = function (url, title, callback, width, height) {
+                if (title === void 0) { title = "Project Item"; }
+                if (callback === void 0) { callback = function () { }; }
+                if (width === void 0) { width = 300; }
+                if (height === void 0) { height = 400; }
+                var ex = window["ExecuteOrDelayUntilScriptLoaded"];
+                var SP = window["SP"];
+                ex(function () {
+                    SP.UI.ModalDialog.showModalDialog({
+                        title: title,
+                        showClose: true,
+                        url: url,
+                        dialogReturnValueCallback: callback
                     });
-                });
-            }
-        };
-    });
-    App.app.directive('kanbanColumn', function () {
-        return {
-            restrict: 'A',
-            scope: {
-                kanbanColumn: '=',
-                parentScope: '='
-            },
-            link: function (scope, $element, attrs) {
-                scope.$watch(function (scope) {
-                    // trigger the event handler when a task element is dropped over the Kanban column.
-                    $element.on('drop', function (event) {
-                        cancel(event);
-                        var controller = scope.parentScope;
-                        var task = scope.parentScope.dragging.task;
-                        var col = scope.kanbanColumn;
-                        if (!!task) {
-                            var field = {
-                                name: 'Status',
-                                value: col.status
-                            };
-                            task.Status.Value = col.status;
-                            controller.updateTask(task.Id, field);
-                            controller.dragging.task = undefined; //clear the referene so we know we're no longer dragging
-                        }
-                    }).on('dragover', function (event) {
-                        cancel(event);
-                    });
-                });
-                // Cross-browser method to prevent the default event when dropping an element.
-                function cancel(event) {
-                    if (event.preventDefault) {
-                        event.preventDefault();
-                    }
-                    if (event.stopPropagation) {
-                        event.stopPropagation();
-                    }
-                    return false;
-                }
-            }
-        };
-    });
+                }, "sp.js");
+                return false;
+            };
+            Utils.openSpDisplayForm = function (siteUrl, listName, item, isEdit, callback) {
+                if (isEdit === void 0) { isEdit = false; }
+                if (callback === void 0) { callback = function () { }; }
+                var itemUrl = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/' + (isEdit ? 'Edit' : 'Disp') + 'Form.aspx?ID=' + item.Id;
+                SharePoint.Utils.openSpForm(itemUrl, item.Title, callback);
+                return false;
+            };
+            Utils.openSpNewForm = function (siteUrl, listName, title, callback) {
+                if (title === void 0) { title = 'New Item'; }
+                if (callback === void 0) { callback = function () { }; }
+                var url = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/NewForm.aspx';
+                SharePoint.Utils.openSpForm(url, title, callback);
+                return false;
+            };
+            return Utils;
+        })();
+        SharePoint.Utils = Utils;
+    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
 })(App || (App = {}));
 var App;
 (function (App) {
-    App.app.filter('by_prop', function () {
-        App.Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
-        return App.Utils.filterByProperty;
-    });
-    App.app.filter('sp_date', function () {
-        function fn(val) {
-            if (!!!val) {
-                return val;
+    var Controllers;
+    (function (Controllers) {
+        var ShellController = (function () {
+            function ShellController($rootScope, config, currentUser) {
+                this.$rootScope = $rootScope;
+                this.config = config;
+                this.currentUser = currentUser;
             }
-            return App.Utils.parseDate(val).toLocaleDateString();
-        }
-        ;
-        //fn['$stateful'] = true;
-        return fn;
-    });
-    App.app.filter('datetime', function () {
-        function fn(val) {
-            if (!!!val) {
-                return val;
-            }
-            return App.Utils.parseDate(val).toLocaleString();
-        }
-        ;
-        //fn['$stateful'] = true;
-        return fn;
-    });
-    App.app.filter('active_tasks', function () {
-        function fn(cols) {
-            var active = [];
-            if (!!!cols) {
-                return active;
-            }
-            for (var i = 0; i < cols.length; i++) {
-                for (var j = 0; j < cols[i].tasks.length; j++) {
-                    if (cols[i].tasks[j].LastTimeOut == null && cols[i].tasks[j].LastTimeIn != null) {
-                        active.push(cols[i].tasks[j]);
-                    }
-                }
-            }
-            return active;
-        }
-        ;
-        //fn['$stateful'] = true;
-        return fn;
-    });
+            ShellController.Id = 'shellController';
+            ShellController.$inject = ['$rootScope', 'config', 'currentUser'];
+            return ShellController;
+        })();
+        Controllers.ShellController = ShellController;
+        // Register with angular
+        App.app.controller(ShellController.Id, ShellController);
+    })(Controllers = App.Controllers || (App.Controllers = {}));
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -1228,6 +1414,19 @@ var App;
                 return val;
             }
             return new Date(parseInt(val.replace(/\D/g, '')));
+        };
+        Utils.toUTCDateTime = function (date) {
+            if (!!!date) {
+                return date;
+            }
+            else if (date.constructor === String) {
+                date = Utils.parseMsDateTicks(date);
+            }
+            var m = date.getUTCMinutes(), h = date.getUTCHours(), s = date.getUTCSeconds();
+            return date.toLocaleDateString()
+                + ' ' + (h < 10 ? '0' + h : h)
+                + ':' + (m < 10 ? '0' + m : m)
+                + ':' + (s < 10 ? '0' + s : s);
         };
         /**
         * Parse dates in format: "MM/DD/YYYY", "MM-DD-YYYY", "YYYY-MM-DD", "/Date(1442769001000)/", or YYYY-MM-DDTHH:MM:SSZ
@@ -1330,6 +1529,7 @@ var App;
             // Filter out special objects.
             var Constructor = objectToBeCloned.constructor;
             switch (Constructor) {
+                // Implement other special objects here.
                 case RegExp:
                     objectClone = new Constructor(objectToBeCloned);
                     break;
@@ -1339,6 +1539,7 @@ var App;
                 default:
                     objectClone = new Constructor();
             }
+            // Clone each property.
             for (var prop in objectToBeCloned) {
                 objectClone[prop] = Utils.clone(objectToBeCloned[prop]);
             }
@@ -1347,133 +1548,4 @@ var App;
         return Utils;
     })();
     App.Utils = Utils;
-})(App || (App = {}));
-var App;
-(function (App) {
-    var SharePoint;
-    (function (SharePoint) {
-        // recreate the SP REST object for an attachment
-        var SpAttachment = (function () {
-            function SpAttachment(rootUrl, siteUrl, listName, itemId, fileName) {
-                var entitySet = listName.replace(/\s/g, '');
-                siteUrl = SharePoint.Utils.formatSubsiteUrl(siteUrl);
-                var uri = rootUrl + siteUrl + "_vti_bin/listdata.svc/Attachments(EntitySet='{0}',ItemId={1},Name='{2}')";
-                uri = uri.replace(/\{0\}/, entitySet).replace(/\{1\}/, itemId + '').replace(/\{2\}/, fileName);
-                this.__metadata = {
-                    uri: uri,
-                    content_type: "application/octetstream",
-                    edit_media: uri + "/$value",
-                    media_etag: null,
-                    media_src: rootUrl + siteUrl + "/Lists/" + listName + "/Attachments/" + itemId + "/" + fileName,
-                    type: "Microsoft.SharePoint.DataService.AttachmentsItem"
-                };
-                this.EntitySet = entitySet;
-                this.ItemId = itemId;
-                this.Name = fileName;
-            }
-            return SpAttachment;
-        })();
-        SharePoint.SpAttachment = SpAttachment;
-        var SpItem = (function () {
-            function SpItem() {
-            }
-            return SpItem;
-        })();
-        SharePoint.SpItem = SpItem;
-    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
-})(App || (App = {}));
-var App;
-(function (App) {
-    var SharePoint;
-    (function (SharePoint) {
-        var Utils = (function () {
-            function Utils() {
-            }
-            /**
-            * Ensure site url is or ends with '/'
-            * @param url: string
-            * @return string
-            */
-            Utils.formatSubsiteUrl = function (url) {
-                return !!!url ? '/' : !/\/$/.test(url) ? url + '/' : url;
-            };
-            /**
-            * Convert a name to REST camel case format
-            * @param str: string
-            * @return string
-            */
-            Utils.toCamelCase = function (str) {
-                return str.toString().replace(/\s*\b\w/g, function (x) {
-                    return (x[1] || x[0]).toUpperCase();
-                }).replace(/\s/g, '').replace(/\'s/, 'S').replace(/[^A-Za-z0-9\s]/g, '');
-            };
-            /**
-            * Escape column values
-            * http://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/155/
-            */
-            Utils.escapeColumnValue = function (s) {
-                if (typeof s === "string") {
-                    return s.replace(/&(?![a-zA-Z]{1,8};)/g, "&amp;");
-                }
-                else {
-                    return s;
-                }
-            };
-            Utils.openSpForm = function (url, title, callback, width, height) {
-                if (title === void 0) { title = "Project Item"; }
-                if (callback === void 0) { callback = function () {
-                }; }
-                if (width === void 0) { width = 300; }
-                if (height === void 0) { height = 400; }
-                var ex = window["ExecuteOrDelayUntilScriptLoaded"];
-                var SP = window["SP"];
-                ex(function () {
-                    SP.UI.ModalDialog.showModalDialog({
-                        title: title,
-                        showClose: true,
-                        url: url,
-                        dialogReturnValueCallback: callback
-                    });
-                }, "sp.js");
-                return false;
-            };
-            Utils.openSpDisplayForm = function (siteUrl, listName, item, isEdit, callback) {
-                if (isEdit === void 0) { isEdit = false; }
-                if (callback === void 0) { callback = function () {
-                }; }
-                var itemUrl = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/' + (isEdit ? 'Edit' : 'Disp') + 'Form.aspx?ID=' + item.Id;
-                SharePoint.Utils.openSpForm(itemUrl, item.Title, callback);
-                return false;
-            };
-            Utils.openSpNewForm = function (siteUrl, listName, title, callback) {
-                if (title === void 0) { title = 'New Item'; }
-                if (callback === void 0) { callback = function () {
-                }; }
-                var url = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/NewForm.aspx';
-                SharePoint.Utils.openSpForm(url, title, callback);
-                return false;
-            };
-            return Utils;
-        })();
-        SharePoint.Utils = Utils;
-    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
-})(App || (App = {}));
-var App;
-(function (App) {
-    var Controllers;
-    (function (Controllers) {
-        var ShellController = (function () {
-            function ShellController($rootScope, config, currentUser) {
-                this.$rootScope = $rootScope;
-                this.config = config;
-                this.currentUser = currentUser;
-            }
-            ShellController.Id = 'shellController';
-            ShellController.$inject = ['$rootScope', 'config', 'currentUser'];
-            return ShellController;
-        })();
-        Controllers.ShellController = ShellController;
-        // Register with angular
-        App.app.controller(ShellController.Id, ShellController);
-    })(Controllers = App.Controllers || (App.Controllers = {}));
 })(App || (App = {}));

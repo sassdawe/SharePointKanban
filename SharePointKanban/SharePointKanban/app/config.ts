@@ -56,6 +56,7 @@ module App {
             listName: 'Projects', //the SharePoint list name
             previousMonths: 18, //how far back to show project tasks
             timeLogListName: 'Time Log',
+            statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
             columns: <Array<IKanbanColumn>>[
                 {
                     title: 'Backlog',
@@ -91,8 +92,9 @@ module App {
         heldpeskKanbanConfig: IKanbanConfig = {
             siteUrl: '/ws',
             listName: 'Tasks',
-            previousMonths: 6,
+            previousMonths: 1,
             timeLogListName: 'Time Log',
+            statuses: ['Not Started', 'In Progress', 'Completed'],
             columns: <Array<IKanbanColumn>>[
                 {
                     title: 'Backlog',
