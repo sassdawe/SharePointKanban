@@ -122,7 +122,7 @@ var App;
 (function (App) {
     var Config = (function () {
         function Config() {
-            this.debug = true;
+            this.debug = false;
             this.appPath = 'app/'; //path to Angular app template files
             this.appTitle = 'Dev Projects Kanban'; //display title of the app
             this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 
@@ -547,6 +547,7 @@ var App;
             };
             KanbanController.prototype.updateTask = function (taskId, field, index) {
                 if (index === void 0) { index = undefined; }
+                var self = this;
                 for (var i = 0; i < this.projects.length; i++) {
                     if (this.projects[i].Id != taskId) {
                         continue;
@@ -561,7 +562,7 @@ var App;
                             task.Status.Value = field.value;
                             // Clock out the task if clocked in and not working.
                             if (/(not started|completed)/i.test(field.value) && task.LastTimeOut == null) {
-                                this.clockOut(task);
+                                self.clockOut(task.Id);
                             }
                             break;
                         case 'OrderBy':
@@ -665,22 +666,85 @@ var App;
                 }
                 return a;
             };
-            KanbanController.prototype.clockIn = function (task) {
-                this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(function (response) {
-                    if (response.statusText != 'Created') {
-                        console.warn(response);
-                        return;
+            KanbanController.prototype.clockIn = function (id) {
+                var self = this;
+                try {
+                    var project = this.findProjectById(id);
+                    if (!!!project) {
+                        console.warn('ERORR: Controllers.KanBanController.clockIn() - project is null');
+                        return false;
                     }
-                    task.LastTimeIn = App.Utils.parseMsDateTicks(response.data.d.TimeIn);
-                    task.LastTimeOut = null;
-                });
-                return false;
+                    var now = new Date();
+                    project.LastTimeIn = now;
+                    project.LastTimeOut = null;
+                    var url = self.kanbanConfig.siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(self.kanbanConfig.timeLogListName);
+                    var data = JSON.stringify({ ItemId: id, TimeIn: now.toISOString() });
+                    this.datacontext.executeRestRequest(url, data, false, 'POST').then(function (response) {
+                        if (self.config.debug) {
+                            console.info('Controllers.KanBanController.clockIn() returned...');
+                            console.info(response);
+                        }
+                        // if not 201 (Created)
+                        if (response.status != 201) {
+                            alert('Error creating entry in ' + self.kanbanConfig.timeLogListName + '. Status: ' + response.status + '; Status Text: ' + response.statusText);
+                            console.warn(response);
+                            return;
+                        }
+                        project.LastTimeIn = App.Utils.parseMsDateTicks(response.data.d.TimeIn);
+                        project.LastTimeOut = null;
+                    });
+                }
+                catch (e) {
+                    console.warn('ERROR: Controllers.KanBanController.clockIn()...');
+                    console.warn(e);
+                }
+                finally {
+                    return false;
+                }
             };
-            KanbanController.prototype.clockOut = function (task) {
-                this.datacontext.clockOut(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(function (timeOut) {
-                    task.LastTimeOut = timeOut;
-                });
-                return false;
+            KanbanController.prototype.clockOut = function (id) {
+                var self = this;
+                try {
+                    var project = this.findProjectById(id);
+                    if (!!!project) {
+                        console.warn('ERORR: Controllers.KanBanController.clockOut() - project is null');
+                        return false;
+                    }
+                    this.datacontext.clockOut(project, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, function (timeOut) {
+                        try {
+                            if (self.config.debug) {
+                                console.info('Controllers.KanBanController.clockOut() returned...');
+                                console.info(arguments);
+                            }
+                            project.LastTimeOut = timeOut;
+                            if (!!timeOut && timeOut.constructor == Date) {
+                                self.updateColumns(true);
+                            }
+                        }
+                        catch (e) {
+                            console.warn('ERROR: Controllers.KanBanController.clockOut() callback()...');
+                            console.warn(e);
+                        }
+                    });
+                }
+                catch (e) {
+                    console.warn('ERROR: Controllers.KanBanController.clockOut()...');
+                    console.warn(e);
+                }
+                finally {
+                    return false;
+                }
+            };
+            KanbanController.prototype.findProjectById = function (id) {
+                if (this.projects == null) {
+                    return null;
+                }
+                for (var i = 0; i < this.projects.length; i++) {
+                    if (this.projects[i].Id == id) {
+                        return this.projects[i];
+                    }
+                }
+                return null;
             };
             KanbanController.prototype.isActive = function (task) {
                 return task.LastTimeOut == null && task.LastTimeIn != null;
@@ -1152,16 +1216,35 @@ var App;
             * @return ng.IPromise<Date>
             */
             Datacontext.prototype.clockIn = function (item, siteUrl, listName) {
-                var d = this.$q.defer();
+                var self = this;
+                var now = new Date();
                 if (!this.config.isProduction) {
-                    d.resolve(new Date());
+                    var d = this.$q.defer();
+                    d.resolve({
+                        data: {
+                            d: { TimeIn: now }
+                        }
+                    });
                     return d.promise;
                 }
-                // TODO: We'll need to clock in other projects that might be open - you can only have one active project at a time.
-                var now = new Date();
-                var url = siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName);
-                var data = { ItemId: item.Id, TimeIn: now.toISOString() };
-                return this.insertListItem(url, data);
+                return this.insertListItem(siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName), { ItemId: item.Id, TimeIn: now.toISOString() });
+                //var $jqXhr = $.ajax({
+                //    url: siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName),
+                //    type: 'POST',
+                //    headers: { 'Accept': 'application/json;odata=verbose' },
+                //    data: JSON.stringify({ ItemId: item.Id, TimeIn: now.toISOString() }),
+                //    cache: false
+                //});
+                //$jqXhr.done(function (data, status, jqXhr) {
+                //    if (self.config.debug) {
+                //        console.info('Services.Datacontext.clockIn() returned...');
+                //        console.info(arguments);
+                //    }
+                //    callback(data);
+                //});
+                //$jqXhr.always(function () {
+                //    self.common.hideLoader();
+                //});
             };
             /**
             * Log the date and time a project was stopped (not completed); UPDATES existing row in SharePoint list "Time Log" where `ItemId == itemId && CreatedById == userId`.
@@ -1170,45 +1253,52 @@ var App;
             * @param itemId: number
             * @return ng.IPromise<Date>
             */
-            Datacontext.prototype.clockOut = function (item, siteUrl, listName) {
-                var d = this.$q.defer();
+            Datacontext.prototype.clockOut = function (item, siteUrl, listName, callback) {
                 var self = this;
-                var now = new Date();
-                if (!this.config.isProduction) {
-                    d.resolve(now);
-                    return d.promise;
-                }
-                this.common.showLoader();
-                //Query the last time entry to get the ID, then update the TimeOut field to now.
-                this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(function (items) {
-                    var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
-                    //self.updateListItem(item, { TimeOut: now.toISOString() })
-                    //    .finally((): void => {
-                    //        d.resolve(now);
-                    //        self.common.hideLoader();
-                    //    });
-                    function beforeSendFunction(xhr) {
-                        xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
-                        // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
-                        xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
+                try {
+                    var now = new Date();
+                    if (!this.config.isProduction) {
+                        callback(now);
+                        return;
                     }
-                    // Angular's $http does not work for this!
-                    var $jqXhr = $.ajax({
-                        url: timeLog.__metadata.uri,
-                        type: 'POST',
-                        contentType: 'application/json',
-                        processData: false,
-                        beforeSend: beforeSendFunction,
-                        data: JSON.stringify({ TimeOut: now.toISOString() })
+                    this.common.showLoader();
+                    //Query the last time entry to get the ID, then update the TimeOut field to now.
+                    this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(function (items) {
+                        var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
+                        // Angular's $http does not work for this!
+                        var $jqXhr = $.ajax({
+                            url: timeLog.__metadata.uri,
+                            type: 'POST',
+                            contentType: 'application/json',
+                            processData: false,
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
+                                // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
+                                xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
+                            },
+                            data: JSON.stringify({ TimeOut: now.toISOString() })
+                        });
+                        $jqXhr.done(function (data, status, jqXhr) {
+                            if (self.config.debug) {
+                                console.info('Services.Datacontext.clockOut() returned...');
+                                console.info(arguments);
+                            }
+                            callback(now);
+                        });
+                        $jqXhr.always(function () {
+                            self.common.hideLoader();
+                        });
+                        $jqXhr.fail(function (jqXhr, status, error) {
+                            callback(null);
+                            console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
+                        });
                     });
-                    $jqXhr.always(function () {
-                        d.resolve(now);
-                    });
-                    $jqXhr.fail(function (jqXhr, status, error) {
-                        console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
-                    });
-                });
-                return d.promise;
+                }
+                catch (e) {
+                    callback(null);
+                    console.warn('ERROR: Services.Datacontext.clockOut()...');
+                    console.warn(e);
+                }
             };
             Datacontext.prototype.getTestData = function () {
                 var d = this.$q.defer();

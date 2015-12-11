@@ -11,8 +11,8 @@
         updateListItem(item: SharePoint.ISpItem, data: any): ng.IPromise<any>;
         deleteListItem(item: SharePoint.ISpItem): ng.IPromise<any>;
         deleteAttachment(att: SharePoint.ISpAttachment): ng.IPromise<any>;
-        clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date>;
-        clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date>;
+        clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<SharePoint.ISpItem>>>;
+        clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string, callback: JQueryPromiseCallback<any>): void;
 
         // SOAP Methods
         executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl?: string, cache?: boolean, headers?: any, service?: string): ng.IPromise<any>
@@ -518,21 +518,41 @@
         * @param item: SP List Item with fields LastTimeIn and LastTimeOut
         * @return ng.IPromise<Date>
         */
-        public clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date> {
-            var d = this.$q.defer();
+        public clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<SharePoint.ISpItem>>> {
+            var self = this;
+            var now = new Date();
 
             if (!this.config.isProduction) {
-                d.resolve(new Date());
+                var d = this.$q.defer();
+                d.resolve({
+                    data: {
+                        d: { TimeIn: now }
+                    }
+                });
                 return d.promise;
             }
 
-            // TODO: We'll need to clock in other projects that might be open - you can only have one active project at a time.
+            return this.insertListItem(siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName), { ItemId: item.Id, TimeIn: now.toISOString() })
 
-            var now = new Date();
-            var url = siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName);
-            var data = { ItemId: item.Id, TimeIn: now.toISOString() };
+            //var $jqXhr = $.ajax({
+            //    url: siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName),
+            //    type: 'POST',
+            //    headers: { 'Accept': 'application/json;odata=verbose' },
+            //    data: JSON.stringify({ ItemId: item.Id, TimeIn: now.toISOString() }),
+            //    cache: false
+            //});
 
-            return this.insertListItem(url, data);
+            //$jqXhr.done(function (data, status, jqXhr) {
+            //    if (self.config.debug) {
+            //        console.info('Services.Datacontext.clockIn() returned...');
+            //        console.info(arguments);
+            //    }
+            //    callback(data);
+            //});
+
+            //$jqXhr.always(function () {
+            //    self.common.hideLoader();
+            //});
         }
 
         /**
@@ -542,57 +562,62 @@
         * @param itemId: number
         * @return ng.IPromise<Date>
         */
-        public clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<Date> {
-            var d = this.$q.defer();
+        public clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string, callback: JQueryPromiseCallback<any>): void {
             var self = this;
-            var now = new Date();
+            try {
+                var now = new Date();
 
-            if (!this.config.isProduction) {
-                d.resolve(now);
-                return d.promise;
+                if (!this.config.isProduction) {
+                    callback(now);
+                    return;
+                }
+
+                this.common.showLoader();
+
+                //Query the last time entry to get the ID, then update the TimeOut field to now.
+                this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(
+                    (items: Array<SharePoint.ISpItem>): void => {
+
+                        var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
+
+                        // Angular's $http does not work for this!
+                        var $jqXhr: JQueryXHR = $.ajax({
+                            url: timeLog.__metadata.uri,
+                            type: 'POST',
+                            contentType: 'application/json',
+                            processData: false,
+                            beforeSend: function (xhr) {
+                                xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
+                                // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
+                                xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
+                            },
+                            data: JSON.stringify({ TimeOut: now.toISOString() })
+                        });
+
+                        $jqXhr.done(function (data, status, jqXhr) {
+                            if (self.config.debug) {
+                                console.info('Services.Datacontext.clockOut() returned...');
+                                console.info(arguments);
+                            }
+                            callback(now);
+                        });
+
+                        $jqXhr.always(function () {
+                            self.common.hideLoader();
+                        });
+
+                        $jqXhr.fail(function (jqXhr: JQueryXHR, status: string, error: string) {
+                            callback(null);
+                            console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
+                        });
+
+                    });
             }
-
-            this.common.showLoader();
-
-            //Query the last time entry to get the ID, then update the TimeOut field to now.
-            this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(
-                (items: Array<SharePoint.ISpItem>): void => {
-
-                    var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
-
-                    //self.updateListItem(item, { TimeOut: now.toISOString() })
-                    //    .finally((): void => {
-                    //        d.resolve(now);
-                    //        self.common.hideLoader();
-                    //    });
-
-                    function beforeSendFunction(xhr) {
-                        xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
-                        // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
-                        xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
-                    }
-
-                    // Angular's $http does not work for this!
-                    var $jqXhr: JQueryXHR = $.ajax({
-                        url: timeLog.__metadata.uri,
-                        type: 'POST',
-                        contentType: 'application/json',
-                        processData: false,
-                        beforeSend: beforeSendFunction,
-                        data: JSON.stringify({ TimeOut: now.toISOString() })
-                    });
-
-                    $jqXhr.always(function () {
-                        d.resolve(now);
-                    });
-
-                    $jqXhr.fail(function (jqXhr: JQueryXHR, status: string, error: string) {
-                        console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
-                    });
-
-                });
-
-            return d.promise;
+            catch (e) {
+                callback(null);
+                console.warn('ERROR: Services.Datacontext.clockOut()...');
+                console.warn(e);
+            }
         }
 
         public getTestData(): ng.IPromise<Array<SharePoint.ISpTaskItem>> {

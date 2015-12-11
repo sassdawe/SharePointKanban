@@ -42,8 +42,8 @@
                 </span>
                 <!--Start/Stop buttons-->
                 <div ng-show="vm.userIsEditor" style="padding:.2em;">
-                    <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut != null || task.LastTimeIn == null" ng-mousedown="vm.clockIn(task)"><span class="glyphicon glyphicon-time green"></span> Start</button>
-                    <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut == null && task.LastTimeIn != null" ng-mousedown="vm.clockOut(task)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
+                    <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut != null || task.LastTimeIn == null" ng-mousedown="vm.clockIn(task.Id)"><span class="glyphicon glyphicon-time green"></span> Start</button>
+                    <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut == null && task.LastTimeIn != null" ng-mousedown="vm.clockOut(task.Id)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
                 </div>
 
             </li>
@@ -97,8 +97,8 @@
 
                     <!--Start/Stop buttons-->
                     <div ng-show="vm.userIsEditor && (col.status == 'In Progress' || col.status == 'Testing')" style="padding:.2em;">
-                        <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut != null || task.LastTimeIn == null" ng-mousedown="vm.clockIn(task)"><span class="glyphicon glyphicon-time green"></span> Start</button>
-                        <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut == null && task.LastTimeIn != null" ng-mousedown="vm.clockOut(task)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
+                        <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut != null || task.LastTimeIn == null" ng-mousedown="vm.clockIn(task.Id)"><span class="glyphicon glyphicon-time green"></span> Start</button>
+                        <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut == null && task.LastTimeIn != null" ng-mousedown="vm.clockOut(task.Id)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
                     </div>
 
                     <div class="form-group">

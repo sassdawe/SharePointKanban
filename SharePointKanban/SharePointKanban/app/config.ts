@@ -25,7 +25,7 @@ module App {
 
         static Id: string = 'config';
 
-        public debug: boolean = true;
+        public debug: boolean = false;
         public appPath: string = 'app/'; //path to Angular app template files
         public appTitle: string = 'Dev Projects Kanban'; //display title of the app
         public editGroups: Array<string> = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 

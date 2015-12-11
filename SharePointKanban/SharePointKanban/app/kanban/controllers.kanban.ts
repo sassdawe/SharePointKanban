@@ -4,8 +4,6 @@ module App.Controllers{
     export interface IKanbanController {
         updateTask(taskId: number, field: ISpUpdateField): number;
         dragging: any;
-        clockIn(task: SharePoint.ISpTaskItem): boolean;
-        clockOut(task: SharePoint.ISpTaskItem): boolean;
     }
 
     export class KanbanController implements IKanbanController {
@@ -15,27 +13,16 @@ module App.Controllers{
         static $inject = ['$scope', 'common', 'config', '$stateParams', 'datacontext', 'kanbanConfig'];
 
         private changeQueue: Array<ISpUpdateItem>;
-
         private pristineProjectsData: Array<SharePoint.ISpTaskItem>;
-
         private priorities: Array<string>;
-
         private currentUser: SharePoint.ISpUser;
-
         private $parent: Controllers.IShellController;
-
         private projects: Array<SharePoint.ISpTaskItem> = [];
-
         private userIsEditor: boolean;
-
         private now: Date;
-
         private statuses: Array<string>;
-
         private columns: Array<IKanbanColumn>;
-
         private siteUrl: string;
-
         private listName: string;
 
         // used by directive, `kanbanColumn`, to reference the current task being dragged over it.
@@ -103,7 +90,7 @@ module App.Controllers{
         }
 
         public updateTask(taskId: number, field: ISpUpdateField, index: number = undefined): number {
-
+            var self = this;
             for (var i = 0; i < this.projects.length; i++) {
                 if (this.projects[i].Id != taskId) { continue; }
 
@@ -119,7 +106,7 @@ module App.Controllers{
                         task.Status.Value = field.value;
                         // Clock out the task if clocked in and not working.
                         if (/(not started|completed)/i.test(field.value) && task.LastTimeOut == null) {
-                            this.clockOut(task);
+                            self.clockOut(task.Id);
                         }
                         break;
 
@@ -243,25 +230,94 @@ module App.Controllers{
             return a;
         }
 
-        public clockIn(task: SharePoint.ISpTaskItem): boolean {
-            this.datacontext.clockIn(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then(
-                (response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
-                    if (response.statusText != 'Created') {
+        private clockIn(id: number): boolean {
+            var self = this;
+            try {
+                var project = this.findProjectById(id);
+
+                if (!!!project) {
+                    console.warn('ERORR: Controllers.KanBanController.clockIn() - project is null');
+                    return false;
+                }
+
+                var now = new Date();
+
+                project.LastTimeIn = now;
+                project.LastTimeOut = null;
+
+                var url = self.kanbanConfig.siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(self.kanbanConfig.timeLogListName);
+                var data = JSON.stringify({ ItemId: id, TimeIn: now.toISOString() });
+
+                this.datacontext.executeRestRequest(url, data, false, 'POST').then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
+                    if (self.config.debug) {
+                        console.info('Controllers.KanBanController.clockIn() returned...');
+                        console.info(response);
+                    }
+
+                    // if not 201 (Created)
+                    if (response.status != 201) {
+                        alert('Error creating entry in ' + self.kanbanConfig.timeLogListName + '. Status: ' + response.status + '; Status Text: ' + response.statusText);
                         console.warn(response);
                         return;
                     }
-                    task.LastTimeIn = Utils.parseMsDateTicks(response.data.d.TimeIn);
-                    task.LastTimeOut = null;
+
+                    project.LastTimeIn = Utils.parseMsDateTicks(response.data.d.TimeIn);
+                    project.LastTimeOut = null;
                 });
-            return false;
+            }
+            catch (e) {
+                console.warn('ERROR: Controllers.KanBanController.clockIn()...');
+                console.warn(e);
+            }
+            finally {
+                return false;
+            }
         }
 
-        public clockOut(task: SharePoint.ISpTaskItem): boolean {
-            this.datacontext.clockOut(task, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName).then((timeOut: Date): void => {
-                task.LastTimeOut = timeOut;
-            });
+        private clockOut(id: number): boolean {
+            var self = this;
+            try {
+                var project = this.findProjectById(id);
 
-            return false;
+                if (!!!project) {
+                    console.warn('ERORR: Controllers.KanBanController.clockOut() - project is null');
+                    return false;
+                }
+
+                this.datacontext.clockOut(project, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, function (timeOut: Date) {
+                    try {
+                        if (self.config.debug) {
+                            console.info('Controllers.KanBanController.clockOut() returned...');
+                            console.info(arguments);
+                        }
+                        project.LastTimeOut = timeOut;
+                        if (!!timeOut && timeOut.constructor == Date) {
+                            self.updateColumns(true);
+                        }
+                    }
+                    catch (e) {
+                        console.warn('ERROR: Controllers.KanBanController.clockOut() callback()...');
+                        console.warn(e);
+                    }
+                });
+            }
+            catch (e) {
+                console.warn('ERROR: Controllers.KanBanController.clockOut()...');
+                console.warn(e);
+            }
+            finally {
+                return false;
+            }
+        }
+
+        private findProjectById(id: number): SharePoint.ISpTaskItem {
+            if (this.projects == null) { return null; }
+            for (var i = 0; i < this.projects.length; i++) {
+                if (this.projects[i].Id == id) {
+                    return this.projects[i];
+                }
+            }
+            return null;
         }
 
         private isActive(task: SharePoint.ISpTaskItem): boolean {
