@@ -13,6 +13,7 @@
         deleteAttachment(att: SharePoint.ISpAttachment): ng.IPromise<any>;
         clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<SharePoint.ISpItem>>>;
         clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string, callback: JQueryPromiseCallback<any>): void;
+        getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date): ng.IPromise<Array<IPersonProjects>>;
 
         // SOAP Methods
         executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl?: string, cache?: boolean, headers?: any, service?: string): ng.IPromise<any>
@@ -34,6 +35,7 @@
 
         constructor(private $http: any, private $q: ng.IQService, private common: ICommon, private config: IConfiguration) {
             this.cache = {};
+            this.common.hideLoader();
         }
 
         /**
@@ -50,7 +52,7 @@
             this.common.showLoader();
 
             var params = {
-                url: url,
+                url: this.config.serverHostname + url,
                 method: method,
                 cache: cache,
                 headers: { 'Accept': 'application/json;odata=verbose' }
@@ -647,6 +649,101 @@
             }).finally((): void => {
                 self.common.hideLoader();
             });
+
+            return d.promise;
+        }
+
+        public getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date): ng.IPromise<Array<IPersonProjects>> {
+            var self = this;
+            var d = this.$q.defer();
+
+            // Group the time entry data by CreatedBy, Project
+            var transform = (logs: Array<SharePoint.ITimeLogItem>): void => {
+
+                var groups: Array<IPersonProjects> = [];
+
+                // logs is ordered by CreatedBy.Name, ProjectId, TimeIn 
+                // 1. group by user
+                var people = [];
+                for (var i = 0; i < logs.length; i++) {
+                    var name = logs[i].CreatedBy.Name;
+                    if (people.indexOf(name) < 0) {
+                        people.push(name);
+                        groups.push({
+                            Name: name,
+                            Projects: []
+                        });
+                    }
+                }
+
+                people.forEach(function (name, i) {
+                    var group = groups[i];
+
+                    var temp = [];
+                    var projects = logs.filter(function (p) {
+                        return p.CreatedBy.Name == group.Name;
+                    }).forEach(function (p) {
+                        if (temp.indexOf(p.ProjectId) < 0) {
+                            temp.push(p.ProjectId);
+                            group.Projects.push({
+                                Id: p.ProjectId,
+                                Title: p.Project.Title,
+                                TotalHours: 0
+                            });
+                        }
+                    });
+
+                    group.Projects.forEach(function (proj) {
+                        logs.filter(function (l) {
+                            return l.ProjectId == proj.Id;
+                        }).forEach(function (l) {
+                            proj.TotalHours += l.Hours;
+                        });
+                    });
+                      
+                });
+
+
+                d.resolve(groups);
+            };
+            // tested Odata query
+            // /_vti_bin/listdata.svc/TimeLog?$expand=CreatedBy,Project&$orderby=CreatedBy/Name,ProjectId,TimeIn&$filter=TimeIn ge datetime'2015-12-07T05:00:00.000Z' and TimeIn le datetime'2015-12-11T05:00:00.000Z'&$select=CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title
+
+
+            if (this.config.isProduction) {
+                var startIso: string = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
+                var endIso: string = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 24, 0, 0).toISOString();
+
+                // get data from production server
+                this.getSpListItems(
+                /*siteUrl:*/siteUrl,
+                /*listName:*/listName, 
+                /*filter:*/'TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'',
+                /*select:*/'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title',
+                /*orderby:*/'CreatedBy/Name,ProjectId,TimeIn',
+                /*expand:*/'CreatedBy,Project',
+                /*top:*/1000).then(transform);
+            }
+            else {
+                // get test data
+                self.$http({
+                    url: '/test_time_entries.txt?_=' + Utils.getTimestamp(),
+                    method: 'GET'
+                }).then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpCollectionWrapper<SharePoint.ITimeLogItem>>): void => {
+
+                    if (response.status != 200) {
+                        d.resolve(null);
+                        d.reject(response.statusText);
+                        return;
+                    }
+
+                    transform(response.data.d.results);
+
+                }).finally((): void => {
+                    self.common.hideLoader();
+                });
+            }
+
 
             return d.promise;
         }

@@ -1,8 +1,8 @@
 ﻿module App {
 
     app.filter('by_prop', function () {
-        Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
-        return Utils.filterByProperty;
+        Utils.filterByValue['$stateful'] = true; // enable function to wait on async data
+        return Utils.filterByValue;
     });
 
     app.filter('sp_date', function () {

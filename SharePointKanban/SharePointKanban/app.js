@@ -3,6 +3,9 @@
 /// <reference path="../scripts/typings/angular-ui-router.d.ts" />
 /// <reference path="../scripts/typings/angular-ui-bootstrap.d.ts" />
 /// <reference path="../scripts/typings/angular-sanitize.d.ts" />
+/// <reference path="../scripts/typings/moment/moment.d.ts" />
+/// <reference path="../scripts/typings/q/q.d.ts" />
+/// <reference path="../scripts/typings/toastr/toastr.d.ts" />
 'use strict';
 var App;
 (function (App) {
@@ -145,74 +148,6 @@ var App;
             this.timeLogSiteUrl = '/media';
             this.timeLogListName = 'Time Log';
             this.version = '0.0.1';
-            // Kanban board configs
-            this.projectsKanbanConfig = {
-                siteUrl: '/media',
-                listName: 'Projects',
-                previousMonths: 18,
-                timeLogListName: 'Time Log',
-                statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
-                columns: [
-                    {
-                        title: 'Backlog',
-                        id: 'backlog-tasks',
-                        className: 'panel panel-info',
-                        status: 'Not Started',
-                        tasks: []
-                    },
-                    {
-                        title: 'In Progress',
-                        id: 'in-progress-tasks',
-                        className: 'panel panel-danger',
-                        status: 'In Progress',
-                        tasks: []
-                    },
-                    {
-                        title: 'Testing',
-                        id: 'testing-tasks',
-                        className: 'panel panel-warning',
-                        status: 'Testing',
-                        tasks: []
-                    },
-                    {
-                        title: 'Done',
-                        id: 'completed-tasks',
-                        className: 'panel panel-success',
-                        status: 'Completed',
-                        tasks: []
-                    }
-                ]
-            };
-            this.heldpeskKanbanConfig = {
-                siteUrl: '/ws',
-                listName: 'Tasks',
-                previousMonths: 1,
-                timeLogListName: 'Time Log',
-                statuses: ['Not Started', 'In Progress', 'Completed'],
-                columns: [
-                    {
-                        title: 'Backlog',
-                        id: 'backlog-tasks',
-                        className: 'panel panel-info',
-                        status: 'Not Started',
-                        tasks: []
-                    },
-                    {
-                        title: 'In Progress',
-                        id: 'in-progress-tasks',
-                        className: 'panel panel-danger',
-                        status: 'In Progress',
-                        tasks: []
-                    },
-                    {
-                        title: 'Done',
-                        id: 'completed-tasks',
-                        className: 'panel panel-success',
-                        status: 'Completed',
-                        tasks: []
-                    }
-                ]
-            };
             this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
         }
         Config.Id = 'config';
@@ -288,6 +223,45 @@ var App;
             }
         };
     });
+    App.app.directive('datePicker', ['$window', function ($window) {
+            return {
+                restrict: 'A',
+                scope: {
+                    ngModel: '='
+                },
+                link: function (scope, elem, attr) {
+                    // apply jQueryUI datepicker
+                    $(elem)['datepicker']({
+                        changeMonth: true,
+                        changeYear: true
+                    });
+                    scope.$watch(function (scope) {
+                        var d = scope.ngModel;
+                        $(elem).val(moment(d).format('MM/DD/YYYY'));
+                    });
+                }
+            };
+        }]);
+    App.app.directive('totalHours', ['$window', function ($window) {
+            return {
+                restrict: 'EA',
+                scope: {
+                    projects: '='
+                },
+                link: function (scope, elem, attr) {
+                    scope.$watch(function (scope) {
+                        var projects = scope.projects;
+                        var total = 0;
+                        for (var i = 0; i < projects.length; i++) {
+                            total += projects[i].TotalHours;
+                        }
+                        scope.total = total;
+                    });
+                },
+                replace: true,
+                template: '<strong>{{total | number:3}}</strong>'
+            };
+        }]);
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -296,12 +270,6 @@ var App;
         }
         Dependencies.currentUser = ['datacontext', function (datacontext) {
                 return datacontext.getCurrentUser();
-            }];
-        Dependencies.projectsKanbanConfig = ['config', function (config) {
-                return config.projectsKanbanConfig;
-            }];
-        Dependencies.helpdeskKanbanConfig = ['config', function (config) {
-                return config.heldpeskKanbanConfig;
             }];
         return Dependencies;
     })();
@@ -373,6 +341,14 @@ var App;
                     'main@app': App.Views.helpdesk,
                 }
             });
+            $stateProvider.state('app.summary', {
+                url: 'summary',
+                views: {
+                    'menu@app': App.Views.menu,
+                    'main@app': App.Views.summary,
+                    'footer@app': App.Views.footer
+                }
+            });
         }
         Routes.$inject = ['$stateProvider', '$urlRouterProvider'];
         return Routes;
@@ -399,7 +375,46 @@ var App;
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
-                kanbanConfig: App.Dependencies.projectsKanbanConfig
+                kanbanConfig: function () {
+                    var config = {
+                        siteUrl: '/media',
+                        listName: 'Projects',
+                        previousMonths: 18,
+                        timeLogListName: 'Time Log',
+                        statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
+                        columns: [
+                            {
+                                title: 'Backlog',
+                                id: 'backlog-tasks',
+                                className: 'panel panel-info',
+                                status: 'Not Started',
+                                tasks: []
+                            },
+                            {
+                                title: 'In Progress',
+                                id: 'in-progress-tasks',
+                                className: 'panel panel-danger',
+                                status: 'In Progress',
+                                tasks: []
+                            },
+                            {
+                                title: 'Testing',
+                                id: 'testing-tasks',
+                                className: 'panel panel-warning',
+                                status: 'Testing',
+                                tasks: []
+                            },
+                            {
+                                title: 'Done',
+                                id: 'completed-tasks',
+                                className: 'panel panel-success',
+                                status: 'Completed',
+                                tasks: []
+                            }
+                        ]
+                    };
+                    return config;
+                }
             }
         };
         Views.helpdesk = {
@@ -407,7 +422,48 @@ var App;
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
-                kanbanConfig: App.Dependencies.helpdeskKanbanConfig
+                kanbanConfig: function () {
+                    var config = {
+                        siteUrl: '/ws',
+                        listName: 'Tasks',
+                        previousMonths: 1,
+                        timeLogListName: 'Time Log',
+                        statuses: ['Not Started', 'In Progress', 'Completed'],
+                        columns: [
+                            {
+                                title: 'Backlog',
+                                id: 'backlog-tasks',
+                                className: 'panel panel-info',
+                                status: 'Not Started',
+                                tasks: []
+                            },
+                            {
+                                title: 'In Progress',
+                                id: 'in-progress-tasks',
+                                className: 'panel panel-danger',
+                                status: 'In Progress',
+                                tasks: []
+                            },
+                            {
+                                title: 'Done',
+                                id: 'completed-tasks',
+                                className: 'panel panel-success',
+                                status: 'Completed',
+                                tasks: []
+                            }
+                        ]
+                    };
+                    return config;
+                }
+            }
+        };
+        Views.summary = {
+            templateUrl: 'app/reports/summary.htm' + Views.getTs(),
+            controller: 'projectSummaryController',
+            controllerAs: 'vm',
+            resolve: {
+                siteUrl: function () { return '/media'; },
+                listName: function () { return 'Time Log'; }
             }
         };
         Views.menu = {
@@ -427,8 +483,8 @@ var App;
 var App;
 (function (App) {
     App.app.filter('by_prop', function () {
-        App.Utils.filterByProperty['$stateful'] = true; // enable function to wait on async data
-        return App.Utils.filterByProperty;
+        App.Utils.filterByValue['$stateful'] = true; // enable function to wait on async data
+        return App.Utils.filterByValue;
     });
     App.app.filter('sp_date', function () {
         function fn(val) {
@@ -781,6 +837,32 @@ var App;
 })(App || (App = {}));
 var App;
 (function (App) {
+    var Controllers;
+    (function (Controllers) {
+        var ProjectSummary = (function () {
+            function ProjectSummary(datacontext, siteUrl, listName) {
+                this.datacontext = datacontext;
+                this.siteUrl = siteUrl;
+                this.listName = listName;
+            }
+            ProjectSummary.prototype.getData = function () {
+                var self = this;
+                this.datacontext.getProjectTotals(this.siteUrl, this.listName, this.startDate, this.endDate).then(function (projects) {
+                    self.projects = projects;
+                    console.log(projects);
+                });
+                return false;
+            };
+            ProjectSummary.Id = 'projectSummaryController';
+            ProjectSummary.$inject = ['datacontext', 'siteUrl', 'listName'];
+            return ProjectSummary;
+        })();
+        Controllers.ProjectSummary = ProjectSummary;
+        App.app.controller(ProjectSummary.Id, ProjectSummary);
+    })(Controllers = App.Controllers || (App.Controllers = {}));
+})(App || (App = {}));
+var App;
+(function (App) {
     App.app.run(['$rootScope', '$state', '$stateParams', function run($rootScope, $state, $stateParams) {
             $rootScope.$state = $state;
             $rootScope.$stateParams = $stateParams;
@@ -816,7 +898,7 @@ var App;
                 var d = this.$q.defer();
                 this.common.showLoader();
                 var params = {
-                    url: url,
+                    url: this.config.serverHostname + url,
                     method: method,
                     cache: cache,
                     headers: { 'Accept': 'application/json;odata=verbose' }
@@ -1324,6 +1406,83 @@ var App;
                 });
                 return d.promise;
             };
+            Datacontext.prototype.getProjectTotals = function (siteUrl, listName, start, end) {
+                var self = this;
+                var d = this.$q.defer();
+                // Group the time entry data by CreatedBy, Project
+                var transform = function (logs) {
+                    var groups = [];
+                    // logs is ordered by CreatedBy.Name, ProjectId, TimeIn 
+                    // 1. group by user
+                    var people = [];
+                    for (var i = 0; i < logs.length; i++) {
+                        var name = logs[i].CreatedBy.Name;
+                        if (people.indexOf(name) < 0) {
+                            people.push(name);
+                            groups.push({
+                                Name: name,
+                                Projects: []
+                            });
+                        }
+                    }
+                    people.forEach(function (name, i) {
+                        var group = groups[i];
+                        var temp = [];
+                        var projects = logs.filter(function (p) {
+                            return p.CreatedBy.Name == group.Name;
+                        }).forEach(function (p) {
+                            if (temp.indexOf(p.ProjectId) < 0) {
+                                temp.push(p.ProjectId);
+                                group.Projects.push({
+                                    Id: p.ProjectId,
+                                    Title: p.Project.Title,
+                                    TotalHours: 0
+                                });
+                            }
+                        });
+                        group.Projects.forEach(function (proj) {
+                            logs.filter(function (l) {
+                                return l.ProjectId == proj.Id;
+                            }).forEach(function (l) {
+                                proj.TotalHours += l.Hours;
+                            });
+                        });
+                    });
+                    d.resolve(groups);
+                };
+                // tested Odata query
+                // /_vti_bin/listdata.svc/TimeLog?$expand=CreatedBy,Project&$orderby=CreatedBy/Name,ProjectId,TimeIn&$filter=TimeIn ge datetime'2015-12-07T05:00:00.000Z' and TimeIn le datetime'2015-12-11T05:00:00.000Z'&$select=CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title
+                if (this.config.isProduction) {
+                    var startIso = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
+                    var endIso = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 24, 0, 0).toISOString();
+                    // get data from production server
+                    this.getSpListItems(
+                    /*siteUrl:*/ siteUrl, 
+                    /*listName:*/ listName, 
+                    /*filter:*/ 'TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'', 
+                    /*select:*/ 'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title', 
+                    /*orderby:*/ 'CreatedBy/Name,ProjectId,TimeIn', 
+                    /*expand:*/ 'CreatedBy,Project', 
+                    /*top:*/ 1000).then(transform);
+                }
+                else {
+                    // get test data
+                    self.$http({
+                        url: '/test_time_entries.txt?_=' + App.Utils.getTimestamp(),
+                        method: 'GET'
+                    }).then(function (response) {
+                        if (response.status != 200) {
+                            d.resolve(null);
+                            d.reject(response.statusText);
+                            return;
+                        }
+                        transform(response.data.d.results);
+                    }).finally(function () {
+                        self.common.hideLoader();
+                    });
+                }
+                return d.promise;
+            };
             Datacontext.Id = 'datacontext';
             return Datacontext;
         })();
@@ -1572,24 +1731,25 @@ var App;
         * @param entities Array<any>
         * @return Array<any>
         */
-        Utils.filterByProperty = function (entities, val) {
+        Utils.filterByValue = function (entities, val) {
             if (!!!entities) {
                 return [];
             }
             var filtered = [];
-            entities.forEach(function (entity) {
-                for (var prop in entity) {
-                    if (entity[prop] == val) {
-                        filtered.push(entity);
+            for (var i = 0; i < entities.length; i++) {
+                for (var prop in entities[i]) {
+                    if (entities[i][prop] == val) {
+                        filtered.push(entities[i]);
                     }
                 }
-            });
+            }
             return filtered;
         };
         /**
         * Find and return unique values from an array.
         *
         * @param inputArray:Array
+        * @param keyName
         * @return Array
         */
         Utils.getUniqueKeyValues = function (inputArray, keyName) {

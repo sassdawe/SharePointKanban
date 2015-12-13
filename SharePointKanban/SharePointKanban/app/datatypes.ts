@@ -27,5 +27,15 @@
         value: any;
     }
 
+    export interface IPersonProjects{
+        Name: string;
+        Projects: Array<IProjectTotal>
+    }
+
+    export interface IProjectTotal {
+        Id: number;
+        Title: string;
+        TotalHours: number;
+    }
 
 }

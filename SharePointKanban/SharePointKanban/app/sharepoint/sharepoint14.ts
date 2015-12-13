@@ -203,4 +203,20 @@
         LastTimeOut: Date;
         OrderBy: number;     
     }
+
+    export interface IProject {
+        __metadata: ISpMetadata;
+        Title: string;
+    }
+
+    // Microsoft.SharePoint.DataService.TimeLogItem
+    export interface ITimeLogItem {
+        __metadata: ISpMetadata;
+        ProjectId: number;
+        TimeIn: Date;
+        TimeOut: Date;
+        Project: IProject;
+        CreatedBy: ISpPerson;
+        Hours: number;
+    }
 }

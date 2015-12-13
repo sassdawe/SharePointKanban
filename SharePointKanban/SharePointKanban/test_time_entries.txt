@@ -1,0 +1,1019 @@
+﻿{
+	"d": {
+		"results": [{
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(43)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449571179000)\/",
+			"TimeOut": "\/Date(1449576641000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(471)",
+					"etag": "W/\"23\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Job Application for Mobile Devices"
+			},
+			"ProjectId": 471,
+			"Hours": 1.51722222223179,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(45)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449581389000)\/",
+			"TimeOut": "\/Date(1449593390000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(471)",
+					"etag": "W/\"23\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Job Application for Mobile Devices"
+			},
+			"ProjectId": 471,
+			"Hours": 3.33361111104023,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(48)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449652805000)\/",
+			"TimeOut": "\/Date(1449658557000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(471)",
+					"etag": "W/\"23\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Job Application for Mobile Devices"
+			},
+			"ProjectId": 471,
+			"Hours": 1.59777777775889,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(41)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449568106000)\/",
+			"TimeOut": "\/Date(1449594952000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(583)",
+					"etag": "W/\"31\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "LifeSpanTx.com"
+			},
+			"ProjectId": 583,
+			"Hours": 7.45722222235054,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(100)",
+				"etag": "W/\"6\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449827460000)\/",
+			"TimeOut": "\/Date(1449835800000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(621)",
+					"etag": "W/\"87\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Kanban Agile Project Tracking Dashboard"
+			},
+			"ProjectId": 621,
+			"Hours": 2.31666666670935,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(192)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449839400000)\/",
+			"TimeOut": "\/Date(1449843442000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(621)",
+					"etag": "W/\"87\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Kanban Agile Project Tracking Dashboard"
+			},
+			"ProjectId": 621,
+			"Hours": 1.12277777778218,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(200)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449843720000)\/",
+			"TimeOut": "\/Date(1449853200000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(621)",
+					"etag": "W/\"87\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Kanban Agile Project Tracking Dashboard"
+			},
+			"ProjectId": 621,
+			"Hours": 2.6333333333605,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(201)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449853200000)\/",
+			"TimeOut": "\/Date(1449861000000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(622)",
+					"etag": "W/\"9\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "SP 2013 Migration - Rewrite Webster's Web Form Framework"
+			},
+			"ProjectId": 622,
+			"Hours": 2.16666666656965,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(37)",
+				"etag": "W/\"2\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449475200000)\/",
+			"TimeOut": "\/Date(1449489600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(623)",
+					"etag": "W/\"13\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "PTO - 12/4/2015-12/7/2015"
+			},
+			"ProjectId": 623,
+			"Hours": 3.99999999994179,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(38)",
+				"etag": "W/\"2\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449493200000)\/",
+			"TimeOut": "\/Date(1449507600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(623)",
+					"etag": "W/\"13\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "PTO - 12/4/2015-12/7/2015"
+			},
+			"ProjectId": 623,
+			"Hours": 4.00000000011642,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(39)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449560669000)\/",
+			"TimeOut": "\/Date(1449565848000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(624)",
+					"etag": "W/\"10\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CDS Website Updates"
+			},
+			"ProjectId": 624,
+			"Hours": 1.43861111107981,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(199)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449843464000)\/",
+			"TimeOut": "\/Date(1449843724000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(624)",
+					"etag": "W/\"10\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CDS Website Updates"
+			},
+			"ProjectId": 624,
+			"Hours": 0.0722222221666016,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(50)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449658590000)\/",
+			"TimeOut": "\/Date(1449677973000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(626)",
+					"etag": "W/\"21\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Infection Report on Webster"
+			},
+			"ProjectId": 626,
+			"Hours": 5.38416666659759,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(52)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449678155000)\/",
+			"TimeOut": "\/Date(1449692065000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(626)",
+					"etag": "W/\"21\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Infection Report on Webster"
+			},
+			"ProjectId": 626,
+			"Hours": 3.86388888896909,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(54)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449734802000)\/",
+			"TimeOut": "\/Date(1449744521000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(626)",
+					"etag": "W/\"21\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Infection Report on Webster"
+			},
+			"ProjectId": 626,
+			"Hours": 2.69972222222714,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(61)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449757534000)\/",
+			"TimeOut": "\/Date(1449771113000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(626)",
+					"etag": "W/\"21\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Infection Report on Webster"
+			},
+			"ProjectId": 626,
+			"Hours": 3.77194444451015,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(63)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449821065000)\/",
+			"TimeOut": "\/Date(1449827349000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(626)",
+					"etag": "W/\"21\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Infection Report on Webster"
+			},
+			"ProjectId": 626,
+			"Hours": 1.74555555550614,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(56)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449744663000)\/",
+			"TimeOut": "\/Date(1449748043000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(628)",
+					"etag": "W/\"8\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CDS Pop-up Banner"
+			},
+			"ProjectId": 628,
+			"Hours": 0.938888888864312,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(59)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449748262000)\/",
+			"TimeOut": "\/Date(1449748575000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(628)",
+					"etag": "W/\"8\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CDS Pop-up Banner"
+			},
+			"ProjectId": 628,
+			"Hours": 0.0869444445124827,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(34)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449486000000)\/",
+			"TimeOut": "\/Date(1449486360000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(590)",
+					"etag": "W/\"15\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Credit Card Acknowledgement"
+			},
+			"ProjectId": 590,
+			"Hours": 0.0999999999767169,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(35)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449486360000)\/",
+			"TimeOut": "\/Date(1449489600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(602)",
+					"etag": "W/\"10\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Cardiocom Request"
+			},
+			"ProjectId": 602,
+			"Hours": 0.899999999965075,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(49)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449657761000)\/",
+			"TimeOut": "\/Date(1449658705000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(604)",
+					"etag": "W/\"10\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Complaint Form"
+			},
+			"ProjectId": 604,
+			"Hours": 0.262222222227138,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(36)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449493200000)\/",
+			"TimeOut": "\/Date(1449507600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(605)",
+					"etag": "W/\"22\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CPR Refund"
+			},
+			"ProjectId": 605,
+			"Hours": 4.00000000011642,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(40)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449561600000)\/",
+			"TimeOut": "\/Date(1449567000000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(605)",
+					"etag": "W/\"22\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CPR Refund"
+			},
+			"ProjectId": 605,
+			"Hours": 1.5,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(42)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449570817000)\/",
+			"TimeOut": "\/Date(1449576204000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(605)",
+					"etag": "W/\"22\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CPR Refund"
+			},
+			"ProjectId": 605,
+			"Hours": 1.49638888891786,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(44)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449580113000)\/",
+			"TimeOut": "\/Date(1449594963000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(605)",
+					"etag": "W/\"22\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "CPR Refund"
+			},
+			"ProjectId": 605,
+			"Hours": 4.125,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(66)",
+				"etag": "W/\"2\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449648000000)\/",
+			"TimeOut": "\/Date(1449653400000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(610)",
+					"etag": "W/\"24\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Medical Records/Change Request"
+			},
+			"ProjectId": 610,
+			"Hours": 1.5,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(51)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449658780000)\/",
+			"TimeOut": "\/Date(1449662523000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(610)",
+					"etag": "W/\"24\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Medical Records/Change Request"
+			},
+			"ProjectId": 610,
+			"Hours": 1.03972222219454,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(67)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449666000000)\/",
+			"TimeOut": "\/Date(1449677700000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(610)",
+					"etag": "W/\"24\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Medical Records/Change Request"
+			},
+			"ProjectId": 610,
+			"Hours": 3.25000000011642,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(53)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449679200000)\/",
+			"TimeOut": "\/Date(1449680640000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(610)",
+					"etag": "W/\"24\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Medical Records/Change Request"
+			},
+			"ProjectId": 610,
+			"Hours": 0.399999999906868,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(55)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449734400000)\/",
+			"TimeOut": "\/Date(1449746700000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(610)",
+					"etag": "W/\"24\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Medical Records/Change Request"
+			},
+			"ProjectId": 610,
+			"Hours": 3.41666666662786,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(58)",
+				"etag": "W/\"5\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449748200000)\/",
+			"TimeOut": "\/Date(1449748800000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(614)",
+					"etag": "W/\"34\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Petty Cash Fund Form"
+			},
+			"ProjectId": 614,
+			"Hours": 0.166666666686069,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(60)",
+				"etag": "W/\"6\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449752400000)\/",
+			"TimeOut": "\/Date(1449765000000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(614)",
+					"etag": "W/\"34\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Petty Cash Fund Form"
+			},
+			"ProjectId": 614,
+			"Hours": 3.50000000005821,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(65)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449766200000)\/",
+			"TimeOut": "\/Date(1449766800000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(614)",
+					"etag": "W/\"34\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Petty Cash Fund Form"
+			},
+			"ProjectId": 614,
+			"Hours": 0.166666666686069,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(62)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449820055000)\/",
+			"TimeOut": "\/Date(1449821633000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(614)",
+					"etag": "W/\"34\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Petty Cash Fund Form"
+			},
+			"ProjectId": 614,
+			"Hours": 0.438333333295304,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(185)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449841347000)\/",
+			"TimeOut": "\/Date(1449854165000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(614)",
+					"etag": "W/\"34\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Petty Cash Fund Form"
+			},
+			"ProjectId": 614,
+			"Hours": 3.56055555562489,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(32)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449475161000)\/",
+			"TimeOut": "\/Date(1449485946000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(615)",
+					"etag": "W/\"10\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Physician/Provider Request"
+			},
+			"ProjectId": 615,
+			"Hours": 2.99583333340706,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(64)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449821679000)\/",
+			"TimeOut": "\/Date(1449835387000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(627)",
+					"etag": "W/\"8\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Update Time Log for Past Quarter"
+			},
+			"ProjectId": 627,
+			"Hours": 3.80777777766343,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/media/_vti_bin/listdata.svc/TimeLog(57)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449746700000)\/",
+			"TimeOut": "\/Date(1449748200000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/Projects(629)",
+					"etag": "W/\"7\"",
+					"type": "Microsoft.SharePoint.DataService.ProjectsItem"
+				},
+				"Title": "Research EVV Products"
+			},
+			"ProjectId": 629,
+			"Hours": 0.416666666627862,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/media/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}]
+	}
+}

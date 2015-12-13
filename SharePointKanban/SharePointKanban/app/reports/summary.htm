@@ -1,0 +1,48 @@
+﻿
+<div class="panel panel-default">
+    <div class="panel-heading">Date Filter</div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-sm-4 form-group">
+                <label class="control-label">From:</label>
+                <input type="text" date-picker ng-model="startDate" class="form-control" />
+            </div>
+            <div class="col-sm-4 form-group">
+                <label class="control-label">To:</label>
+                <input type="text" date-picker ng-model="endDate" class="form-control" />
+            </div>
+            <div class="col-sm-4 form-group">
+                <button class="btn btn-warning" ng-mousedown="vm.getData()"><span class="glyphicon glyphicon-download"></span>Get Data</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="panel panel-info" ng-repeat="person in vm.projects">
+    <div class="panel-heading">{{person.Name}}</div>
+    <div class="panel-body">
+
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead>
+                    <tr><th>ID</th><th>Title</th><th>Total Hours</th></tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="project in person.Projects">
+                        <td>{{project.Id}}</td>
+                        <td>{{project.Title}}</td>
+                        <td>{{project.TotalHours | number:3}}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="2"><strong>Total</strong></td>
+                        <td><total-hours projects="person.Projects"></total-hours></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+    </div>
+</div>

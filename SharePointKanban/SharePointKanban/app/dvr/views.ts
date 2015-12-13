@@ -18,7 +18,47 @@
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
-                kanbanConfig: Dependencies.projectsKanbanConfig
+                kanbanConfig: function (): IKanbanConfig {
+                    var config: IKanbanConfig = {
+                        siteUrl: '/media', //the SharePoint subsite relative URL
+                        listName: 'Projects', //the SharePoint list name
+                        previousMonths: 18, //how far back to show project tasks
+                        timeLogListName: 'Time Log',
+                        statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
+                        columns: <Array<IKanbanColumn>>[
+                            {
+                                title: 'Backlog',
+                                id: 'backlog-tasks',
+                                className: 'panel panel-info',
+                                status: 'Not Started',
+                                tasks: []
+                            },
+                            {
+                                title: 'In Progress',
+                                id: 'in-progress-tasks',
+                                className: 'panel panel-danger',
+                                status: 'In Progress',
+                                tasks: []
+                            },
+                            {
+                                title: 'Testing',
+                                id: 'testing-tasks',
+                                className: 'panel panel-warning',
+                                status: 'Testing',
+                                tasks: []
+                            },
+                            {
+                                title: 'Done',
+                                id: 'completed-tasks',
+                                className: 'panel panel-success',
+                                status: 'Completed',
+                                tasks: []
+                            }
+                        ]
+                    };
+
+                    return config;
+                }
             }
         }
 
@@ -27,7 +67,50 @@
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
-                kanbanConfig: Dependencies.helpdeskKanbanConfig
+                kanbanConfig: function (): IKanbanConfig {
+                    var config: IKanbanConfig = {
+                        siteUrl: '/ws',
+                        listName: 'Tasks',
+                        previousMonths: 1,
+                        timeLogListName: 'Time Log',
+                        statuses: ['Not Started', 'In Progress', 'Completed'],
+                        columns: <Array<IKanbanColumn>>[
+                            {
+                                title: 'Backlog',
+                                id: 'backlog-tasks',
+                                className: 'panel panel-info',
+                                status: 'Not Started',
+                                tasks: []
+                            },
+                            {
+                                title: 'In Progress',
+                                id: 'in-progress-tasks',
+                                className: 'panel panel-danger',
+                                status: 'In Progress',
+                                tasks: []
+                            },
+                            {
+                                title: 'Done',
+                                id: 'completed-tasks',
+                                className: 'panel panel-success',
+                                status: 'Completed',
+                                tasks: []
+                            }
+                        ]
+                    };
+
+                    return config;
+                }
+            }
+        }
+
+        public static summary: any = {
+            templateUrl: 'app/reports/summary.htm' + Views.getTs(),
+            controller: 'projectSummaryController',
+            controllerAs: 'vm',
+            resolve: {
+                siteUrl: function () { return '/media'; },
+                listName: function () { return 'Time Log'; }
             }
         }
 

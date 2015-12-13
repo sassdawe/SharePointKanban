@@ -123,16 +123,16 @@
         * @param entities Array<any>
         * @return Array<any>
         */
-        public static filterByProperty(entities: Array<any>, val: any): Array<any> {
+        public static filterByValue(entities: Array<any>, val: any): Array<any> {
             if (!!!entities) { return []; }
             var filtered = [];
-            entities.forEach(function (entity) {
-                for (var prop in entity) {
-                    if (entity[prop] == val) {
-                        filtered.push(entity);
+            for (var i = 0; i < entities.length; i++) {
+                for (var prop in entities[i]) {
+                    if (entities[i][prop] == val) {
+                        filtered.push(entities[i]);
                     }
                 }
-            });
+            }
             return filtered;
         }
 
@@ -140,6 +140,7 @@
         * Find and return unique values from an array.
         * 
         * @param inputArray:Array
+        * @param keyName
         * @return Array
         */
         public static getUniqueKeyValues(inputArray, keyName): Array<any> {

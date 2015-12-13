@@ -87,6 +87,15 @@ module App{
                 }
             });
 
+            $stateProvider.state('app.summary', {
+                url: 'summary',
+                views: {
+                    'menu@app': Views.menu,
+                    'main@app': Views.summary,
+                    'footer@app': Views.footer
+                }
+            });
+
         }
 
     }

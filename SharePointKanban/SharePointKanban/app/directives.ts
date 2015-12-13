@@ -77,4 +77,44 @@
         }
     });
 
+    app.directive('datePicker', ['$window', function ($window) {
+        return {
+            restrict: 'A',
+            scope: {
+                ngModel: '='
+            },
+            link: function (scope: any, elem: any, attr: any): void {
+                // apply jQueryUI datepicker
+                $(elem)['datepicker']({
+                    changeMonth: true,
+                    changeYear: true
+                });
+                scope.$watch(function (scope) {
+                    var d: Date = <Date>scope.ngModel;
+                    $(elem).val(moment(d).format('MM/DD/YYYY'));
+                });
+            }
+        }
+    }]);
+
+    app.directive('totalHours', ['$window', function ($window) {
+        return {
+            restrict: 'EA',
+            scope: {
+                projects: '='
+            },
+            link: function (scope: any, elem: any, attr: any): void {
+                scope.$watch(function (scope) {
+                    var projects: Array<IProjectTotal> = scope.projects;
+                    var total: number = 0;
+                    for (var i = 0; i < projects.length; i++) {
+                        total += projects[i].TotalHours;
+                    }
+                    scope.total = total;
+                });
+            },
+            replace: true,
+            template: '<strong>{{total | number:3}}</strong>'
+        }
+    }]);
 }
