@@ -109,8 +109,12 @@
             controller: 'projectSummaryController',
             controllerAs: 'vm',
             resolve: {
-                siteUrl: function () { return '/media'; },
-                listName: function () { return 'Time Log'; }
+                projectSiteConfigs: function (): Array<IProjectSiteConfig> {
+                    return [
+                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects' },
+                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests' },
+                    ]
+                }
             }
         }
 

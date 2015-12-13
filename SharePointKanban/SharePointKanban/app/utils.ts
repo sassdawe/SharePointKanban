@@ -194,6 +194,97 @@
 
             return objectClone;
         }
+
+        /**
+         * Randomize array element order in-place.
+         * Using Durstenfeld shuffle algorithm.
+         */
+        public static randomize(array: Array<any>): Array<any> {        
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;           
+        }
+
+        public static randomColor(): string {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        }
+
+        public static hexColors(): Array<string> {
+            return [
+            //blues: http://www.color-hex.com/color-palette/1294
+                '#011f4b',
+                '#03396c',
+                '#005b96',
+                '#6497b1',
+                '#b3cde0', 
+
+            //"program catalog": http://www.color-hex.com/color-palette/894 
+                '#edc951',
+                '#eb6841',
+                '#cc2a36',
+                '#4f372d',
+                '#00a0b0', 
+
+            //metro: http://www.color-hex.com/color-palette/700
+                '#d11141',
+                '#00b159',
+                '#00aedb',
+                '#f37735',
+                '#ffc425', 
+
+            //cedar ridge: http://www.color-hex.com/color-palette/263
+                '#bb1515',
+                '#e0cda7',
+                '#2a334f',
+                '#6b4423',
+                '#ac8f57', 
+
+            // gold: http://www.color-hex.com/color-palette/2799
+                '#a67c00',
+                '#bf9b30',
+                '#ffbf00',
+                '#ffcf40',
+                '#ffdc73', 
+            //summertime: http://www.color-hex.com/color-palette/826
+                '#e8d174',
+                '#e39e54',
+                '#d64d4d',
+                '#4d7358',
+                '#9ed670', 
+
+            //red: http://www.color-hex.com/color-palette/255'
+                '#b62020',
+                '#cb2424',
+                '#fe2e2e',
+                '#fe5757',
+                '#fe8181', 
+
+            //purple: http://www.color-hex.com/color-palette/1835' 
+                '#efbbff',
+                '#d896ff',
+                '#be29ec',
+                '#800080',
+                '#660066', 
+	
+            // teal: http://www.color-hex.com/color-palette/309
+                '#007777',
+                '#006666',
+                '#005555',
+                '#004444',
+                '#003333', 
+	
+            // pastel: http://www.color-hex.com/color-palette/164
+                '#1b85b8',
+                '#5a5255',
+                '#559e83',
+                '#ae5a41',
+                '#c3cb71'
+            ];
+        }
     }
 
 }

@@ -29,6 +29,7 @@
 
     export interface IPersonProjects{
         Name: string;
+        Title: string;
         Projects: Array<IProjectTotal>
     }
 
@@ -36,6 +37,23 @@
         Id: number;
         Title: string;
         TotalHours: number;
+        Color: string;
+    }
+
+    export interface IProjectSiteConfig {
+        siteUrl: string;
+        listName: string;
+        title: string;
+    }
+
+    export interface IPersonProjectsGroup {
+        Name: string;
+        ProjectGroups: Array<IProjectGroup>;
+    }
+
+    export interface IProjectGroup {
+        Title: string;
+        Projects: Array<IProjectTotal>;
     }
 
 }

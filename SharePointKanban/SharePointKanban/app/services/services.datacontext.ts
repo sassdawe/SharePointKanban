@@ -13,7 +13,7 @@
         deleteAttachment(att: SharePoint.ISpAttachment): ng.IPromise<any>;
         clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<SharePoint.ISpItem>>>;
         clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string, callback: JQueryPromiseCallback<any>): void;
-        getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date): ng.IPromise<Array<IPersonProjects>>;
+        getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string): ng.IPromise<Array<IPersonProjects>>;
 
         // SOAP Methods
         executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl?: string, cache?: boolean, headers?: any, service?: string): ng.IPromise<any>
@@ -653,7 +653,7 @@
             return d.promise;
         }
 
-        public getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date): ng.IPromise<Array<IPersonProjects>> {
+        public getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string): ng.IPromise<Array<IPersonProjects>> {
             var self = this;
             var d = this.$q.defer();
 
@@ -671,11 +671,13 @@
                         people.push(name);
                         groups.push({
                             Name: name,
+                            Title: title,
                             Projects: []
                         });
                     }
                 }
 
+                // 2. group by project
                 people.forEach(function (name, i) {
                     var group = groups[i];
 
@@ -688,11 +690,13 @@
                             group.Projects.push({
                                 Id: p.ProjectId,
                                 Title: p.Project.Title,
-                                TotalHours: 0
+                                TotalHours: 0,
+                                Color: null
                             });
                         }
                     });
 
+                    // 2.1 sum project hours
                     group.Projects.forEach(function (proj) {
                         logs.filter(function (l) {
                             return l.ProjectId == proj.Id;
@@ -702,7 +706,6 @@
                     });
                       
                 });
-
 
                 d.resolve(groups);
             };
@@ -726,8 +729,10 @@
             }
             else {
                 // get test data
+                this.common.hideLoader();
+                var testData = title == 'Projects' ? '/test_time_entries.txt' : 'test_support_entries.txt';
                 self.$http({
-                    url: '/test_time_entries.txt?_=' + Utils.getTimestamp(),
+                    url: testData + '?_=' + Utils.getTimestamp(),
                     method: 'GET'
                 }).then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpCollectionWrapper<SharePoint.ITimeLogItem>>): void => {
 

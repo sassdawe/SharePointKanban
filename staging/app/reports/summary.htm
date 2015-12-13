@@ -1,17 +1,17 @@
 ﻿
-<div class="panel panel-default no-print">
+<div class="panel panel-default">
     <div class="panel-heading">Date Filter</div>
     <div class="panel-body">
         <div class="row">
-            <div class="col-xs-4 form-group">
+            <div class="col-sm-4 form-group">
                 <label class="control-label">From:</label>
                 <input type="text" date-picker ng-model="vm.startDate" class="form-control" />
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col-sm-4 form-group">
                 <label class="control-label">To:</label>
                 <input type="text" date-picker ng-model="vm.endDate" class="form-control" />
             </div>
-            <div class="col-xs-4 form-group">
+            <div class="col-sm-4 form-group">
                 <button class="btn btn-warning" ng-mousedown="vm.getData()"><span class="glyphicon glyphicon-download"></span>Get Data</button>
             </div>
         </div>
@@ -22,13 +22,13 @@
 <div class="panel panel-default" ng-repeat="person in vm.groupedProjects">
 
     <div class="panel-heading">
-        <strong>{{person.Name}}'s Projects from {{vm.startDate | date}} to {{vm.endDate | date}} <span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span></strong>
+        <h4>{{person.Name}}'s Projects from {{vm.startDate | date}} to {{vm.endDate | date}} <span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span></h4>
     </div>
 
     <div class="panel-body">
 
         <div class="row">
-            <div class="col-xs-{{12/person.ProjectGroups.length}}" ng-repeat="projectGroup in person.ProjectGroups">
+            <div class="col-md-{{12/person.ProjectGroups.length}}" ng-repeat="projectGroup in person.ProjectGroups">
 
                 <h4>{{projectGroup.Title}}</h4>
 
@@ -41,13 +41,13 @@
                 </div>
 
                 <div class="table-responsive">
-                    <table class="table table-condensed table-bordered">
+                    <table class="table table-bordered">
                         <thead>
                             <tr><th>&nbsp;</th><th>ID</th><th>Title</th><th>Hours</th></tr>
                         </thead>
                         <tbody>
                             <tr ng-repeat="project in projectGroup.Projects">
-                                <td><div style="border:10px solid {{project.Color}}; width:1px; height:1px;"></div></td>
+                                <td><span class="glyphicon glyphicon-stop" style="color:{{project.Color}}"></span></td>
                                 <td>{{project.Id}}</td>
                                 <td>{{project.Title}}</td>
                                 <td>{{project.TotalHours | number:3}}</td>

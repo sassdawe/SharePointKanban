@@ -262,6 +262,80 @@ var App;
                 template: '<strong>{{total | number:3}}</strong>'
             };
         }]);
+    //<span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span>
+    App.app.directive('projectsTotalHours', ['$window', function ($window) {
+            return {
+                restrict: 'EA',
+                scope: {
+                    projectGroups: '='
+                },
+                link: function (scope, elem, attr) {
+                    scope.$watch(function (scope) {
+                        var projectGroups = scope.projectGroups;
+                        var total = 0;
+                        for (var i = 0; i < projectGroups.length; i++) {
+                            for (var j = 0; j < projectGroups[i].Projects.length; j++) {
+                                total += projectGroups[i].Projects[j].TotalHours;
+                            }
+                        }
+                        scope.total = total;
+                    });
+                },
+                replace: false,
+                template: 'Total Hours: {{total | number:3}}'
+            };
+        }]);
+    App.app.directive('doughnutChart', doughnutChart);
+    function doughnutChart() {
+        return {
+            restrict: 'A',
+            scope: {
+                projectsData: '='
+            },
+            link: function (scope, $elem, attr) {
+                scope.$watch(function (scope) {
+                    var projects = scope.projectsData;
+                    var chartData = [];
+                    var canvasId = $elem[0].id;
+                    var uniqueId = 'doughnut_' + canvasId;
+                    var chart;
+                    var canvas = document.getElementById(canvasId);
+                    var ctx = canvas.getContext("2d");
+                    var colors = App.Utils.randomize(App.Utils.hexColors());
+                    // destroy existing chart object
+                    if (canvas['__chartRef']) {
+                        chart = canvas['__chartRef'];
+                        chart.clear();
+                        chart.destroy();
+                    }
+                    if (typeof projects != 'undefined') {
+                        projects.forEach(function (p, i) {
+                            p.Color = p.Color || (i < colors.length ? colors[i] : colors[colors.length - i]);
+                            chartData.push({
+                                label: p.Id + ': ' + p.Title,
+                                value: p.TotalHours.toFixed(3),
+                                color: p.Color
+                            });
+                        });
+                    }
+                    //canvas['__chartRef'] = 
+                    chart = new window['Chart'](ctx).Doughnut(chartData, {
+                        responsive: true,
+                        segmentShowStroke: true,
+                        segmentStrokeColor: "#ccc",
+                        segmentStrokeWidth: 1,
+                        percentageInnerCutout: 50 // This is 0 for Pie charts
+                        ,
+                        animationSteps: 100,
+                        animationEasing: "easeOutBounce",
+                        animateRotate: true,
+                        animateScale: false
+                    });
+                    canvas['__chartRef'] = chart;
+                });
+            }
+        };
+    }
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -462,8 +536,12 @@ var App;
             controller: 'projectSummaryController',
             controllerAs: 'vm',
             resolve: {
-                siteUrl: function () { return '/media'; },
-                listName: function () { return 'Time Log'; }
+                projectSiteConfigs: function () {
+                    return [
+                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects' },
+                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests' },
+                    ];
+                }
             }
         };
         Views.menu = {
@@ -840,21 +918,55 @@ var App;
     var Controllers;
     (function (Controllers) {
         var ProjectSummary = (function () {
-            function ProjectSummary(datacontext, siteUrl, listName) {
+            function ProjectSummary(datacontext, projectSiteConfigs) {
                 this.datacontext = datacontext;
-                this.siteUrl = siteUrl;
-                this.listName = listName;
+                this.projectSiteConfigs = projectSiteConfigs;
+                // default dates to current week from Mon to Sun
+                var days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat']; // 6-5,5-4,4-3,3-2,2-1
+                var today = new Date();
+                var dayOfWeek = today.getDay();
+                var dayOfMonth = today.getDate();
+                var mondayDate = days[dayOfWeek] == 'Mon' ? dayOfMonth : dayOfMonth - (6 - dayOfWeek);
+                this.startDate = new Date(today.getFullYear(), today.getMonth(), mondayDate, 0, 0, 0);
+                this.endDate = new Date(today.getFullYear(), today.getMonth(), mondayDate + 6, 0, 0, 0);
+                this.groupedProjects = [];
             }
             ProjectSummary.prototype.getData = function () {
                 var self = this;
-                this.datacontext.getProjectTotals(this.siteUrl, this.listName, this.startDate, this.endDate).then(function (projects) {
-                    self.projects = projects;
-                    console.log(projects);
-                });
+                this.groupedProjects = [];
+                for (var i = 0; i < this.projectSiteConfigs.length; i++) {
+                    var config = self.projectSiteConfigs[i];
+                    var groupTitle = self.projectSiteConfigs[i].title;
+                    var names = []; //to keep track of unique names
+                    this.datacontext.getProjectTotals(config.siteUrl, config.listName, this.startDate, this.endDate, groupTitle).then(function (data) {
+                        // group multiple project groups under each unique person                        
+                        data.forEach(function (o) {
+                            var name = o.Name;
+                            if (names.indexOf(name) < 0) {
+                                names.push(name);
+                                self.groupedProjects.push({
+                                    Name: name,
+                                    ProjectGroups: [{
+                                            Title: o.Title,
+                                            Projects: o.Projects
+                                        }]
+                                });
+                            }
+                            else {
+                                self.groupedProjects.filter(function (person) {
+                                    return person.Name == name;
+                                })[0].ProjectGroups.push({
+                                    Title: o.Title,
+                                    Projects: o.Projects
+                                });
+                            }
+                        });
+                    });
+                }
                 return false;
             };
             ProjectSummary.Id = 'projectSummaryController';
-            ProjectSummary.$inject = ['datacontext', 'siteUrl', 'listName'];
+            ProjectSummary.$inject = ['datacontext', 'projectSiteConfigs'];
             return ProjectSummary;
         })();
         Controllers.ProjectSummary = ProjectSummary;
@@ -881,6 +993,7 @@ var App;
                 this.common = common;
                 this.config = config;
                 this.cache = {};
+                this.common.hideLoader();
             }
             /**
             * Execute a REST request.
@@ -1406,7 +1519,7 @@ var App;
                 });
                 return d.promise;
             };
-            Datacontext.prototype.getProjectTotals = function (siteUrl, listName, start, end) {
+            Datacontext.prototype.getProjectTotals = function (siteUrl, listName, start, end, title) {
                 var self = this;
                 var d = this.$q.defer();
                 // Group the time entry data by CreatedBy, Project
@@ -1421,10 +1534,12 @@ var App;
                             people.push(name);
                             groups.push({
                                 Name: name,
+                                Title: title,
                                 Projects: []
                             });
                         }
                     }
+                    // 2. group by project
                     people.forEach(function (name, i) {
                         var group = groups[i];
                         var temp = [];
@@ -1436,10 +1551,12 @@ var App;
                                 group.Projects.push({
                                     Id: p.ProjectId,
                                     Title: p.Project.Title,
-                                    TotalHours: 0
+                                    TotalHours: 0,
+                                    Color: null
                                 });
                             }
                         });
+                        // 2.1 sum project hours
                         group.Projects.forEach(function (proj) {
                             logs.filter(function (l) {
                                 return l.ProjectId == proj.Id;
@@ -1467,8 +1584,10 @@ var App;
                 }
                 else {
                     // get test data
+                    this.common.hideLoader();
+                    var testData = title == 'Projects' ? '/test_time_entries.txt' : 'test_support_entries.txt';
                     self.$http({
-                        url: '/test_time_entries.txt?_=' + App.Utils.getTimestamp(),
+                        url: testData + '?_=' + App.Utils.getTimestamp(),
                         method: 'GET'
                     }).then(function (response) {
                         if (response.status != 200) {
@@ -1794,6 +1913,86 @@ var App;
                 objectClone[prop] = Utils.clone(objectToBeCloned[prop]);
             }
             return objectClone;
+        };
+        /**
+         * Randomize array element order in-place.
+         * Using Durstenfeld shuffle algorithm.
+         */
+        Utils.randomize = function (array) {
+            for (var i = array.length - 1; i > 0; i--) {
+                var j = Math.floor(Math.random() * (i + 1));
+                var temp = array[i];
+                array[i] = array[j];
+                array[j] = temp;
+            }
+            return array;
+        };
+        Utils.randomColor = function () {
+            return '#' + Math.floor(Math.random() * 16777215).toString(16);
+        };
+        Utils.hexColors = function () {
+            return [
+                //blues: http://www.color-hex.com/color-palette/1294
+                '#011f4b',
+                '#03396c',
+                '#005b96',
+                '#6497b1',
+                '#b3cde0',
+                //"program catalog": http://www.color-hex.com/color-palette/894 
+                '#edc951',
+                '#eb6841',
+                '#cc2a36',
+                '#4f372d',
+                '#00a0b0',
+                //metro: http://www.color-hex.com/color-palette/700
+                '#d11141',
+                '#00b159',
+                '#00aedb',
+                '#f37735',
+                '#ffc425',
+                //cedar ridge: http://www.color-hex.com/color-palette/263
+                '#bb1515',
+                '#e0cda7',
+                '#2a334f',
+                '#6b4423',
+                '#ac8f57',
+                // gold: http://www.color-hex.com/color-palette/2799
+                '#a67c00',
+                '#bf9b30',
+                '#ffbf00',
+                '#ffcf40',
+                '#ffdc73',
+                //summertime: http://www.color-hex.com/color-palette/826
+                '#e8d174',
+                '#e39e54',
+                '#d64d4d',
+                '#4d7358',
+                '#9ed670',
+                //red: http://www.color-hex.com/color-palette/255'
+                '#b62020',
+                '#cb2424',
+                '#fe2e2e',
+                '#fe5757',
+                '#fe8181',
+                //purple: http://www.color-hex.com/color-palette/1835' 
+                '#efbbff',
+                '#d896ff',
+                '#be29ec',
+                '#800080',
+                '#660066',
+                // teal: http://www.color-hex.com/color-palette/309
+                '#007777',
+                '#006666',
+                '#005555',
+                '#004444',
+                '#003333',
+                // pastel: http://www.color-hex.com/color-palette/164
+                '#1b85b8',
+                '#5a5255',
+                '#559e83',
+                '#ae5a41',
+                '#c3cb71'
+            ];
         };
         return Utils;
     })();

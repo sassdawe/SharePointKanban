@@ -68,6 +68,14 @@
     <Content Include="scripts\angular.min.js" />
     <Content Include="scripts\bootstrap.js" />
     <Content Include="scripts\bootstrap.min.js" />
+    <Content Include="scripts\Chart.Bar.js" />
+    <Content Include="scripts\Chart.Core.js" />
+    <Content Include="scripts\Chart.Doughnut.js" />
+    <Content Include="scripts\Chart.js" />
+    <Content Include="scripts\Chart.Line.js" />
+    <Content Include="scripts\Chart.min.js" />
+    <Content Include="scripts\Chart.PolarArea.js" />
+    <Content Include="scripts\Chart.Radar.js" />
     <Content Include="scripts\jquery-1.11.2.js" />
     <Content Include="scripts\jquery-1.11.2.min.js" />
     <Content Include="scripts\jquery-ui.datepicker.js" />
@@ -76,6 +84,7 @@
     <Content Include="scripts\moment.min.js" />
     <Content Include="testdata.txt" />
     <Content Include="testuser.xml" />
+    <Content Include="test_support_entries.txt" />
     <Content Include="test_time_entries.txt" />
     <Content Include="web.config" />
   </ItemGroup>

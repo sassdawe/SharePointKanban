@@ -69,3 +69,7 @@ body {
         }
     }
 }
+
+@media print{
+    .no-print{display: none !important;}
+}

@@ -117,4 +117,101 @@
             template: '<strong>{{total | number:3}}</strong>'
         }
     }]);
+
+    //<span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span>
+    app.directive('projectsTotalHours', ['$window', function ($window) {
+        return {
+            restrict: 'EA',
+            scope: {
+                projectGroups: '='
+            },
+            link: function (scope: any, elem: any, attr: any): void {
+                scope.$watch(function (scope) {
+                    var projectGroups: Array<IProjectGroup> = scope.projectGroups
+                    var total: number = 0;
+                    for (var i = 0; i < projectGroups.length; i++) {
+                        for (var j = 0; j < projectGroups[i].Projects.length; j++) {
+                            total += projectGroups[i].Projects[j].TotalHours;
+                        }
+                    }
+                    scope.total = total;
+                });
+            },
+            replace: false,
+            template: 'Total Hours: {{total | number:3}}'
+        }
+    }]);
+
+    app.directive('doughnutChart', doughnutChart);
+
+    function doughnutChart() {
+        return {
+            restrict: 'A',
+            scope: {
+                projectsData: '='
+            },
+            link: function (scope: any, $elem: any, attr: any): void {
+
+                scope.$watch(function (scope) {
+                    var projects: Array<IProjectTotal> = scope.projectsData;
+                    var chartData = [];
+                    var canvasId: string = $elem[0].id;
+                    var uniqueId = 'doughnut_' + canvasId;
+                    var chart: any;
+                    var canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById(canvasId);
+                    var ctx = canvas.getContext("2d");
+                    var colors = Utils.randomize(Utils.hexColors());
+
+                    // destroy existing chart object
+                    if (canvas['__chartRef']) {
+                        chart = canvas['__chartRef'];
+                        chart.clear();
+                        chart.destroy();
+                    }
+
+                    if (typeof projects != 'undefined') {
+                        projects.forEach(function (p, i) {
+
+                            p.Color = p.Color || (i < colors.length ? colors[i] : colors[colors.length - i]);
+
+                            chartData.push({
+                                label: p.Id + ': ' + p.Title,
+                                value: p.TotalHours.toFixed(3),
+                                color: p.Color
+                            });
+                        });
+                    }
+              
+                    //canvas['__chartRef'] = 
+                    chart = new window['Chart'](ctx).Doughnut(chartData, {
+                        responsive: true
+                        //Boolean - Whether we should show a stroke on each segment
+                        , segmentShowStroke : true
+
+                        //String - The colour of each segment stroke
+                        , segmentStrokeColor: "#ccc"
+
+                        //Number - The width of each segment stroke
+                        , segmentStrokeWidth: 1
+
+                        //Number - The percentage of the chart that we cut out of the middle
+                        , percentageInnerCutout: 50 // This is 0 for Pie charts
+
+                        //Number - Amount of animation steps
+                        , animationSteps: 100
+
+                        //String - Animation easing effect
+                        , animationEasing: "easeOutBounce"
+
+                        //Boolean - Whether we animate the rotation of the Doughnut
+                        , animateRotate: true
+
+                        //Boolean - Whether we animate scaling the Doughnut from the centre
+                        , animateScale: false
+                    });
+                    canvas['__chartRef'] = chart;
+                });
+            }
+        };
+    }
 }
