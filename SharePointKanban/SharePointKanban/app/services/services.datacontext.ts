@@ -657,6 +657,14 @@
             var self = this;
             var d = this.$q.defer();
 
+            start = Utils.parseDate(start);
+            end = Utils.parseDate(end);
+
+            if (this.config.debug) {
+                console.info(start);
+                console.info(end);
+            }
+
             // Group the time entry data by CreatedBy, Project
             var transform = (logs: Array<SharePoint.ITimeLogItem>): void => {
 

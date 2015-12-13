@@ -1522,6 +1522,12 @@ var App;
             Datacontext.prototype.getProjectTotals = function (siteUrl, listName, start, end, title) {
                 var self = this;
                 var d = this.$q.defer();
+                start = App.Utils.parseDate(start);
+                end = App.Utils.parseDate(end);
+                if (this.config.debug) {
+                    console.info(start);
+                    console.info(end);
+                }
                 // Group the time entry data by CreatedBy, Project
                 var transform = function (logs) {
                     var groups = [];
