@@ -423,6 +423,14 @@ var App;
                     'footer@app': App.Views.footer
                 }
             });
+            $stateProvider.state('app.summary.range', {
+                url: '/start/{start:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}/end/{end:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}',
+                views: {
+                    'menu@app': App.Views.menu,
+                    'main@app': App.Views.summary,
+                    'footer@app': App.Views.footer
+                }
+            });
         }
         Routes.$inject = ['$stateProvider', '$urlRouterProvider'];
         return Routes;
@@ -502,7 +510,7 @@ var App;
                         listName: 'Tasks',
                         previousMonths: 1,
                         timeLogListName: 'Time Log',
-                        statuses: ['Not Started', 'In Progress', 'Completed'],
+                        statuses: ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'],
                         columns: [
                             {
                                 title: 'Backlog',
@@ -516,6 +524,13 @@ var App;
                                 id: 'in-progress-tasks',
                                 className: 'panel panel-danger',
                                 status: 'In Progress',
+                                tasks: []
+                            },
+                            {
+                                title: 'Waiting on someone else',
+                                id: 'waiting-on-someone-tasks',
+                                className: 'panel panel-warning',
+                                status: 'Waiting on someone else',
                                 tasks: []
                             },
                             {
@@ -918,21 +933,39 @@ var App;
     var Controllers;
     (function (Controllers) {
         var ProjectSummary = (function () {
-            function ProjectSummary(datacontext, projectSiteConfigs) {
+            function ProjectSummary($state, $stateParams, datacontext, projectSiteConfigs) {
+                this.$state = $state;
+                this.$stateParams = $stateParams;
                 this.datacontext = datacontext;
                 this.projectSiteConfigs = projectSiteConfigs;
+                this.updateState = false;
                 // default dates to current week from Mon to Sun
                 var days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat']; // 6-5,5-4,4-3,3-2,2-1
                 var today = new Date();
                 var dayOfWeek = today.getDay();
                 var dayOfMonth = today.getDate();
                 var mondayDate = days[dayOfWeek] == 'Mon' ? dayOfMonth : dayOfMonth - (6 - dayOfWeek);
-                this.startDate = new Date(today.getFullYear(), today.getMonth(), mondayDate, 0, 0, 0);
-                this.endDate = new Date(today.getFullYear(), today.getMonth(), mondayDate + 6, 0, 0, 0);
+                if (!!$stateParams.start && !!$stateParams.end) {
+                    var start = $stateParams.start.split('-');
+                    var end = $stateParams.end.split('-');
+                    this.startDate = new Date(parseInt(start[0]), parseInt(start[1]) - 1, parseInt(start[2]));
+                    this.endDate = new Date(parseInt(end[0]), parseInt(end[1]) - 1, parseInt(end[2]));
+                    this.getData();
+                }
+                else {
+                    this.updateState = true;
+                    this.startDate = new Date(today.getFullYear(), today.getMonth(), mondayDate, 0, 0, 0);
+                    this.endDate = new Date(today.getFullYear(), today.getMonth(), mondayDate + 6, 0, 0, 0);
+                }
                 this.groupedProjects = [];
             }
             ProjectSummary.prototype.getData = function () {
                 var self = this;
+                console.info(this.startDate);
+                //if (this.updateState) {
+                //this.$state.go('app.summary.range', { start: this.startDate.toISOString().split('T')[0], end: this.endDate.toISOString().split('T')[0] });
+                //this.updateState = false;
+                //}
                 this.groupedProjects = [];
                 for (var i = 0; i < this.projectSiteConfigs.length; i++) {
                     var config = self.projectSiteConfigs[i];
@@ -949,6 +982,8 @@ var App;
                                     ProjectGroups: [{
                                             Title: o.Title,
                                             Projects: o.Projects
+                                                .filter(function (p) { return p.PersonName == name; })
+                                                .sort(function (a, b) { return a.TotalHours < b.TotalHours ? 1 : 0; })
                                         }]
                                 });
                             }
@@ -958,6 +993,8 @@ var App;
                                 })[0].ProjectGroups.push({
                                     Title: o.Title,
                                     Projects: o.Projects
+                                        .filter(function (p) { return p.PersonName == name; })
+                                        .sort(function (a, b) { return a.TotalHours < b.TotalHours ? 1 : 0; })
                                 });
                             }
                         });
@@ -966,7 +1003,7 @@ var App;
                 return false;
             };
             ProjectSummary.Id = 'projectSummaryController';
-            ProjectSummary.$inject = ['datacontext', 'projectSiteConfigs'];
+            ProjectSummary.$inject = ['$state', '$stateParams', 'datacontext', 'projectSiteConfigs'];
             return ProjectSummary;
         })();
         Controllers.ProjectSummary = ProjectSummary;
@@ -1549,7 +1586,7 @@ var App;
                     people.forEach(function (name, i) {
                         var group = groups[i];
                         var temp = [];
-                        var projects = logs.filter(function (p) {
+                        logs.filter(function (p) {
                             return p.CreatedBy.Name == group.Name;
                         }).forEach(function (p) {
                             if (temp.indexOf(p.ProjectId) < 0) {
@@ -1558,6 +1595,7 @@ var App;
                                     Id: p.ProjectId,
                                     Title: p.Project.Title,
                                     TotalHours: 0,
+                                    PersonName: p.CreatedBy.Name,
                                     Color: null
                                 });
                             }

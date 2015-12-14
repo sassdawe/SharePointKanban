@@ -96,6 +96,15 @@ module App{
                 }
             });
 
+            $stateProvider.state('app.summary.range', {
+                url: '/start/{start:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}/end/{end:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}',
+                views: {
+                    'menu@app': Views.menu,
+                    'main@app': Views.summary,
+                    'footer@app': Views.footer
+                }
+            });
+
         }
 
     }

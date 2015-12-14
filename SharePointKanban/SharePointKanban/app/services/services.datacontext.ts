@@ -690,8 +690,9 @@
                     var group = groups[i];
 
                     var temp = [];
-                    var projects = logs.filter(function (p) {
+                    logs.filter(function (p) {
                         return p.CreatedBy.Name == group.Name;
+
                     }).forEach(function (p) {
                         if (temp.indexOf(p.ProjectId) < 0) {
                             temp.push(p.ProjectId);
@@ -699,6 +700,7 @@
                                 Id: p.ProjectId,
                                 Title: p.Project.Title,
                                 TotalHours: 0,
+                                PersonName: p.CreatedBy.Name,
                                 Color: null
                             });
                         }

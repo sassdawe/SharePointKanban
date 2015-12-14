@@ -71,5 +71,5 @@ body {
 }
 
 @media print{
-    .no-print{display: none !important;}
+    .no-print, .s4-notdlg, .s4-mini-header{display: none !important;}
 }

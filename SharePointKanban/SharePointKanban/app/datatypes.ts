@@ -1,4 +1,12 @@
 ﻿module App {
+
+    /**
+    * Extends IStateParamsService to include custom url parameters for Angular UI Router states.
+    */
+    export interface IAppStateParams extends ng.ui.IStateParamsService {
+        start: string;
+        end: string;
+    }
     
     export interface IKanbanConfig {
         siteUrl: string;
@@ -37,6 +45,7 @@
         Id: number;
         Title: string;
         TotalHours: number;
+        PersonName: string;
         Color: string;
     }
 

@@ -73,7 +73,7 @@
                         listName: 'Tasks',
                         previousMonths: 1,
                         timeLogListName: 'Time Log',
-                        statuses: ['Not Started', 'In Progress', 'Completed'],
+                        statuses: ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'],
                         columns: <Array<IKanbanColumn>>[
                             {
                                 title: 'Backlog',
@@ -87,6 +87,13 @@
                                 id: 'in-progress-tasks',
                                 className: 'panel panel-danger',
                                 status: 'In Progress',
+                                tasks: []
+                            },
+                            {
+                                title: 'Waiting on someone else',
+                                id: 'waiting-on-someone-tasks',
+                                className: 'panel panel-warning',
+                                status: 'Waiting on someone else',
                                 tasks: []
                             },
                             {
