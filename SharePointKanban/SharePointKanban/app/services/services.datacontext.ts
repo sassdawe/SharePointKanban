@@ -140,7 +140,7 @@
             var orderBy = 'PriorityValue asc,Created asc';
             var expand = 'AssignedTo,Attachments,Priority,Status';
 
-            this.getSpListItems(siteUrl, listName, filter, select, orderBy, expand, 100).then(
+            this.getSpListItems(siteUrl, listName, filter, select, orderBy, expand, 1000).then(
                 (projects: Array<SharePoint.ISpTaskItem>): void => {
 
                     // parse all the dates
@@ -672,50 +672,47 @@
 
                 // logs is ordered by CreatedBy.Name, ProjectId, TimeIn 
                 // 1. group by user
-                var people = [];
+                var temp = []; //temporary tracking array
                 for (var i = 0; i < logs.length; i++) {
                     var name = logs[i].CreatedBy.Name;
-                    if (people.indexOf(name) < 0) {
-                        people.push(name);
-                        groups.push({
-                            Name: name,
-                            Title: title,
-                            Projects: []
-                        });
-                    }
+                    if (temp.indexOf(name) > -1) { continue; }
+                    temp.push(name);
+                    groups.push({
+                        Name: name,
+                        Title: title,
+                        Projects: []
+                    });                   
                 }
 
                 // 2. group by project
-                people.forEach(function (name, i) {
+                for (var i = 0; i < groups.length; i++) {
                     var group = groups[i];
-
                     var temp = [];
-                    logs.filter(function (p) {
-                        return p.CreatedBy.Name == group.Name;
 
-                    }).forEach(function (p) {
-                        if (temp.indexOf(p.ProjectId) < 0) {
-                            temp.push(p.ProjectId);
-                            group.Projects.push({
-                                Id: p.ProjectId,
-                                Title: p.Project.Title,
-                                TotalHours: 0,
-                                PersonName: p.CreatedBy.Name,
-                                Color: null
-                            });
+                    for (var j = 0; j < logs.length; j++) {
+                        var p = logs[j];
+                        if (p.CreatedBy.Name != group.Name || temp.indexOf(p.ProjectId) > -1) { continue; }
+                        
+                        temp.push(p.ProjectId);
+                        var proj = {
+                            Id: p.ProjectId,
+                            Title: p.Project.Title,
+                            TotalHours: 0,
+                            PersonName: p.CreatedBy.Name,
+                            Color: null
+                        };
+
+                        // sum the total hours from a person's project's entries in `logs`
+                        for (var k = 0; k < logs.length; k++) {
+                            var log = logs[k];
+                            if (log.CreatedBy.Name == group.Name && proj.Id == log.ProjectId) {
+                                proj.TotalHours += log.Hours;
+                            }
                         }
-                    });
 
-                    // 2.1 sum project hours
-                    group.Projects.forEach(function (proj) {
-                        logs.filter(function (l) {
-                            return l.ProjectId == proj.Id;
-                        }).forEach(function (l) {
-                            proj.TotalHours += l.Hours;
-                        });
-                    });
-                      
-                });
+                        group.Projects.push(proj);
+                    }
+                }
 
                 d.resolve(groups);
             };
