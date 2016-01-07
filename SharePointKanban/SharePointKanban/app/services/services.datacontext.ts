@@ -705,7 +705,7 @@
                         // sum the total hours from a person's project's entries in `logs`
                         for (var k = 0; k < logs.length; k++) {
                             var log = logs[k];
-                            if (log.CreatedBy.Name == group.Name && proj.Id == log.ProjectId) {
+                            if (log.CreatedBy.Name == group.Name && proj.Id == log.ProjectId && !!log.TimeIn && !!log.TimeOut) {
                                 proj.TotalHours += log.Hours;
                             }
                         }
@@ -728,7 +728,7 @@
                 this.getSpListItems(
                 /*siteUrl:*/siteUrl,
                 /*listName:*/listName, 
-                /*filter:*/'TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'',
+                /*filter:*/'TimeIn ne null and TimeOut ne null and TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'',
                 /*select:*/'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title',
                 /*orderby:*/'CreatedBy/Name,ProjectId,TimeIn',
                 /*expand:*/'CreatedBy,Project',

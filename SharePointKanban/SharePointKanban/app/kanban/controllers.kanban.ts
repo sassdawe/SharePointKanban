@@ -236,7 +236,7 @@ module App.Controllers{
                 var project = this.findProjectById(id);
 
                 if (!!!project) {
-                    console.warn('ERORR: Controllers.KanBanController.clockIn() - project is null');
+                    console.warn('ERROR: Controllers.KanBanController.clockIn() - project is null');
                     return false;
                 }
 
@@ -280,7 +280,7 @@ module App.Controllers{
                 var project = this.findProjectById(id);
 
                 if (!!!project) {
-                    console.warn('ERORR: Controllers.KanBanController.clockOut() - project is null');
+                    console.warn('ERROR: Controllers.KanBanController.clockOut() - project is null');
                     return false;
                 }
 

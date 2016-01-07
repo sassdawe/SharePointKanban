@@ -820,7 +820,7 @@ var App;
                 try {
                     var project = this.findProjectById(id);
                     if (!!!project) {
-                        console.warn('ERORR: Controllers.KanBanController.clockIn() - project is null');
+                        console.warn('ERROR: Controllers.KanBanController.clockIn() - project is null');
                         return false;
                     }
                     var now = new Date();
@@ -856,7 +856,7 @@ var App;
                 try {
                     var project = this.findProjectById(id);
                     if (!!!project) {
-                        console.warn('ERORR: Controllers.KanBanController.clockOut() - project is null');
+                        console.warn('ERROR: Controllers.KanBanController.clockOut() - project is null');
                         return false;
                     }
                     this.datacontext.clockOut(project, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, function (timeOut) {
@@ -1603,7 +1603,7 @@ var App;
                             // sum the total hours from a person's project's entries in `logs`
                             for (var k = 0; k < logs.length; k++) {
                                 var log = logs[k];
-                                if (log.CreatedBy.Name == group.Name && proj.Id == log.ProjectId) {
+                                if (log.CreatedBy.Name == group.Name && proj.Id == log.ProjectId && !!log.TimeIn && !!log.TimeOut) {
                                     proj.TotalHours += log.Hours;
                                 }
                             }
@@ -1621,7 +1621,7 @@ var App;
                     this.getSpListItems(
                     /*siteUrl:*/ siteUrl, 
                     /*listName:*/ listName, 
-                    /*filter:*/ 'TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'', 
+                    /*filter:*/ 'TimeIn ne null and TimeOut ne null and TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'', 
                     /*select:*/ 'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title', 
                     /*orderby:*/ 'CreatedBy/Name,ProjectId,TimeIn', 
                     /*expand:*/ 'CreatedBy,Project', 
