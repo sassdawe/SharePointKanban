@@ -24,6 +24,7 @@ module App.Controllers{
         private columns: Array<IKanbanColumn>;
         private siteUrl: string;
         private listName: string;
+        private keywordFilter: string;
 
         // used by directive, `kanbanColumn`, to reference the current task being dragged over it.
         public dragging: any = {
@@ -49,6 +50,8 @@ module App.Controllers{
             this.userIsEditor = Utils.userIsEditor(this.currentUser, this.config.editGroups);
             this.now = new Date();
             this.refreshData();
+
+            document.getElementById('keywordFilter').focus();
         }
 
         private saveChanges(): boolean {
