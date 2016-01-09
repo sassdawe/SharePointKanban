@@ -15,10 +15,19 @@
                 <button class="btn btn-warning" ng-mousedown="vm.getData()"><span class="glyphicon glyphicon-download"></span>Get Data</button>
             </div>
         </div>
+        <div class="row" ng-show="vm.groupedProjects.length > 0">
+            <div class="col-sm-3">Filter By:</div>
+            <div class="col-sm-9">
+                <select ng-model="vm.filterBy" class="form-control" style="max-width: 280px;">
+                    <option value="">--View All--</option>
+                    <option ng-repeat="person in vm.groupedProjects">{{person.Name}}</option>
+                </select>
+            </div>
+        </div>
     </div>
 </div>
 
-<div class="panel panel-default" ng-repeat="person in vm.groupedProjects">
+<div class="panel panel-default" ng-repeat="person in vm.groupedProjects  | filter : vm.filterBy">
 
     <div class="panel-heading">
         <strong>{{person.Name}}'s Projects from {{vm.startDate | date}} to {{vm.endDate | date}} <span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span></strong>
@@ -39,7 +48,7 @@
                     </div>
                 </div>
 
-                <div class="table-responsive"style="margin-top:2em;">
+                <div class="table-responsive" style="margin-top:2em;">
                     <table class="table table-condensed table-bordered">
                         <thead>
                             <tr><th>&nbsp;</th><th>ID</th><th>Title</th><th>Hours</th></tr>

@@ -11,6 +11,7 @@
         private startDate: Date;
         private endDate: Date;
         private updateState: boolean;
+        private filterBy: string;
 
         constructor(
             private $state: any,
