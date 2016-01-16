@@ -488,8 +488,12 @@ var App;
                     project.LastTimeIn = now;
                     project.LastTimeOut = null;
                     var url = self.kanbanConfig.siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(self.kanbanConfig.timeLogListName);
-                    var data = JSON.stringify({ ItemId: id, TimeIn: now.toISOString() });
-                    this.datacontext.executeRestRequest(url, data, false, 'POST').then(function (response) {
+                    var timeEntryPayload = JSON.stringify({
+                        ProjectId: id,
+                        TimeIn: now.toISOString()
+                    });
+                    this.datacontext.executeRestRequest(url, timeEntryPayload, false, 'POST')
+                        .then(function (response) {
                         if (self.config.debug) {
                             console.info('Controllers.KanBanController.clockIn() returned...');
                             console.info(response);
@@ -497,11 +501,28 @@ var App;
                         // if not 201 (Created)
                         if (response.status != 201) {
                             alert('Error creating entry in ' + self.kanbanConfig.timeLogListName + '. Status: ' + response.status + '; Status Text: ' + response.statusText);
-                            console.warn(response);
+                            //console.warn(response);
                             return;
                         }
-                        project.LastTimeIn = App.Utils.parseMsDateTicks(response.data.d.TimeIn);
-                        project.LastTimeOut = null;
+                        // update project fields in memory
+                        // setting LastTimeOut to null allows the project to show up in the Working Now section.
+                        var projectPayload = {
+                            LastTimeIn: App.Utils.parseMsDateTicks(response.data.d.TimeIn),
+                            LastTimeOut: null
+                        };
+                        self.datacontext.updateListItem(project, projectPayload, function (data, statusText, jqXhr) {
+                            // if not 204 (Updated)
+                            if (self.config.debug) {
+                                console.info('clockIn()');
+                                console.info(arguments);
+                            }
+                            if (!!jqXhr && jqXhr.status != 204) {
+                                alert('Error in Kanban.clockIn(). Failed to clock out.');
+                                return;
+                            }
+                            project.LastTimeIn = projectPayload.LastTimeIn;
+                            project.LastTimeOut = null;
+                        });
                     });
                 }
                 catch (e) {
@@ -520,21 +541,44 @@ var App;
                         console.warn('ERROR: Controllers.KanBanController.clockOut() - project is null');
                         return false;
                     }
-                    this.datacontext.clockOut(project, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, function (timeOut) {
-                        try {
+                    var now = new Date();
+                    if (!this.config.isProduction) {
+                        project.LastTimeOut = now;
+                        return;
+                    }
+                    //Query the last time entry to get the ID, then update the TimeOut field to now.
+                    this.datacontext.getSpListItems(this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, 'ProjectId eq ' + project.Id, null, 'Id desc', null, 1).then(function (items) {
+                        var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
+                        var projectPayload = {
+                            LastTimeOut: now.toISOString()
+                        };
+                        var timeLogPayload = {
+                            TimeOut: now.toISOString()
+                        };
+                        //Update list item in time log list
+                        self.datacontext.updateListItem(timeLog, timeLogPayload, function (data, statusText, jqXhr) {
                             if (self.config.debug) {
-                                console.info('Controllers.KanBanController.clockOut() returned...');
+                                console.info('clockOut()');
                                 console.info(arguments);
                             }
-                            project.LastTimeOut = timeOut;
-                            if (!!timeOut && timeOut.constructor == Date) {
-                                self.updateColumns(true);
+                            if (!!jqXhr && jqXhr.status != 204) {
+                                alert('Error in Kanban.clockOut(). Failed to clock out.');
+                                return;
                             }
-                        }
-                        catch (e) {
-                            console.warn('ERROR: Controllers.KanBanController.clockOut() callback()...');
-                            console.warn(e);
-                        }
+                        });
+                        //Update listitem in project/task list
+                        self.datacontext.updateListItem(project, projectPayload, function (data, statusText, jqXhr) {
+                            if (self.config.debug) {
+                                console.info('clockOut()');
+                                console.info(arguments);
+                            }
+                            if (!!jqXhr && jqXhr.status != 204) {
+                                alert('Error in Kanban.clockOut(). Failed to clock out.');
+                                return;
+                            }
+                            project.LastTimeOut = now;
+                            self.updateColumns(true);
+                        });
                     });
                 }
                 catch (e) {
@@ -831,22 +875,41 @@ var App;
                 if (data === void 0) { data = undefined; }
                 return this.executeRestRequest(url, JSON.stringify(data), false, 'POST');
             };
-            Datacontext.prototype.updateListItem = function (item, data) {
-                var req = {
-                    method: 'POST',
-                    url: 'http://example.com',
+            Datacontext.prototype.updateListItem = function (item, data, callback) {
+                var self = this;
+                // Angular's $http does not work for this!
+                var $jqXhr = $.ajax({
+                    url: item.__metadata.uri,
+                    type: 'POST',
+                    contentType: 'application/json',
                     processData: false,
-                    headers: {
-                        'Accept': 'application/json;odata=verbose',
-                        'Access-Control-Allow-Origin': '*',
-                        'Origin': window.location.protocol + '//' + this.config.productionHostname + '/',
-                        'X-HTTP-Method': 'MERGE',
-                        'If-Match': JSON.stringify(item.__metadata.etag)
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("If-Match", item.__metadata.etag);
+                        // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
+                        xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
                     },
                     data: JSON.stringify(data)
-                };
-                return this.$http(req);
-                //return this.executeRestRequest(item.__metadata.uri, JSON.stringify(data), false, 'POST', headers);
+                });
+                $jqXhr.done(function (data, status, jqXhr) {
+                    if (self.config.debug) {
+                        console.info('Services.Datacontext.updateListItem() returned...');
+                        console.info(arguments);
+                    }
+                    if (callback) {
+                        callback(arguments);
+                    }
+                });
+                $jqXhr.always(function () {
+                    self.common.hideLoader();
+                });
+                $jqXhr.fail(function (jqXhr, status, error) {
+                    if (callback) {
+                        callback(arguments);
+                    }
+                    if (self.config.debug) {
+                        console.warn('Error in Datacontext.updateListItem(): ' + status + ' ' + error);
+                    }
+                });
             };
             /**
             * Delete the list item.
@@ -1112,98 +1175,6 @@ var App;
                 });
                 return d.promise;
             };
-            /**
-            * Log the date and time a project was started; INSERTS new row in SharePoint list "Time Log".
-            * The TimeInWorkflow will update the related project item's LastTimeIn to the current time and the LastTimeOut field to NULL.
-            *
-            * @param item: SP List Item with fields LastTimeIn and LastTimeOut
-            * @return ng.IPromise<Date>
-            */
-            Datacontext.prototype.clockIn = function (item, siteUrl, listName) {
-                var self = this;
-                var now = new Date();
-                if (!this.config.isProduction) {
-                    var d = this.$q.defer();
-                    d.resolve({
-                        data: {
-                            d: { TimeIn: now }
-                        }
-                    });
-                    return d.promise;
-                }
-                return this.insertListItem(siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName), { ItemId: item.Id, TimeIn: now.toISOString() });
-                //var $jqXhr = $.ajax({
-                //    url: siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName),
-                //    type: 'POST',
-                //    headers: { 'Accept': 'application/json;odata=verbose' },
-                //    data: JSON.stringify({ ItemId: item.Id, TimeIn: now.toISOString() }),
-                //    cache: false
-                //});
-                //$jqXhr.done(function (data, status, jqXhr) {
-                //    if (self.config.debug) {
-                //        console.info('Services.Datacontext.clockIn() returned...');
-                //        console.info(arguments);
-                //    }
-                //    callback(data);
-                //});
-                //$jqXhr.always(function () {
-                //    self.common.hideLoader();
-                //});
-            };
-            /**
-            * Log the date and time a project was stopped (not completed); UPDATES existing row in SharePoint list "Time Log" where `ItemId == itemId && CreatedById == userId`.
-            * The TimeOutWorkflow will update the related project item's LastTimeOut field to the current time.
-            *
-            * @param itemId: number
-            * @return ng.IPromise<Date>
-            */
-            Datacontext.prototype.clockOut = function (item, siteUrl, listName, callback) {
-                var self = this;
-                try {
-                    var now = new Date();
-                    if (!this.config.isProduction) {
-                        callback(now);
-                        return;
-                    }
-                    this.common.showLoader();
-                    //Query the last time entry to get the ID, then update the TimeOut field to now.
-                    this.getSpListItems(siteUrl, listName, 'ItemId eq ' + item.Id, 'Id', 'Id desc', null, 1).then(function (items) {
-                        var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
-                        // Angular's $http does not work for this!
-                        var $jqXhr = $.ajax({
-                            url: timeLog.__metadata.uri,
-                            type: 'POST',
-                            contentType: 'application/json',
-                            processData: false,
-                            beforeSend: function (xhr) {
-                                xhr.setRequestHeader("If-Match", timeLog.__metadata.etag);
-                                // Using MERGE so that the entire entity doesn't need to be sent over the wire. 
-                                xhr.setRequestHeader("X-HTTP-Method", 'MERGE');
-                            },
-                            data: JSON.stringify({ TimeOut: now.toISOString() })
-                        });
-                        $jqXhr.done(function (data, status, jqXhr) {
-                            if (self.config.debug) {
-                                console.info('Services.Datacontext.clockOut() returned...');
-                                console.info(arguments);
-                            }
-                            callback(now);
-                        });
-                        $jqXhr.always(function () {
-                            self.common.hideLoader();
-                        });
-                        $jqXhr.fail(function (jqXhr, status, error) {
-                            callback(null);
-                            console.warn('Error in Datacontext.clockOut(): ' + status + ' ' + error);
-                        });
-                    });
-                }
-                catch (e) {
-                    callback(null);
-                    console.warn('ERROR: Services.Datacontext.clockOut()...');
-                    console.warn(e);
-                }
-            };
             Datacontext.prototype.getTestData = function () {
                 var d = this.$q.defer();
                 var self = this;
@@ -1360,7 +1331,7 @@ var App;
      */
     var Config = (function () {
         function Config() {
-            this.debug = false;
+            this.debug = true;
             this.appPath = 'app/'; //path to Angular app template files
             this.appTitle = 'Dev Projects Kanban'; //display title of the app
             // list of SharePoint group names who's members are allowed to edit 

@@ -22,7 +22,7 @@ module App {
 
         static Id: string = 'config';
 
-        public debug: boolean = false;
+        public debug: boolean = true;
         public appPath: string = 'app/'; //path to Angular app template files
         public appTitle: string = 'Dev Projects Kanban'; //display title of the app
         // list of SharePoint group names who's members are allowed to edit 

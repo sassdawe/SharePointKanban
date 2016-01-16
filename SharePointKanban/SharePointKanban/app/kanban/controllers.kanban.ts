@@ -244,29 +244,51 @@ module App.Controllers{
                 }
 
                 var now = new Date();
-
                 project.LastTimeIn = now;
                 project.LastTimeOut = null;
 
                 var url = self.kanbanConfig.siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(self.kanbanConfig.timeLogListName);
-                var data = JSON.stringify({ ItemId: id, TimeIn: now.toISOString() });
-
-                this.datacontext.executeRestRequest(url, data, false, 'POST').then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
-                    if (self.config.debug) {
-                        console.info('Controllers.KanBanController.clockIn() returned...');
-                        console.info(response);
-                    }
-
-                    // if not 201 (Created)
-                    if (response.status != 201) {
-                        alert('Error creating entry in ' + self.kanbanConfig.timeLogListName + '. Status: ' + response.status + '; Status Text: ' + response.statusText);
-                        console.warn(response);
-                        return;
-                    }
-
-                    project.LastTimeIn = Utils.parseMsDateTicks(response.data.d.TimeIn);
-                    project.LastTimeOut = null;
+                var timeEntryPayload = JSON.stringify({
+                    ProjectId: id,
+                    TimeIn: now.toISOString()
                 });
+
+                this.datacontext.executeRestRequest(url, timeEntryPayload, false, 'POST')
+                    .then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<any>>): void => {
+                        if (self.config.debug) {
+                            console.info('Controllers.KanBanController.clockIn() returned...');
+                            console.info(response);
+                        }
+
+                        // if not 201 (Created)
+                        if (response.status != 201) {
+                            alert('Error creating entry in ' + self.kanbanConfig.timeLogListName + '. Status: ' + response.status + '; Status Text: ' + response.statusText);
+                            //console.warn(response);
+                            return;
+                        }
+
+                        // update project fields in memory
+                        // setting LastTimeOut to null allows the project to show up in the Working Now section.
+                        var projectPayload = {
+                            LastTimeIn: Utils.parseMsDateTicks(response.data.d.TimeIn),
+                            LastTimeOut: null
+                        };
+                        self.datacontext.updateListItem(project, projectPayload, function (data: any, statusText: string, jqXhr: JQueryXHR) {
+                            // if not 204 (Updated)
+                            if (self.config.debug) {
+                                console.info('clockIn()');
+                                console.info(arguments);
+                            }
+                            if (!!jqXhr && jqXhr.status != 204) {
+                                alert('Error in Kanban.clockIn(). Failed to clock out.');
+                                return;
+                            }
+                            
+                            project.LastTimeIn = projectPayload.LastTimeIn;
+                            project.LastTimeOut = null;
+                        });
+
+                    });
             }
             catch (e) {
                 console.warn('ERROR: Controllers.KanBanController.clockIn()...');
@@ -287,22 +309,53 @@ module App.Controllers{
                     return false;
                 }
 
-                this.datacontext.clockOut(project, this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, function (timeOut: Date) {
-                    try {
-                        if (self.config.debug) {
-                            console.info('Controllers.KanBanController.clockOut() returned...');
-                            console.info(arguments);
-                        }
-                        project.LastTimeOut = timeOut;
-                        if (!!timeOut && timeOut.constructor == Date) {
+                var now = new Date();
+
+                if (!this.config.isProduction) {
+                    project.LastTimeOut = now;
+                    return;
+                }
+
+                //Query the last time entry to get the ID, then update the TimeOut field to now.
+                this.datacontext.getSpListItems(this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, 'ProjectId eq ' + project.Id, null, 'Id desc', null, 1).then(
+                    (items: Array<SharePoint.ISpItem>): void => {
+
+                        var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
+
+                        var projectPayload = {
+                            LastTimeOut: now.toISOString() 
+                        };
+
+                        var timeLogPayload = {
+                            TimeOut: now.toISOString()
+                        };
+
+                        //Update list item in time log list
+                        self.datacontext.updateListItem(timeLog, timeLogPayload, function (data: any, statusText: string, jqXhr: JQueryXHR) {
+                            if (self.config.debug) {
+                                console.info('clockOut()');
+                                console.info(arguments);
+                            }
+                            if (!!jqXhr && jqXhr.status != 204) {
+                                alert('Error in Kanban.clockOut(). Failed to clock out.');
+                                return;
+                            }
+                        });
+
+                        //Update listitem in project/task list
+                        self.datacontext.updateListItem(project, projectPayload, function (data: any, statusText: string, jqXhr: JQueryXHR) {
+                            if (self.config.debug) {
+                                console.info('clockOut()');
+                                console.info(arguments);
+                            }
+                            if (!!jqXhr && jqXhr.status != 204) {
+                                alert('Error in Kanban.clockOut(). Failed to clock out.');
+                                return;
+                            }
+                            project.LastTimeOut = now;
                             self.updateColumns(true);
-                        }
-                    }
-                    catch (e) {
-                        console.warn('ERROR: Controllers.KanBanController.clockOut() callback()...');
-                        console.warn(e);
-                    }
-                });
+                        });
+                    });
             }
             catch (e) {
                 console.warn('ERROR: Controllers.KanBanController.clockOut()...');
