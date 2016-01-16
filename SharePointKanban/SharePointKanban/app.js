@@ -7,6 +7,12 @@
 /// <reference path="../scripts/typings/q/q.d.ts" />
 /// <reference path="../scripts/typings/toastr/toastr.d.ts" />
 'use strict';
+/**
+ * SharePoint Kanban (Signboard) Angular Application
+ * by John Bonfardeci <john.bonfardeci@gmail.com>
+ * Created: December 2015
+ * Modified:January 16,2016
+ */
 var App;
 (function (App) {
     App.app = angular.module("app", [

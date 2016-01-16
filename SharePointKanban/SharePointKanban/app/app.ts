@@ -9,6 +9,12 @@
 
 
 'use strict';
+/**
+ * SharePoint Kanban (Signboard) Angular Application
+ * by John Bonfardeci <john.bonfardeci@gmail.com>
+ * Created: December 2015
+ * Modified:January 16,2016
+ */
 module App {
 
     export var app = angular.module("app", [
