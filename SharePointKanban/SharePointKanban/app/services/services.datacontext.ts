@@ -718,9 +718,9 @@
 
                 d.resolve(groups);
             };
+
             // tested Odata query
             // /_vti_bin/listdata.svc/TimeLog?$expand=CreatedBy,Project&$orderby=CreatedBy/Name,ProjectId,TimeIn&$filter=TimeIn ge datetime'2015-12-07T05:00:00.000Z' and TimeIn le datetime'2015-12-11T05:00:00.000Z'&$select=CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title
-
 
             if (this.config.isProduction) {
                 var startIso: string = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
@@ -757,8 +757,6 @@
                     self.common.hideLoader();
                 });
             }
-
-
             return d.promise;
         }
     }

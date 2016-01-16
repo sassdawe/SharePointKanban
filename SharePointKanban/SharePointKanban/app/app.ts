@@ -18,7 +18,6 @@ module App {
         // Custom modules 
         'config',
         'common', // common functions
-        'common.bootstrap',
 
         // 3rd Party Modules
         'ui.bootstrap',

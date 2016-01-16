@@ -2,7 +2,6 @@
 module App {
 
     export interface ICommon {
-        $q: ng.IQService;
         $rootScope: ng.IRootScopeService;
         $loader: any;
         showLoader(): void;
@@ -14,12 +13,10 @@ module App {
         static Id: string = "common";
 
         $rootScope: ng.IRootScopeService;
-        $q: ng.IQService;
         $loader: any;
        
-        constructor($q: ng.IQService, $rootScope: ng.IRootScopeService) {
+        constructor($rootScope: ng.IRootScopeService) {
             this.$rootScope = $rootScope;
-            this.$q = $q;
             this.$loader = $('.ajax-loader');
         }
 
@@ -34,8 +31,8 @@ module App {
         
     export var commonModule: ng.IModule = angular.module('common', []);
 
-    commonModule.factory(Common.Id, ['$q', '$rootScope', function ($q: ng.IQService, $rootScope: ng.IRootScopeService) {
-        return new Common($q, $rootScope);
+    commonModule.factory(Common.Id, ['$rootScope', function ($rootScope: ng.IRootScopeService) {
+        return new Common($rootScope);
     }]);
 
 }

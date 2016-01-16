@@ -15,11 +15,327 @@ var App;
         // Custom modules 
         'config',
         'common',
-        'common.bootstrap',
         // 3rd Party Modules
         'ui.bootstrap',
         'ui.router'
     ]);
+})(App || (App = {}));
+var App;
+(function (App) {
+    var BootstrapDialog = (function () {
+        function BootstrapDialog($modal, $templateCache) {
+            this.$modal = $modal;
+            this.$templateCache = $templateCache;
+            this.setTemplate();
+        }
+        BootstrapDialog.prototype.deleteDialog = function (itemName) {
+            var title = 'Confirm Delete';
+            itemName = itemName || 'item';
+            var msg = 'Delete ' + itemName + '?';
+            return this.confirmationDialog(title, msg);
+        };
+        BootstrapDialog.prototype.confirmationDialog = function (title, msg, okText, cancelText) {
+            var modalOptions = {
+                templateUrl: 'modalDialog.tpl.html',
+                controller: [
+                    '$scope', '$modalInstance', 'options',
+                    function ($s, $mI, o) { return new ModalCtrl($s, $mI, o); }],
+                keyboard: true,
+                resolve: {
+                    options: function () {
+                        return {
+                            title: title,
+                            message: msg,
+                            okText: okText,
+                            cancelText: cancelText
+                        };
+                    }
+                }
+            };
+            return this.$modal.open(modalOptions).result;
+        };
+        BootstrapDialog.prototype.setTemplate = function () {
+            this.$templateCache.put('modalDialog.tpl.html', '<div>' +
+                '    <div class="modal-header">' +
+                '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">&times;</button>' +
+                '        <h3>{{title}}</h3>' +
+                '    </div>' +
+                '    <div class="modal-body">' +
+                '        <p>{{message}}</p>' +
+                '    </div>' +
+                '    <div class="modal-footer">' +
+                '        <button class="btn btn-primary" data-ng-click="ok()">{{okText}}</button>' +
+                '        <button class="btn btn-info" data-ng-click="cancel()">{{cancelText}}</button>' +
+                '    </div>' +
+                '</div>');
+        };
+        BootstrapDialog.Id = 'bootstrap.dialog';
+        BootstrapDialog.$inject = ['$modal', '$templateCache'];
+        return BootstrapDialog;
+    })();
+    var ModalCtrl = (function () {
+        function ModalCtrl($scope, $modalInstance, options) {
+            $scope.title = options.title || 'Title';
+            $scope.message = options.message || '';
+            $scope.okText = options.okText || 'OK';
+            $scope.cancelText = options.cancelText || 'Cancel';
+            $scope.ok = function () { $modalInstance.close('ok'); };
+            $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
+        }
+        return ModalCtrl;
+    })();
+    // Register bootstrap.dialog service
+    //#region explanation
+    //-------STARTING COMMON MODULE----------
+    // THIS CREATES THE ANGULAR CONTAINER NAMED 'common', A BAG THAT HOLDS SERVICES
+    // CREATION OF A MODULE IS DONE USING ...module('moduleName', []) => retrieved using ...module.('...')
+    // Contains services:
+    //  - common
+    //  - logger
+    //  - spinner
+    //#endregion
+    App.bootstrapModule = angular.module('common.bootstrap', [])
+        .factory(BootstrapDialog.Id, BootstrapDialog);
+})(App || (App = {}));
+var App;
+(function (App) {
+    var Common = (function () {
+        function Common($rootScope) {
+            this.$rootScope = $rootScope;
+            this.$loader = $('.ajax-loader');
+        }
+        Common.prototype.showLoader = function () {
+            this.$loader.show();
+        };
+        Common.prototype.hideLoader = function () {
+            this.$loader.hide();
+        };
+        Common.Id = "common";
+        return Common;
+    })();
+    App.Common = Common;
+    App.commonModule = angular.module('common', []);
+    App.commonModule.factory(Common.Id, ['$rootScope', function ($rootScope) {
+            return new Common($rootScope);
+        }]);
+})(App || (App = {}));
+var App;
+(function (App) {
+    /**
+     * Setup your SharePoint host application configurations here and in /app/dvr/views.ts
+     */
+    var Config = (function () {
+        function Config() {
+            this.debug = false;
+            this.appPath = 'app/'; //path to Angular app template files
+            this.appTitle = 'Dev Projects Kanban'; //display title of the app
+            // list of SharePoint group names who's members are allowed to edit 
+            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations'];
+            this.orgName = ''; //the name of your organization, shown in Copyright
+            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
+            this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
+            this.serverHostname = '//' + window.location.hostname;
+            this.testUser = {
+                Account: null,
+                Department: 'Vogon Affairs',
+                EMail: 'hitchiker@galaxy.org',
+                Groups: [{ id: 42, name: 'testers' }],
+                ID: 42,
+                JobTitle: 'Tester',
+                Name: 'domain\marvin',
+                Office: 'Heart of Gold',
+                Title: 'Paranoid Android',
+                UserName: 'marvin'
+            };
+            this.version = '0.0.1';
+            this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
+        }
+        Config.Id = 'config';
+        return Config;
+    })();
+    App.Config = Config;
+    App.configModule = angular.module('config', []);
+    App.configModule.factory(Config.Id, [function () {
+            return new Config();
+        }]);
+})(App || (App = {}));
+var App;
+(function (App) {
+    App.app.directive('kanbanTask', function () {
+        return {
+            restrict: 'A',
+            scope: {
+                kanbanTask: '=',
+                parentScope: '='
+            },
+            link: function (scope, $element, attrs) {
+                scope.$watch(function (scope) {
+                    // Store in parent scope a reference to the task being dragged, 
+                    // its parent column array, and its index number.
+                    $element.on('dragstart', function (ev) {
+                        //console.info(ev.target.id);
+                        scope.parentScope.dragging = {
+                            task: scope.kanbanTask,
+                        };
+                    });
+                });
+            }
+        };
+    });
+    App.app.directive('kanbanColumn', function () {
+        return {
+            restrict: 'A',
+            scope: {
+                kanbanColumn: '=',
+                parentScope: '='
+            },
+            link: function (scope, $element, attrs) {
+                scope.$watch(function (scope) {
+                    // trigger the event handler when a task element is dropped over the Kanban column.
+                    $element.on('drop', function (event) {
+                        cancel(event);
+                        var controller = scope.parentScope;
+                        var task = scope.parentScope.dragging.task;
+                        var col = scope.kanbanColumn;
+                        if (!!task) {
+                            var field = {
+                                name: 'Status',
+                                value: col.status
+                            };
+                            task.Status.Value = col.status;
+                            controller.updateTask(task.Id, field);
+                            controller.dragging.task = undefined; //clear the referene so we know we're no longer dragging
+                        }
+                    }).on('dragover', function (event) {
+                        cancel(event);
+                    });
+                });
+                // Cross-browser method to prevent the default event when dropping an element.
+                function cancel(event) {
+                    if (event.preventDefault) {
+                        event.preventDefault();
+                    }
+                    if (event.stopPropagation) {
+                        event.stopPropagation();
+                    }
+                    return false;
+                }
+            }
+        };
+    });
+    App.app.directive('datePicker', ['$window', function ($window) {
+            return {
+                restrict: 'A',
+                scope: {
+                    ngModel: '='
+                },
+                link: function (scope, elem, attr) {
+                    // apply jQueryUI datepicker
+                    $(elem)['datepicker']({
+                        changeMonth: true,
+                        changeYear: true
+                    });
+                    scope.$watch(function (scope) {
+                        var d = scope.ngModel;
+                        $(elem).val(moment(d).format('MM/DD/YYYY'));
+                    });
+                }
+            };
+        }]);
+    App.app.directive('totalHours', ['$window', function ($window) {
+            return {
+                restrict: 'EA',
+                scope: {
+                    projects: '='
+                },
+                link: function (scope, elem, attr) {
+                    scope.$watch(function (scope) {
+                        var projects = scope.projects;
+                        var total = 0;
+                        for (var i = 0; i < projects.length; i++) {
+                            total += projects[i].TotalHours;
+                        }
+                        scope.total = total;
+                    });
+                },
+                replace: true,
+                template: '<strong>{{total | number:3}}</strong>'
+            };
+        }]);
+    //<span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span>
+    App.app.directive('projectsTotalHours', ['$window', function ($window) {
+            return {
+                restrict: 'EA',
+                scope: {
+                    projectGroups: '='
+                },
+                link: function (scope, elem, attr) {
+                    scope.$watch(function (scope) {
+                        var projectGroups = scope.projectGroups;
+                        var total = 0;
+                        for (var i = 0; i < projectGroups.length; i++) {
+                            for (var j = 0; j < projectGroups[i].Projects.length; j++) {
+                                total += projectGroups[i].Projects[j].TotalHours;
+                            }
+                        }
+                        scope.total = total;
+                    });
+                },
+                replace: false,
+                template: 'Total Hours: {{total | number:3}}'
+            };
+        }]);
+    App.app.directive('doughnutChart', doughnutChart);
+    function doughnutChart() {
+        return {
+            restrict: 'A',
+            scope: {
+                projectsData: '='
+            },
+            link: function (scope, $elem, attr) {
+                scope.$watch(function (scope) {
+                    var projects = scope.projectsData;
+                    var chartData = [];
+                    var canvasId = $elem[0].id;
+                    var uniqueId = 'doughnut_' + canvasId;
+                    var chart;
+                    var canvas = document.getElementById(canvasId);
+                    var ctx = canvas.getContext("2d");
+                    var colors = App.Utils.randomize(App.Utils.hexColors());
+                    // destroy existing chart object
+                    if (canvas['__chartRef']) {
+                        chart = canvas['__chartRef'];
+                        chart.clear();
+                        chart.destroy();
+                    }
+                    if (typeof projects != 'undefined') {
+                        projects.forEach(function (p, i) {
+                            p.Color = p.Color || (i < colors.length ? colors[i] : colors[colors.length - i]);
+                            chartData.push({
+                                label: p.Id + ': ' + p.Title,
+                                value: p.TotalHours.toFixed(3),
+                                color: p.Color
+                            });
+                        });
+                    }
+                    //canvas['__chartRef'] = 
+                    chart = new window['Chart'](ctx).Doughnut(chartData, {
+                        responsive: true,
+                        segmentShowStroke: true,
+                        segmentStrokeColor: "#ccc",
+                        segmentStrokeWidth: 1,
+                        percentageInnerCutout: 50 // This is 0 for Pie charts
+                        ,
+                        animationSteps: 100,
+                        animationEasing: "easeOutBounce",
+                        animateRotate: true,
+                        animateScale: false
+                    });
+                    canvas['__chartRef'] = chart;
+                });
+            }
+        };
+    }
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -126,7 +442,7 @@ var App;
 (function (App) {
     /**
     * Views
-    *
+    * Setup your SharePoint Project/Tasks list configurations here and in /app/config.ts
     * Reusable Angular UI Router view modules
     * Declare all controller views here.
     */
@@ -136,11 +452,15 @@ var App;
         Views.getTs = function () {
             return '?_=' + new Date().getTime();
         };
+        /**
+        * SharePoint Projects/Tasks List View Configurations
+        */
         Views.projects = {
             templateUrl: 'app/kanban/kanban.htm' + Views.getTs(),
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
+                // Change SharePoint Project/Tasks configurations as needed. 
                 kanbanConfig: function () {
                     var statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                     var config = {
@@ -151,7 +471,7 @@ var App;
                         statuses: statuses,
                         columns: [
                             {
-                                title: 'Backlog',
+                                title: 'Queue',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
                                 status: statuses[0],
@@ -199,7 +519,7 @@ var App;
                         statuses: statuses,
                         columns: [
                             {
-                                title: 'Backlog',
+                                title: 'Queue',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
                                 status: statuses[0],
@@ -232,12 +552,16 @@ var App;
                 }
             }
         };
+        /**
+        * Summary Report View
+        */
         Views.summary = {
             templateUrl: 'app/reports/summary.htm' + Views.getTs(),
             controller: 'projectSummaryController',
             controllerAs: 'vm',
             resolve: {
                 projectSiteConfigs: function () {
+                    // List as many SharePoint Project/Tasks configurations here as needed. 
                     return [
                         { siteUrl: '/media', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
                         { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks' },
@@ -245,11 +569,17 @@ var App;
                 }
             }
         };
+        /**
+        * Application Main Menu View
+        */
         Views.menu = {
             templateUrl: 'app/menu/menu.htm' + Views.getTs(),
             controller: 'menuController',
             controllerAs: 'vm' // the alias of the Angular controller in the HTML templates; `vm` short for 'View Model'
         };
+        /**
+        * Application Footer View
+        */
         Views.footer = {
             templateUrl: 'app/footer/footer.htm' + Views.getTs(),
             controller: 'footerController',
@@ -258,6 +588,51 @@ var App;
         return Views;
     })();
     App.Views = Views;
+})(App || (App = {}));
+var App;
+(function (App) {
+    App.app.filter('by_prop', function () {
+        App.Utils.filterByValue['$stateful'] = true; // enable function to wait on async data
+        return App.Utils.filterByValue;
+    });
+    App.app.filter('sp_date', function () {
+        function fn(val) {
+            if (!!!val) {
+                return val;
+            }
+            return App.Utils.parseDate(val).toLocaleDateString();
+        }
+        ;
+        fn['$stateful'] = true;
+        return fn;
+    });
+    App.app.filter('sp_datetime', function () {
+        function fn(val) {
+            return App.Utils.toUTCDateTime(val);
+        }
+        ;
+        fn['$stateful'] = true;
+        return fn;
+    });
+    App.app.filter('active_tasks', function () {
+        function fn(cols) {
+            var active = [];
+            if (!!!cols) {
+                return active;
+            }
+            for (var i = 0; i < cols.length; i++) {
+                for (var j = 0; j < cols[i].tasks.length; j++) {
+                    if (cols[i].tasks[j].LastTimeOut == null && cols[i].tasks[j].LastTimeIn != null) {
+                        active.push(cols[i].tasks[j]);
+                    }
+                }
+            }
+            return active;
+        }
+        ;
+        fn['$stateful'] = true;
+        return fn;
+    });
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -1314,364 +1689,132 @@ var App;
 })(App || (App = {}));
 var App;
 (function (App) {
-    var BootstrapDialog = (function () {
-        function BootstrapDialog($modal, $templateCache) {
-            this.$modal = $modal;
-            this.$templateCache = $templateCache;
-            this.setTemplate();
-        }
-        BootstrapDialog.prototype.deleteDialog = function (itemName) {
-            var title = 'Confirm Delete';
-            itemName = itemName || 'item';
-            var msg = 'Delete ' + itemName + '?';
-            return this.confirmationDialog(title, msg);
-        };
-        BootstrapDialog.prototype.confirmationDialog = function (title, msg, okText, cancelText) {
-            var modalOptions = {
-                templateUrl: 'modalDialog.tpl.html',
-                controller: [
-                    '$scope', '$modalInstance', 'options',
-                    function ($s, $mI, o) { return new ModalCtrl($s, $mI, o); }],
-                keyboard: true,
-                resolve: {
-                    options: function () {
-                        return {
-                            title: title,
-                            message: msg,
-                            okText: okText,
-                            cancelText: cancelText
-                        };
-                    }
-                }
-            };
-            return this.$modal.open(modalOptions).result;
-        };
-        BootstrapDialog.prototype.setTemplate = function () {
-            this.$templateCache.put('modalDialog.tpl.html', '<div>' +
-                '    <div class="modal-header">' +
-                '        <button type="button" class="close" data-dismiss="modal" aria-hidden="true" data-ng-click="cancel()">&times;</button>' +
-                '        <h3>{{title}}</h3>' +
-                '    </div>' +
-                '    <div class="modal-body">' +
-                '        <p>{{message}}</p>' +
-                '    </div>' +
-                '    <div class="modal-footer">' +
-                '        <button class="btn btn-primary" data-ng-click="ok()">{{okText}}</button>' +
-                '        <button class="btn btn-info" data-ng-click="cancel()">{{cancelText}}</button>' +
-                '    </div>' +
-                '</div>');
-        };
-        BootstrapDialog.Id = 'bootstrap.dialog';
-        BootstrapDialog.$inject = ['$modal', '$templateCache'];
-        return BootstrapDialog;
-    })();
-    var ModalCtrl = (function () {
-        function ModalCtrl($scope, $modalInstance, options) {
-            $scope.title = options.title || 'Title';
-            $scope.message = options.message || '';
-            $scope.okText = options.okText || 'OK';
-            $scope.cancelText = options.cancelText || 'Cancel';
-            $scope.ok = function () { $modalInstance.close('ok'); };
-            $scope.cancel = function () { $modalInstance.dismiss('cancel'); };
-        }
-        return ModalCtrl;
-    })();
-    // Register bootstrap.dialog service
-    //#region explanation
-    //-------STARTING COMMON MODULE----------
-    // THIS CREATES THE ANGULAR CONTAINER NAMED 'common', A BAG THAT HOLDS SERVICES
-    // CREATION OF A MODULE IS DONE USING ...module('moduleName', []) => retrieved using ...module.('...')
-    // Contains services:
-    //  - common
-    //  - logger
-    //  - spinner
-    //#endregion
-    App.bootstrapModule = angular.module('common.bootstrap', [])
-        .factory(BootstrapDialog.Id, BootstrapDialog);
+    var SharePoint;
+    (function (SharePoint) {
+        // recreate the SP REST object for an attachment
+        var SpAttachment = (function () {
+            function SpAttachment(rootUrl, siteUrl, listName, itemId, fileName) {
+                var entitySet = listName.replace(/\s/g, '');
+                siteUrl = SharePoint.Utils.formatSubsiteUrl(siteUrl);
+                var uri = rootUrl + siteUrl + "_vti_bin/listdata.svc/Attachments(EntitySet='{0}',ItemId={1},Name='{2}')";
+                uri = uri.replace(/\{0\}/, entitySet).replace(/\{1\}/, itemId + '').replace(/\{2\}/, fileName);
+                this.__metadata = {
+                    uri: uri,
+                    content_type: "application/octetstream",
+                    edit_media: uri + "/$value",
+                    media_etag: null,
+                    media_src: rootUrl + siteUrl + "/Lists/" + listName + "/Attachments/" + itemId + "/" + fileName,
+                    type: "Microsoft.SharePoint.DataService.AttachmentsItem"
+                };
+                this.EntitySet = entitySet;
+                this.ItemId = itemId;
+                this.Name = fileName;
+            }
+            return SpAttachment;
+        })();
+        SharePoint.SpAttachment = SpAttachment;
+        var SpItem = (function () {
+            function SpItem() {
+            }
+            return SpItem;
+        })();
+        SharePoint.SpItem = SpItem;
+    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
 })(App || (App = {}));
 var App;
 (function (App) {
-    var Common = (function () {
-        function Common($q, $rootScope) {
-            this.$rootScope = $rootScope;
-            this.$q = $q;
-            this.$loader = $('.ajax-loader');
-        }
-        Common.prototype.showLoader = function () {
-            this.$loader.show();
-        };
-        Common.prototype.hideLoader = function () {
-            this.$loader.hide();
-        };
-        Common.Id = "common";
-        return Common;
-    })();
-    App.Common = Common;
-    App.commonModule = angular.module('common', []);
-    App.commonModule.factory(Common.Id, ['$q', '$rootScope', function ($q, $rootScope) {
-            return new Common($q, $rootScope);
-        }]);
+    var SharePoint;
+    (function (SharePoint) {
+        var Utils = (function () {
+            function Utils() {
+            }
+            /**
+            * Ensure site url is or ends with '/'
+            * @param url: string
+            * @return string
+            */
+            Utils.formatSubsiteUrl = function (url) {
+                return !!!url ? '/' : !/\/$/.test(url) ? url + '/' : url;
+            };
+            /**
+            * Convert a name to REST camel case format
+            * @param str: string
+            * @return string
+            */
+            Utils.toCamelCase = function (str) {
+                return str.toString()
+                    .replace(/\s*\b\w/g, function (x) {
+                    return (x[1] || x[0]).toUpperCase();
+                }).replace(/\s/g, '')
+                    .replace(/\'s/, 'S')
+                    .replace(/[^A-Za-z0-9\s]/g, '');
+            };
+            /**
+            * Escape column values
+            * http://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/155/
+            */
+            Utils.escapeColumnValue = function (s) {
+                if (typeof s === "string") {
+                    return s.replace(/&(?![a-zA-Z]{1,8};)/g, "&amp;");
+                }
+                else {
+                    return s;
+                }
+            };
+            Utils.openSpForm = function (url, title, callback, width, height) {
+                if (title === void 0) { title = "Project Item"; }
+                if (callback === void 0) { callback = function () { }; }
+                if (width === void 0) { width = 300; }
+                if (height === void 0) { height = 400; }
+                var ex = window["ExecuteOrDelayUntilScriptLoaded"];
+                var SP = window["SP"];
+                ex(function () {
+                    SP.UI.ModalDialog.showModalDialog({
+                        title: title,
+                        showClose: true,
+                        url: url,
+                        dialogReturnValueCallback: callback
+                    });
+                }, "sp.js");
+                return false;
+            };
+            Utils.openSpDisplayForm = function (siteUrl, listName, item, isEdit, callback) {
+                if (isEdit === void 0) { isEdit = false; }
+                if (callback === void 0) { callback = function () { }; }
+                var itemUrl = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/' + (isEdit ? 'Edit' : 'Disp') + 'Form.aspx?ID=' + item.Id;
+                SharePoint.Utils.openSpForm(itemUrl, item.Title, callback);
+                return false;
+            };
+            Utils.openSpNewForm = function (siteUrl, listName, title, callback) {
+                if (title === void 0) { title = 'New Item'; }
+                if (callback === void 0) { callback = function () { }; }
+                var url = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/NewForm.aspx';
+                SharePoint.Utils.openSpForm(url, title, callback);
+                return false;
+            };
+            return Utils;
+        })();
+        SharePoint.Utils = Utils;
+    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
 })(App || (App = {}));
 var App;
 (function (App) {
-    var Config = (function () {
-        function Config() {
-            this.debug = false;
-            this.appPath = 'app/'; //path to Angular app template files
-            this.appTitle = 'Dev Projects Kanban'; //display title of the app
-            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 
-            this.orgName = ''; //the name of your organization, shown in Copyright
-            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
-            this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
-            this.serverHostname = '//' + window.location.hostname;
-            this.testUser = {
-                Account: null,
-                Department: 'Vogon Affairs',
-                EMail: 'hitchiker@galaxy.org',
-                Groups: [{ id: 42, name: 'testers' }],
-                ID: 42,
-                JobTitle: 'Tester',
-                Name: 'domain\testadmin',
-                Office: 'Some Office',
-                Title: 'Test Admin',
-                UserName: 'testadmin'
-            };
-            this.timeLogSiteUrl = '/media';
-            this.timeLogListName = 'Time Log';
-            this.version = '0.0.1';
-            this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
-        }
-        Config.Id = 'config';
-        return Config;
-    })();
-    App.Config = Config;
-    App.configModule = angular.module('config', []);
-    App.configModule.factory(Config.Id, [function () {
-            return new Config();
-        }]);
-})(App || (App = {}));
-var App;
-(function (App) {
-    App.app.directive('kanbanTask', function () {
-        return {
-            restrict: 'A',
-            scope: {
-                kanbanTask: '=',
-                parentScope: '='
-            },
-            link: function (scope, $element, attrs) {
-                scope.$watch(function (scope) {
-                    // Store in parent scope a reference to the task being dragged, 
-                    // its parent column array, and its index number.
-                    $element.on('dragstart', function (ev) {
-                        //console.info(ev.target.id);
-                        scope.parentScope.dragging = {
-                            task: scope.kanbanTask,
-                        };
-                    });
-                });
+    var Controllers;
+    (function (Controllers) {
+        var ShellController = (function () {
+            function ShellController($rootScope, config, currentUser) {
+                this.$rootScope = $rootScope;
+                this.config = config;
+                this.currentUser = currentUser;
             }
-        };
-    });
-    App.app.directive('kanbanColumn', function () {
-        return {
-            restrict: 'A',
-            scope: {
-                kanbanColumn: '=',
-                parentScope: '='
-            },
-            link: function (scope, $element, attrs) {
-                scope.$watch(function (scope) {
-                    // trigger the event handler when a task element is dropped over the Kanban column.
-                    $element.on('drop', function (event) {
-                        cancel(event);
-                        var controller = scope.parentScope;
-                        var task = scope.parentScope.dragging.task;
-                        var col = scope.kanbanColumn;
-                        if (!!task) {
-                            var field = {
-                                name: 'Status',
-                                value: col.status
-                            };
-                            task.Status.Value = col.status;
-                            controller.updateTask(task.Id, field);
-                            controller.dragging.task = undefined; //clear the referene so we know we're no longer dragging
-                        }
-                    }).on('dragover', function (event) {
-                        cancel(event);
-                    });
-                });
-                // Cross-browser method to prevent the default event when dropping an element.
-                function cancel(event) {
-                    if (event.preventDefault) {
-                        event.preventDefault();
-                    }
-                    if (event.stopPropagation) {
-                        event.stopPropagation();
-                    }
-                    return false;
-                }
-            }
-        };
-    });
-    App.app.directive('datePicker', ['$window', function ($window) {
-            return {
-                restrict: 'A',
-                scope: {
-                    ngModel: '='
-                },
-                link: function (scope, elem, attr) {
-                    // apply jQueryUI datepicker
-                    $(elem)['datepicker']({
-                        changeMonth: true,
-                        changeYear: true
-                    });
-                    scope.$watch(function (scope) {
-                        var d = scope.ngModel;
-                        $(elem).val(moment(d).format('MM/DD/YYYY'));
-                    });
-                }
-            };
-        }]);
-    App.app.directive('totalHours', ['$window', function ($window) {
-            return {
-                restrict: 'EA',
-                scope: {
-                    projects: '='
-                },
-                link: function (scope, elem, attr) {
-                    scope.$watch(function (scope) {
-                        var projects = scope.projects;
-                        var total = 0;
-                        for (var i = 0; i < projects.length; i++) {
-                            total += projects[i].TotalHours;
-                        }
-                        scope.total = total;
-                    });
-                },
-                replace: true,
-                template: '<strong>{{total | number:3}}</strong>'
-            };
-        }]);
-    //<span style="float:right;" projects-total-hours project-groups="person.ProjectGroups"></span>
-    App.app.directive('projectsTotalHours', ['$window', function ($window) {
-            return {
-                restrict: 'EA',
-                scope: {
-                    projectGroups: '='
-                },
-                link: function (scope, elem, attr) {
-                    scope.$watch(function (scope) {
-                        var projectGroups = scope.projectGroups;
-                        var total = 0;
-                        for (var i = 0; i < projectGroups.length; i++) {
-                            for (var j = 0; j < projectGroups[i].Projects.length; j++) {
-                                total += projectGroups[i].Projects[j].TotalHours;
-                            }
-                        }
-                        scope.total = total;
-                    });
-                },
-                replace: false,
-                template: 'Total Hours: {{total | number:3}}'
-            };
-        }]);
-    App.app.directive('doughnutChart', doughnutChart);
-    function doughnutChart() {
-        return {
-            restrict: 'A',
-            scope: {
-                projectsData: '='
-            },
-            link: function (scope, $elem, attr) {
-                scope.$watch(function (scope) {
-                    var projects = scope.projectsData;
-                    var chartData = [];
-                    var canvasId = $elem[0].id;
-                    var uniqueId = 'doughnut_' + canvasId;
-                    var chart;
-                    var canvas = document.getElementById(canvasId);
-                    var ctx = canvas.getContext("2d");
-                    var colors = App.Utils.randomize(App.Utils.hexColors());
-                    // destroy existing chart object
-                    if (canvas['__chartRef']) {
-                        chart = canvas['__chartRef'];
-                        chart.clear();
-                        chart.destroy();
-                    }
-                    if (typeof projects != 'undefined') {
-                        projects.forEach(function (p, i) {
-                            p.Color = p.Color || (i < colors.length ? colors[i] : colors[colors.length - i]);
-                            chartData.push({
-                                label: p.Id + ': ' + p.Title,
-                                value: p.TotalHours.toFixed(3),
-                                color: p.Color
-                            });
-                        });
-                    }
-                    //canvas['__chartRef'] = 
-                    chart = new window['Chart'](ctx).Doughnut(chartData, {
-                        responsive: true,
-                        segmentShowStroke: true,
-                        segmentStrokeColor: "#ccc",
-                        segmentStrokeWidth: 1,
-                        percentageInnerCutout: 50 // This is 0 for Pie charts
-                        ,
-                        animationSteps: 100,
-                        animationEasing: "easeOutBounce",
-                        animateRotate: true,
-                        animateScale: false
-                    });
-                    canvas['__chartRef'] = chart;
-                });
-            }
-        };
-    }
-})(App || (App = {}));
-var App;
-(function (App) {
-    App.app.filter('by_prop', function () {
-        App.Utils.filterByValue['$stateful'] = true; // enable function to wait on async data
-        return App.Utils.filterByValue;
-    });
-    App.app.filter('sp_date', function () {
-        function fn(val) {
-            if (!!!val) {
-                return val;
-            }
-            return App.Utils.parseDate(val).toLocaleDateString();
-        }
-        ;
-        fn['$stateful'] = true;
-        return fn;
-    });
-    App.app.filter('sp_datetime', function () {
-        function fn(val) {
-            return App.Utils.toUTCDateTime(val);
-        }
-        ;
-        fn['$stateful'] = true;
-        return fn;
-    });
-    App.app.filter('active_tasks', function () {
-        function fn(cols) {
-            var active = [];
-            if (!!!cols) {
-                return active;
-            }
-            for (var i = 0; i < cols.length; i++) {
-                for (var j = 0; j < cols[i].tasks.length; j++) {
-                    if (cols[i].tasks[j].LastTimeOut == null && cols[i].tasks[j].LastTimeIn != null) {
-                        active.push(cols[i].tasks[j]);
-                    }
-                }
-            }
-            return active;
-        }
-        ;
-        fn['$stateful'] = true;
-        return fn;
-    });
+            ShellController.Id = 'shellController';
+            ShellController.$inject = ['$rootScope', 'config', 'currentUser'];
+            return ShellController;
+        })();
+        Controllers.ShellController = ShellController;
+        // Register with angular
+        App.app.controller(ShellController.Id, ShellController);
+    })(Controllers = App.Controllers || (App.Controllers = {}));
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -1933,133 +2076,4 @@ var App;
         return Utils;
     })();
     App.Utils = Utils;
-})(App || (App = {}));
-var App;
-(function (App) {
-    var SharePoint;
-    (function (SharePoint) {
-        // recreate the SP REST object for an attachment
-        var SpAttachment = (function () {
-            function SpAttachment(rootUrl, siteUrl, listName, itemId, fileName) {
-                var entitySet = listName.replace(/\s/g, '');
-                siteUrl = SharePoint.Utils.formatSubsiteUrl(siteUrl);
-                var uri = rootUrl + siteUrl + "_vti_bin/listdata.svc/Attachments(EntitySet='{0}',ItemId={1},Name='{2}')";
-                uri = uri.replace(/\{0\}/, entitySet).replace(/\{1\}/, itemId + '').replace(/\{2\}/, fileName);
-                this.__metadata = {
-                    uri: uri,
-                    content_type: "application/octetstream",
-                    edit_media: uri + "/$value",
-                    media_etag: null,
-                    media_src: rootUrl + siteUrl + "/Lists/" + listName + "/Attachments/" + itemId + "/" + fileName,
-                    type: "Microsoft.SharePoint.DataService.AttachmentsItem"
-                };
-                this.EntitySet = entitySet;
-                this.ItemId = itemId;
-                this.Name = fileName;
-            }
-            return SpAttachment;
-        })();
-        SharePoint.SpAttachment = SpAttachment;
-        var SpItem = (function () {
-            function SpItem() {
-            }
-            return SpItem;
-        })();
-        SharePoint.SpItem = SpItem;
-    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
-})(App || (App = {}));
-var App;
-(function (App) {
-    var SharePoint;
-    (function (SharePoint) {
-        var Utils = (function () {
-            function Utils() {
-            }
-            /**
-            * Ensure site url is or ends with '/'
-            * @param url: string
-            * @return string
-            */
-            Utils.formatSubsiteUrl = function (url) {
-                return !!!url ? '/' : !/\/$/.test(url) ? url + '/' : url;
-            };
-            /**
-            * Convert a name to REST camel case format
-            * @param str: string
-            * @return string
-            */
-            Utils.toCamelCase = function (str) {
-                return str.toString()
-                    .replace(/\s*\b\w/g, function (x) {
-                    return (x[1] || x[0]).toUpperCase();
-                }).replace(/\s/g, '')
-                    .replace(/\'s/, 'S')
-                    .replace(/[^A-Za-z0-9\s]/g, '');
-            };
-            /**
-            * Escape column values
-            * http://dracoblue.net/dev/encodedecode-special-xml-characters-in-javascript/155/
-            */
-            Utils.escapeColumnValue = function (s) {
-                if (typeof s === "string") {
-                    return s.replace(/&(?![a-zA-Z]{1,8};)/g, "&amp;");
-                }
-                else {
-                    return s;
-                }
-            };
-            Utils.openSpForm = function (url, title, callback, width, height) {
-                if (title === void 0) { title = "Project Item"; }
-                if (callback === void 0) { callback = function () { }; }
-                if (width === void 0) { width = 300; }
-                if (height === void 0) { height = 400; }
-                var ex = window["ExecuteOrDelayUntilScriptLoaded"];
-                var SP = window["SP"];
-                ex(function () {
-                    SP.UI.ModalDialog.showModalDialog({
-                        title: title,
-                        showClose: true,
-                        url: url,
-                        dialogReturnValueCallback: callback
-                    });
-                }, "sp.js");
-                return false;
-            };
-            Utils.openSpDisplayForm = function (siteUrl, listName, item, isEdit, callback) {
-                if (isEdit === void 0) { isEdit = false; }
-                if (callback === void 0) { callback = function () { }; }
-                var itemUrl = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/' + (isEdit ? 'Edit' : 'Disp') + 'Form.aspx?ID=' + item.Id;
-                SharePoint.Utils.openSpForm(itemUrl, item.Title, callback);
-                return false;
-            };
-            Utils.openSpNewForm = function (siteUrl, listName, title, callback) {
-                if (title === void 0) { title = 'New Item'; }
-                if (callback === void 0) { callback = function () { }; }
-                var url = siteUrl + '/Lists/' + listName.replace(/\s/g, '%20') + '/NewForm.aspx';
-                SharePoint.Utils.openSpForm(url, title, callback);
-                return false;
-            };
-            return Utils;
-        })();
-        SharePoint.Utils = Utils;
-    })(SharePoint = App.SharePoint || (App.SharePoint = {}));
-})(App || (App = {}));
-var App;
-(function (App) {
-    var Controllers;
-    (function (Controllers) {
-        var ShellController = (function () {
-            function ShellController($rootScope, config, currentUser) {
-                this.$rootScope = $rootScope;
-                this.config = config;
-                this.currentUser = currentUser;
-            }
-            ShellController.Id = 'shellController';
-            ShellController.$inject = ['$rootScope', 'config', 'currentUser'];
-            return ShellController;
-        })();
-        Controllers.ShellController = ShellController;
-        // Register with angular
-        App.app.controller(ShellController.Id, ShellController);
-    })(Controllers = App.Controllers || (App.Controllers = {}));
 })(App || (App = {}));

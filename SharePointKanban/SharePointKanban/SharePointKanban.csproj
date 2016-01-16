@@ -123,7 +123,6 @@
     <TypeScriptCompile Include="app\reports\controllers.summary.ts" />
     <TypeScriptCompile Include="app\run.ts" />
     <TypeScriptCompile Include="app\services\services.datacontext.ts" />
-    <TypeScriptCompile Include="app\bootstrap.dialog.ts" />
     <TypeScriptCompile Include="app\common.ts" />
     <TypeScriptCompile Include="app\config.ts" />
     <TypeScriptCompile Include="app\directives.ts" />

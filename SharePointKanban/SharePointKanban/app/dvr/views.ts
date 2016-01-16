@@ -2,7 +2,7 @@
 
     /** 
     * Views
-    *
+    * Setup your SharePoint Project/Tasks list configurations here and in /app/config.ts
     * Reusable Angular UI Router view modules
     * Declare all controller views here.
     */
@@ -13,11 +13,15 @@
             return '?_='+new Date().getTime();
         }
 
+        /**
+        * SharePoint Projects/Tasks List View Configurations
+        */
         public static projects: any = {
             templateUrl: 'app/kanban/kanban.htm' + Views.getTs(),
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
+                // Change SharePoint Project/Tasks configurations as needed. 
                 kanbanConfig: function (): IKanbanConfig {
                     var statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                     var config: IKanbanConfig = {
@@ -28,7 +32,7 @@
                         statuses: statuses,
                         columns: <Array<IKanbanColumn>>[
                             {
-                                title: 'Backlog',
+                                title: 'Queue',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
                                 status: statuses[0],
@@ -78,7 +82,7 @@
                         statuses: statuses,
                         columns: <Array<IKanbanColumn>>[
                             {
-                                title: 'Backlog',
+                                title: 'Queue',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
                                 status: statuses[0],
@@ -113,12 +117,16 @@
             }
         }
 
+        /**
+        * Summary Report View
+        */
         public static summary: any = {
             templateUrl: 'app/reports/summary.htm' + Views.getTs(),
             controller: 'projectSummaryController',
             controllerAs: 'vm',
             resolve: {
                 projectSiteConfigs: function (): Array<IProjectSiteConfig> {
+                    // List as many SharePoint Project/Tasks configurations here as needed. 
                     return [
                         { siteUrl: '/media', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
                         { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks'  },
@@ -127,12 +135,18 @@
             }
         }
 
+        /**
+        * Application Main Menu View
+        */
         public static menu: any = {
             templateUrl: 'app/menu/menu.htm' + Views.getTs(), // the HTML view template 
             controller: 'menuController', // the static ID of the Angular controller
             controllerAs: 'vm' // the alias of the Angular controller in the HTML templates; `vm` short for 'View Model'
         }
 
+        /**
+        * Application Footer View
+        */
         public static footer: any = {
             templateUrl: 'app/footer/footer.htm' + Views.getTs(),
             controller: 'footerController',

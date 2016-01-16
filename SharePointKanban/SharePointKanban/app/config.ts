@@ -12,11 +12,12 @@ module App {
         productionHostname: string;
         serverHostname: string;
         testUser: SharePoint.ISpUser;
-        timeLogSiteUrl: string;
-        timeLogListName: string;
         version: string;
     }
 
+    /**
+     * Setup your SharePoint host application configurations here and in /app/dvr/views.ts
+     */
     export class Config implements IConfiguration {
 
         static Id: string = 'config';
@@ -24,7 +25,8 @@ module App {
         public debug: boolean = false;
         public appPath: string = 'app/'; //path to Angular app template files
         public appTitle: string = 'Dev Projects Kanban'; //display title of the app
-        public editGroups: Array<string> = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations']; // list of SharePoint group names who's members are allowed to edit 
+        // list of SharePoint group names who's members are allowed to edit 
+        public editGroups: Array<string> = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations'];
         public isProduction: boolean; //if this isn't the production site, get test data
         public orgName: string = ''; //the name of your organization, shown in Copyright
         public productionHostname: string = 'webster'; //the hostname of the live production SharePoint site
@@ -37,13 +39,11 @@ module App {
             Groups: [{id: 42, name: 'testers'}],
             ID: 42,
             JobTitle: 'Tester',
-            Name: 'domain\testadmin',
-            Office: 'Some Office',
-            Title: 'Test Admin',
-            UserName: 'testadmin'
+            Name: 'domain\marvin',
+            Office: 'Heart of Gold',
+            Title: 'Paranoid Android',
+            UserName: 'marvin'
         };
-        public timeLogSiteUrl: string = '/media';
-        public timeLogListName: string = 'Time Log';
         public version: string = '0.0.1';
 
         constructor() {
