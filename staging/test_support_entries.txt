@@ -1,0 +1,265 @@
+﻿{
+	"d": {
+		"results": [{
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(5)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449567000000)\/",
+			"TimeOut": "\/Date(1449570600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(503)",
+					"etag": "W/\"7\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Document Deletion for Checkout Document: Work Order ID 658"
+			},
+			"ProjectId": 503,
+			"Hours": 0.999999999941792,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(9)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449653400000)\/",
+			"TimeOut": "\/Date(1449655140000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(505)",
+					"etag": "W/\"8\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Access to Certpoint Training Site: Support ID 660"
+			},
+			"ProjectId": 505,
+			"Hours": 0.483333333337214,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(14)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449757545000)\/",
+			"TimeOut": "\/Date(1449758350000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(506)",
+					"etag": "W/\"12\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Changes to Certpoint Training Site Info: Support ID 661"
+			},
+			"ProjectId": 506,
+			"Hours": 0.223611111170612,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(12)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449678516000)\/",
+			"TimeOut": "\/Date(1449679129000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(507)",
+					"etag": "W/\"7\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Lifespan webmail link : Support ID 662"
+			},
+			"ProjectId": 507,
+			"Hours": 0.170277777768206,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(13)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449744276000)\/",
+			"TimeOut": "\/Date(1449744481000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(508)",
+					"etag": "W/\"6\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Unable to post to the webster calendar : Support ID 663"
+			},
+			"ProjectId": 508,
+			"Hours": 0.0569444444845431,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1)",
+					"etag": "W/\"314\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "John Bonfardeci"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(10)",
+				"etag": "W/\"5\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449655200000)\/",
+			"TimeOut": "\/Date(1449657600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(502)",
+					"etag": "W/\"11\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Employee Profile and Group Membership Updates: Work Order ID 657"
+			},
+			"ProjectId": 502,
+			"Hours": 0.666666666744277,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(17)",
+				"etag": "W/\"2\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449567000000)\/",
+			"TimeOut": "\/Date(1449570600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(504)",
+					"etag": "W/\"15\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " DSSW and CDS Logos: Work Order ID 659"
+			},
+			"ProjectId": 504,
+			"Hours": 0.999999999941792,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(11)",
+				"etag": "W/\"3\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449677841000)\/",
+			"TimeOut": "\/Date(1449678089000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(506)",
+					"etag": "W/\"12\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Changes to Certpoint Training Site Info: Support ID 661"
+			},
+			"ProjectId": 506,
+			"Hours": 0.0688888889271766,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(15)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449765000000)\/",
+			"TimeOut": "\/Date(1449765600000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(509)",
+					"etag": "W/\"9\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Application Manager: Support ID 664"
+			},
+			"ProjectId": 509,
+			"Hours": 0.166666666686069,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}, {
+			"__metadata": {
+				"uri": "http://webster/ws/_vti_bin/listdata.svc/TimeLog(16)",
+				"etag": "W/\"4\"",
+				"type": "Microsoft.SharePoint.DataService.TimeLogItem"
+			},
+			"TimeIn": "\/Date(1449765600000)\/",
+			"TimeOut": "\/Date(1449766200000)\/",
+			"Project": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/Tasks(510)",
+					"etag": "W/\"9\"",
+					"type": "Microsoft.SharePoint.DataService.TasksItem"
+				},
+				"Title": " Receiving new application notifications for Longview site instead of Henderson site: Support ID 665"
+			},
+			"ProjectId": 510,
+			"Hours": 0.166666666686069,
+			"CreatedBy": {
+				"__metadata": {
+					"uri": "http://webster/ws/_vti_bin/listdata.svc/UserInformationList(1252)",
+					"etag": "W/\"28\"",
+					"type": "Microsoft.SharePoint.DataService.UserInformationListItem"
+				},
+				"Name": "William Cochran"
+			}
+		}]
+	}
+}

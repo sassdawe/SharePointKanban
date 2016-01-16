@@ -1,0 +1,137 @@
+﻿
+
+<div class="row">
+    <div class="col-sm-6">
+        <p>Drag a project to a column to change its status.</p>
+        <p ng-hide="vm.userIsEditor"><span class="glyphicon glyphicon-warning-sign red"></span> Your account isn't permitted to save changes.</p>
+        <p ng-show="vm.userIsEditor"><span class="glyphicon glyphicon-info-sign green"></span> Your account is permitted to save changes.</p>
+    </div>
+    <div class="col-sm-6">
+        <button class="btn btn-sm btn-info" ng-mousedown="vm.refreshData()"><span>Refresh Data</span> <span class="glyphicon glyphicon-refresh"></span></button>
+
+        <button ng-show="vm.userIsEditor && vm.changeQueue.length > 0" class="btn btn-sm btn-danger" ng-mousedown="vm.saveChanges()">
+            <span>Save <span>{{vm.changeQueue.length}}</span> Changes</span> <span class="glyphicon glyphicon-floppy-disk"></span>
+        </button>
+
+        <button class="btn btn-sm btn-success" ng-show="vm.userIsEditor" ng-mousedown="vm.newItem()">
+            <span class="glyphicon glyphicon-plus-sign"></span> New Project
+        </button>
+
+        <button class="btn btn-sm btn-default" ng-mousedown="vm.resetData()" ng-show="vm.changeQueue.length > 0">
+            <span>Reset Changes</span> <span class="glyphicon glyphicon-fast-backward"></span>
+        </button>
+
+        <p class="" style="padding:.4em;"><strong>Showing items for the last <input type="number" ng-model="vm.kanbanConfig.previousMonths" class="short" /> months.</strong></p>
+    </div>
+</div>
+
+<hr />
+
+<div class="row">
+    <div class="col-sm-6">
+        <ul class="list-group" ng-show="(vm.columns | active_tasks).length > 0">
+            <li class="list-group-item list-group-item-danger">{{vm.now | date}}: Working Now</li>
+            <li class="list-group-item" ng-repeat="task in vm.columns | active_tasks">
+
+                #{{task.Id}}: {{task.Title}} &ndash;
+
+                <span ng-repeat="person in task.AssignedTo.results">
+                    <a href="mailto:{{person.WorkEMail}}?subject=#{{task.Id}}: {{task.Title}}" class="btn btn-link">
+                        <span class="glyphicon glyphicon-user"></span> {{person.Name}}
+                    </a>
+                </span>
+
+                <div ng-show="vm.userIsEditor" style="padding:.2em;">
+                    <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut != null || task.LastTimeIn == null" ng-mousedown="vm.clockIn(task.Id)"><span class="glyphicon glyphicon-time green"></span> Start</button>
+                    <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut == null && task.LastTimeIn != null" ng-mousedown="vm.clockOut(task.Id)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
+                    <button class="btn btn-sm btn-default" ng-mousedown="vm.viewItem(task)"><span class="glyphicon glyphicon-eye-open" title="View Task Details"></span> Details</button>
+                </div>
+            </li>
+        </ul>       
+    </div>
+</div>
+
+<div class="row" style="margin:1em auto;">
+    <div class="col-sm-4 text-right"><label>Filter by:</label></div>
+    <div class="col-sm-8 text-left"><input class="form-control" ng-model="vm.keywordFilter" style="max-width:280px;" id="keywordFilter" placeholder="Filter by Keywords..." /></div>
+</div>
+
+<div class="row kanban">
+
+    <div ng-repeat="col in vm.columns" class="col-md-{{12/vm.columns.length}}" kanban-column="col" parent-scope="vm">
+
+        <div class="{{col.className}}" id="{{col.id}}">
+
+            <div class="panel-heading"><span class="glyphicon glyphicon-tasks"></span> {{col.title}} <span class="badge">{{col.tasks.length}}</span></div>
+
+            <div class="panel-body">
+
+                <div ng-repeat="task in col.tasks | orderBy: ['OrderBy', 'Id'] | filter: vm.keywordFilter" kanban-task="task" draggable="true" id="task_{{task.Id}}" parent-scope="vm" ng-class="{'active': vm.isActive(task)}">
+                    <h5>#{{task.Id}}: {{task.Title}} <span ng-show="task.LastTimeOut == null && task.LastTimeIn != null" class="label label-danger">Working Now</span></h5>
+
+                    <div class="form-group">
+                        <small>Priority:</small>
+                        <select ng-model="task.OrderBy" ng-options="opt for opt in vm.range(col.tasks.length)" ng-change="vm.updateTask(task.Id, {'name': 'OrderBy', 'value': task.OrderBy}, $index)"></select>
+                    </div>
+
+                    <!--<div class="form-group">
+                        <small>Priority:</small>
+                        <select ng-options="opt for opt in vm.priorities" ng-model="task.Priority.Value" ng-change="vm.updateTask(task.Id, {'name': 'Priority', 'value': task.Priority.Value})"></select>
+                        &nbsp;<span ng-show="task.Priority.Value == '(1) High'" class="glyphicon glyphicon-fire danger"></span>
+                        <span ng-show="task.Priority.Value == '(3) Low'" class="glyphicon glyphicon-circle-arrow-down success"></span>
+                    </div>-->
+
+                    <div ng-repeat="person in task.AssignedTo.results">
+                        <a href="mailto:{{person.WorkEMail}}?subject=#{{task.Id}}: {{task.Title}}" class="btn btn-link"><span class="glyphicon glyphicon-user"></span> {{person.Name}}</a>
+                    </div>
+
+                    <div ng-show="!!task.DueDate">
+                        <small>Due:</small>
+                        <small>{{task.DueDate | sp_datetime}}</small>
+                    </div>
+
+                    <div ng-show="!!task.LastTimeIn">
+                        <small>Last Start:</small>
+                        <small>{{task.LastTimeIn | sp_datetime}}</small>
+                    </div>
+
+                    <div ng-show="!!task.LastTimeOut">
+                        <small>Last Stop:</small>
+                        <small>{{task.LastTimeOut | sp_datetime}}</small>
+                    </div>
+
+                    <!--Start/Stop buttons-->
+                    <div ng-show="vm.userIsEditor && (col.status == 'In Progress' || col.status == 'Testing')" style="padding:.2em;">
+                        <button class="btn btn-sm btn-default" ng-mousedown="vm.clockIn(task.Id)"><span class="glyphicon glyphicon-time green"></span> Start</button>
+                        <button class="btn btn-sm btn-default" ng-mousedown="vm.clockOut(task.Id)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
+                    </div>
+
+                    <!--<div ng-show="vm.userIsEditor && (col.status == 'In Progress' || col.status == 'Testing')" style="padding:.2em;">
+                        <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut != null || task.LastTimeIn == null" ng-mousedown="vm.clockIn(task.Id)"><span class="glyphicon glyphicon-time green"></span> Start</button>
+                        <button class="btn btn-sm btn-default" ng-show="task.LastTimeOut == null && task.LastTimeIn != null" ng-mousedown="vm.clockOut(task.Id)"><span class="glyphicon glyphicon-time red"></span> Stop</button>
+                    </div>-->
+
+                    <div class="form-group">
+                        <small>Status:</small>
+                        <select ng-options="opt for opt in vm.kanbanConfig.statuses" ng-model="task.Status.Value" ng-change="vm.updateTask(task.Id, {'name': 'Status', 'value': task.Status.Value})" class="form-control" style="padding:0;height:auto;"></select>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-5">
+                            <div ng-show="task.Attachments.results.length">
+                                <span class="glyphicon glyphicon-paperclip"></span> <span class="badge">{{task.Attachments.results.length}}</span>
+                            </div>
+                        </div>
+                        <div class="col-xs-7 text-right">
+                            <button class="btn btn-sm btn-default" ng-mousedown="vm.viewItem(task)"><span class="glyphicon glyphicon-eye-open" title="View Task Details"></span> Details</button>&nbsp;
+                            <!--<button class="btn btn-sm btn-default" ng-mousedown="vm.deleteTask(task.Id, $index)"><span class="glyphicon glyphicon-trash" title="Delete Task"></span></button>-->
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
