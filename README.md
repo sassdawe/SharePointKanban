@@ -47,10 +47,10 @@ In /app/config.ts, update these configuration variables:
 ##Angular UI-Router View Configuration
 In /app/dvr/views.ts, update these list configurations:
 ```
-	siteUrl: '/media', //the SharePoint subsite relative URL
-	listName: 'Projects', //the SharePoint list name
-	previousMonths: 18, //how far back to show project tasks
-	timeLogListName: 'Time Log', 
+	siteUrl: '/<mysite relative URL>', //the SharePoint subsite relative URL, e.g. '/mysubsite'
+	listName: '<my list name>', //the SharePoint list name,e.g. will usually be "Projects", "Tasks", or "Workflow Tasks"
+	previousMonths: 18, //how far back to show project tasksdefault is 18
+	timeLogListName: 'Time Log', // the list name of your time log list. Default is "Time Log" - YOU'LL NEED TO CREATE THIS
 ```
 ![Angular UI-Router View Configuration in Visual Studio](Docs/KanbanAngularViewScreenshot.jpg "Angular UI-Router View Configuration in Visual Studio")
 
