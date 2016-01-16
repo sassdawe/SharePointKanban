@@ -82,10 +82,6 @@
     <Content Include="scripts\jquery-ui.datepicker.min.js" />
     <Content Include="scripts\moment.js" />
     <Content Include="scripts\moment.min.js" />
-    <Content Include="testdata.txt" />
-    <Content Include="testuser.xml" />
-    <Content Include="test_support_entries.txt" />
-    <Content Include="test_time_entries.txt" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>
