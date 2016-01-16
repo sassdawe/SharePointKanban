@@ -19,18 +19,19 @@ A doughnut chart is displayed for each project list which allows management to q
 ![A Report for Hours Logged](Docs/KanbanReportScreenshot.jpg "A Report for Hours Logged")
 
 ##Requirements
-    * At least one SharePoint Tasks or Projects List of Content Type, Tasks
-	    * ADD 2 additional columns
-		   * LastTimeIn (Date and Time)
-		   * LastTimeOut (Date and Time)
-	
-	* If you wish to track hours logged a custom SharePoint list titled "Time Log" with the following columns:
-        * Title (Single line of text)
-        * TimeIn (Date and Time)
-        * TimeOut (Date and Time)
-        * Project (Lookup) - a lookup column to your poject list displaying the ID field of the project.
-        * Project:Title	(Lookup) - a lookup column to your poject list displaying the Title field of the project.	
-        * Hours (Calculated) - the formula to calculate hours (TimeOut minus TimeIn) is: `=IF(NOT(ISBLANK(TimeOut)),(TimeOut-TimeIn)*24,0)`	
+ * At least one SharePoint Tasks or Projects List of Content Type, Tasks
+ * ADD 2 additional columns
+  * LastTimeIn (Date and Time)
+  * LastTimeOut (Date and Time)
+ * If you need a status for "Testing", append "Testing" to the Column choices for Status in the List Settings.
+
+* If you wish to track hours logged a custom SharePoint list titled "Time Log" with the following columns:
+* Title (Single line of text)
+* TimeIn (Date and Time)
+* TimeOut (Date and Time)
+* Project (Lookup) - a lookup column to your poject list displaying the ID field of the project.
+* Project:Title	(Lookup) - a lookup column to your poject list displaying the Title field of the project.	
+* Hours (Calculated) - the formula to calculate hours (TimeOut minus TimeIn) is: `=IF(NOT(ISBLANK(TimeOut)),(TimeOut-TimeIn)*24,0)`	
 
 ![Time Log List Configuration](Docs/TimeLogListColumns.jpg "Time Log List Configuration")
 		
