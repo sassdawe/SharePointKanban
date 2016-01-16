@@ -19,39 +19,40 @@
             controllerAs: 'vm',
             resolve: {
                 kanbanConfig: function (): IKanbanConfig {
+                    var statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                     var config: IKanbanConfig = {
                         siteUrl: '/media', //the SharePoint subsite relative URL
                         listName: 'Projects', //the SharePoint list name
                         previousMonths: 18, //how far back to show project tasks
                         timeLogListName: 'Time Log',
-                        statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
+                        statuses: statuses,
                         columns: <Array<IKanbanColumn>>[
                             {
                                 title: 'Backlog',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
-                                status: 'Not Started',
+                                status: statuses[0],
                                 tasks: []
                             },
                             {
                                 title: 'In Progress',
                                 id: 'in-progress-tasks',
                                 className: 'panel panel-danger',
-                                status: 'In Progress',
+                                status: statuses[1],
                                 tasks: []
                             },
                             {
                                 title: 'Testing',
                                 id: 'testing-tasks',
                                 className: 'panel panel-warning',
-                                status: 'Testing',
+                                status: statuses[2],
                                 tasks: []
                             },
                             {
                                 title: 'Done',
                                 id: 'completed-tasks',
                                 className: 'panel panel-success',
-                                status: 'Completed',
+                                status: statuses[3],
                                 tasks: []
                             }
                         ]
@@ -68,39 +69,40 @@
             controllerAs: 'vm',
             resolve: {
                 kanbanConfig: function (): IKanbanConfig {
+                    var statuses = ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'];
                     var config: IKanbanConfig = {
                         siteUrl: '/ws',
                         listName: 'Tasks',
                         previousMonths: 1,
                         timeLogListName: 'Time Log',
-                        statuses: ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'],
+                        statuses: statuses,
                         columns: <Array<IKanbanColumn>>[
                             {
                                 title: 'Backlog',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
-                                status: 'Not Started',
+                                status: statuses[0],
                                 tasks: []
                             },
                             {
                                 title: 'In Progress',
                                 id: 'in-progress-tasks',
                                 className: 'panel panel-danger',
-                                status: 'In Progress',
+                                status: statuses[1],
                                 tasks: []
                             },
                             {
                                 title: 'Waiting on someone else',
                                 id: 'waiting-on-someone-tasks',
                                 className: 'panel panel-warning',
-                                status: 'Waiting on someone else',
+                                status: statuses[2],
                                 tasks: []
                             },
                             {
                                 title: 'Done',
                                 id: 'completed-tasks',
                                 className: 'panel panel-success',
-                                status: 'Completed',
+                                status: statuses[3],
                                 tasks: []
                             }
                         ]
@@ -118,8 +120,8 @@
             resolve: {
                 projectSiteConfigs: function (): Array<IProjectSiteConfig> {
                     return [
-                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects' },
-                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests' },
+                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
+                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks'  },
                     ]
                 }
             }

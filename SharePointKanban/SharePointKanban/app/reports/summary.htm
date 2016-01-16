@@ -57,7 +57,7 @@
                             <tr ng-repeat="project in projectGroup.Projects">
                                 <td><div style="border:10px solid {{project.Color}}; width:1px; height:1px;"></div></td>
                                 <td>{{project.Id}}</td>
-                                <td>{{project.Title}}</td>
+                                <td><a href="javascript:void(0);" ng-mousedown="vm.viewItem(project)" title="View Details"style="color:#fff;text-decoration:underline;">{{project.Title}}</a></td>
                                 <td>{{project.TotalHours | number:3}}</td>
                             </tr>
                         </tbody>
@@ -70,7 +70,7 @@
                     </table>
                 </div><!--/.table-responsive-->
 
-            </div><!--/ng-repeat="projectGroup in person.ProjectGroups"-->
+            </div><!-- /ng-repeat -->
 
         </div><!--/.row-->
 

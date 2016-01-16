@@ -142,39 +142,40 @@ var App;
             controllerAs: 'vm',
             resolve: {
                 kanbanConfig: function () {
+                    var statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                     var config = {
                         siteUrl: '/media',
                         listName: 'Projects',
                         previousMonths: 18,
                         timeLogListName: 'Time Log',
-                        statuses: ['Not Started', 'In Progress', 'Testing', 'Completed'],
+                        statuses: statuses,
                         columns: [
                             {
                                 title: 'Backlog',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
-                                status: 'Not Started',
+                                status: statuses[0],
                                 tasks: []
                             },
                             {
                                 title: 'In Progress',
                                 id: 'in-progress-tasks',
                                 className: 'panel panel-danger',
-                                status: 'In Progress',
+                                status: statuses[1],
                                 tasks: []
                             },
                             {
                                 title: 'Testing',
                                 id: 'testing-tasks',
                                 className: 'panel panel-warning',
-                                status: 'Testing',
+                                status: statuses[2],
                                 tasks: []
                             },
                             {
                                 title: 'Done',
                                 id: 'completed-tasks',
                                 className: 'panel panel-success',
-                                status: 'Completed',
+                                status: statuses[3],
                                 tasks: []
                             }
                         ]
@@ -189,39 +190,40 @@ var App;
             controllerAs: 'vm',
             resolve: {
                 kanbanConfig: function () {
+                    var statuses = ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'];
                     var config = {
                         siteUrl: '/ws',
                         listName: 'Tasks',
                         previousMonths: 1,
                         timeLogListName: 'Time Log',
-                        statuses: ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'],
+                        statuses: statuses,
                         columns: [
                             {
                                 title: 'Backlog',
                                 id: 'backlog-tasks',
                                 className: 'panel panel-info',
-                                status: 'Not Started',
+                                status: statuses[0],
                                 tasks: []
                             },
                             {
                                 title: 'In Progress',
                                 id: 'in-progress-tasks',
                                 className: 'panel panel-danger',
-                                status: 'In Progress',
+                                status: statuses[1],
                                 tasks: []
                             },
                             {
                                 title: 'Waiting on someone else',
                                 id: 'waiting-on-someone-tasks',
                                 className: 'panel panel-warning',
-                                status: 'Waiting on someone else',
+                                status: statuses[2],
                                 tasks: []
                             },
                             {
                                 title: 'Done',
                                 id: 'completed-tasks',
                                 className: 'panel panel-success',
-                                status: 'Completed',
+                                status: statuses[3],
                                 tasks: []
                             }
                         ]
@@ -237,8 +239,8 @@ var App;
             resolve: {
                 projectSiteConfigs: function () {
                     return [
-                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects' },
-                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests' },
+                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
+                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks' },
                     ];
                 }
             }
@@ -580,28 +582,30 @@ var App;
                 this.projectSiteConfigs = projectSiteConfigs;
                 this.updateState = false;
                 // default dates to current week from Mon to Sun
-                var days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat']; // 6-5,5-4,4-3,3-2,2-1
                 var today = new Date();
-                var dayOfWeek = today.getDay();
+                var dayOfWeek = today.getDay(); //index of the week - 0-6 - Sun-Sat
                 var dayOfMonth = today.getDate();
-                var mondayDate = days[dayOfWeek] == 'Mon' ? dayOfMonth : dayOfMonth - (6 - dayOfWeek);
+                var firstDayOfWeek = 1; // Monday - change to your preference, e.g `0` for Sunday etc.
+                var lastDayOfWeek = 6;
+                // if today's date isn't a the beginning of your week, find the previous date that was. 
+                var startDate = dayOfWeek == firstDayOfWeek ? dayOfMonth : dayOfMonth - (dayOfWeek - firstDayOfWeek);
                 if (!!$stateParams.start && !!$stateParams.end) {
                     var start = $stateParams.start.split('-');
                     var end = $stateParams.end.split('-');
-                    this.startDate = new Date(parseInt(start[0]), parseInt(start[1]) - 1, parseInt(start[2]));
-                    this.endDate = new Date(parseInt(end[0]), parseInt(end[1]) - 1, parseInt(end[2]));
+                    this.startDate = new Date(parseInt(start[0]), (parseInt(start[1]) - 1), parseInt(start[2]), 0, 0, 0);
+                    this.endDate = new Date(parseInt(end[0]), (parseInt(end[1]) - 1), parseInt(end[2]), 23, 59, 0);
                     this.getData();
                 }
                 else {
                     this.updateState = true;
-                    this.startDate = new Date(today.getFullYear(), today.getMonth(), mondayDate, 0, 0, 0);
-                    this.endDate = new Date(today.getFullYear(), today.getMonth(), mondayDate + 6, 0, 0, 0);
+                    this.startDate = new Date(today.getFullYear(), today.getMonth(), startDate, 0, 0, 0);
+                    this.endDate = new Date(today.getFullYear(), today.getMonth(), (startDate + lastDayOfWeek), 23, 59, 0);
                 }
                 this.groupedProjects = [];
             }
             ProjectSummary.prototype.getData = function () {
                 var self = this;
-                console.info(this.startDate);
+                //console.info(this.startDate)
                 //if (this.updateState) {
                 //this.$state.go('app.summary.range', { start: this.startDate.toISOString().split('T')[0], end: this.endDate.toISOString().split('T')[0] });
                 //this.updateState = false;
@@ -611,7 +615,7 @@ var App;
                     var config = self.projectSiteConfigs[i];
                     var groupTitle = self.projectSiteConfigs[i].title;
                     var names = []; //to keep track of unique names
-                    this.datacontext.getProjectTotals(config.siteUrl, config.listName, this.startDate, this.endDate, groupTitle).then(function (data) {
+                    this.datacontext.getProjectTotals(config.siteUrl, config.listName, this.startDate, this.endDate, groupTitle, config.projectsListName).then(function (data) {
                         // group multiple project groups under each unique person                        
                         data.forEach(function (o) {
                             var name = o.Name;
@@ -640,6 +644,15 @@ var App;
                         });
                     });
                 }
+                return false;
+            };
+            ProjectSummary.prototype.viewItem = function (project) {
+                var self = this;
+                var item = {
+                    Id: project.Id,
+                    Title: project.Title
+                };
+                App.SharePoint.Utils.openSpDisplayForm(project.SiteUrl, project.ListName, item);
                 return false;
             };
             ProjectSummary.Id = 'projectSummaryController';
@@ -1196,7 +1209,7 @@ var App;
                 });
                 return d.promise;
             };
-            Datacontext.prototype.getProjectTotals = function (siteUrl, listName, start, end, title) {
+            Datacontext.prototype.getProjectTotals = function (siteUrl, listName, start, end, title, projectsListName) {
                 var self = this;
                 var d = this.$q.defer();
                 start = App.Utils.parseDate(start);
@@ -1238,6 +1251,8 @@ var App;
                                 Title: p.Project.Title,
                                 TotalHours: 0,
                                 PersonName: p.CreatedBy.Name,
+                                SiteUrl: siteUrl,
+                                ListName: projectsListName,
                                 Color: null
                             };
                             // 3. sum the total hours from a person's project's entries in `logs`

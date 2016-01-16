@@ -13,7 +13,7 @@
         deleteAttachment(att: SharePoint.ISpAttachment): ng.IPromise<any>;
         clockIn(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string): ng.IPromise<ng.IHttpPromiseCallbackArg<SharePoint.ISpWrapper<SharePoint.ISpItem>>>;
         clockOut(item: SharePoint.ISpTaskItem, siteUrl: string, listName: string, callback: JQueryPromiseCallback<any>): void;
-        getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string): ng.IPromise<Array<IPersonProjects>>;
+        getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string, projectsListName: string): ng.IPromise<Array<IPersonProjects>>;
 
         // SOAP Methods
         executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl?: string, cache?: boolean, headers?: any, service?: string): ng.IPromise<any>
@@ -653,7 +653,7 @@
             return d.promise;
         }
 
-        public getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string): ng.IPromise<Array<IPersonProjects>> {
+        public getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string, projectsListName: string): ng.IPromise<Array<IPersonProjects>> {
             var self = this;
             var d = this.$q.defer();
 
@@ -683,8 +683,7 @@
                         Projects: []
                     });                   
                 }
-
-                
+               
                 for (var i = 0; i < groups.length; i++) {
                     var group = groups[i];
                     var temp = [];
@@ -695,11 +694,13 @@
                         if (p.CreatedBy.Name != group.Name || temp.indexOf(p.ProjectId) > -1) { continue; }
                         
                         temp.push(p.ProjectId);
-                        var proj = {
+                        var proj: IProjectTotal = {
                             Id: p.ProjectId,
                             Title: p.Project.Title,
                             TotalHours: 0,
                             PersonName: p.CreatedBy.Name,
+                            SiteUrl: siteUrl,
+                            ListName: projectsListName,
                             Color: null
                         };
 

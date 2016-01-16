@@ -46,6 +46,8 @@
         Title: string;
         TotalHours: number;
         PersonName: string;
+        SiteUrl: string;
+        ListName: string;
         Color: string;
     }
 
@@ -53,6 +55,7 @@
         siteUrl: string;
         listName: string;
         title: string;
+        projectsListName: string; 
     }
 
     export interface IPersonProjectsGroup {

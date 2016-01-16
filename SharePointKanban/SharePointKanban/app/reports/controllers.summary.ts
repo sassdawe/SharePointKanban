@@ -22,23 +22,25 @@
             this.updateState = false;
 
             // default dates to current week from Mon to Sun
-            var days = ['Sun', 'Mon', 'Tues', 'Wed', 'Thur', 'Fri', 'Sat']; // 6-5,5-4,4-3,3-2,2-1
             var today = new Date();
-            var dayOfWeek = today.getDay();
+            var dayOfWeek = today.getDay(); //index of the week - 0-6 - Sun-Sat
             var dayOfMonth = today.getDate();
-            var mondayDate = days[dayOfWeek] == 'Mon' ? dayOfMonth : dayOfMonth - (6 - dayOfWeek);
+            var firstDayOfWeek = 1; // Monday - change to your preference, e.g `0` for Sunday etc.
+            var lastDayOfWeek = 6;
+            // if today's date isn't a the beginning of your week, find the previous date that was. 
+            var startDate = dayOfWeek == firstDayOfWeek ? dayOfMonth : dayOfMonth - (dayOfWeek - firstDayOfWeek);
 
             if (!!$stateParams.start && !!$stateParams.end) {
                 var start = $stateParams.start.split('-');
                 var end = $stateParams.end.split('-');
-                this.startDate = new Date(parseInt(start[0]), parseInt(start[1])-1, parseInt(start[2]));
-                this.endDate = new Date(parseInt(end[0]), parseInt(end[1]) - 1, parseInt(end[2]));
+                this.startDate = new Date(parseInt(start[0]), (parseInt(start[1])-1), parseInt(start[2]), 0, 0, 0);
+                this.endDate = new Date(parseInt(end[0]), (parseInt(end[1])-1), parseInt(end[2]), 23, 59, 0);
                 this.getData();
 
             } else {
                 this.updateState = true;
-                this.startDate = new Date(today.getFullYear(), today.getMonth(), mondayDate, 0, 0, 0);
-                this.endDate = new Date(today.getFullYear(), today.getMonth(), mondayDate + 6, 0, 0, 0);              
+                this.startDate = new Date(today.getFullYear(), today.getMonth(), startDate, 0, 0, 0);
+                this.endDate = new Date(today.getFullYear(), today.getMonth(), (startDate + lastDayOfWeek), 23, 59, 0);              
             }
 
             this.groupedProjects = [];
@@ -47,7 +49,7 @@
         private getData(): boolean {
             var self = this;
 
-            console.info(this.startDate)
+            //console.info(this.startDate)
 
             //if (this.updateState) {
                 //this.$state.go('app.summary.range', { start: this.startDate.toISOString().split('T')[0], end: this.endDate.toISOString().split('T')[0] });
@@ -61,12 +63,12 @@
                 var groupTitle = self.projectSiteConfigs[i].title;
                 var names = []; //to keep track of unique names
 
-                this.datacontext.getProjectTotals(config.siteUrl, config.listName, this.startDate, this.endDate, groupTitle).then(
+                this.datacontext.getProjectTotals(config.siteUrl, config.listName, this.startDate, this.endDate, groupTitle, config.projectsListName).then(
                     (data: Array<IPersonProjects>): void => {
 
                         // group multiple project groups under each unique person                        
                         data.forEach(function (o) {
-                            var name = o.Name;
+                            var name = o.Name;                       
 
                             if (names.indexOf(name) < 0) {
                                 names.push(name);
@@ -99,6 +101,15 @@
             return false;
         }
 
+        private viewItem(project: IProjectTotal): boolean {
+            var self = this;
+            var item: SharePoint.ISpItem = <SharePoint.ISpItem>{
+                Id: project.Id, //only need these two propertiesto to create SP dialog; se method `SharePoint.Utils.openSpDisplayForm`
+                Title: project.Title
+            };
+            SharePoint.Utils.openSpDisplayForm(project.SiteUrl, project.ListName, item);
+            return false;
+        }
     }
 
     app.controller(ProjectSummary.Id, ProjectSummary);
