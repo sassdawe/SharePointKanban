@@ -25,7 +25,7 @@ A doughnut chart is displayed for each project list which allows management to q
   * LastTimeOut (Date and Time)
  * If you need a status for "Testing", append "Testing" to the Column choices for Status in the List Settings.
 
-* If you wish to track hours logged, add custom SharePoint list titled "Time Log" with the following columns:
+* If you wish to track hours logged, add a custom SharePoint list titled "Time Log" with the following columns:
  * Title (Single line of text)
  * TimeIn (Date and Time)
  * TimeOut (Date and Time)

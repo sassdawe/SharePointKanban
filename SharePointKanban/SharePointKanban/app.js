@@ -58,10 +58,10 @@ var App;
             this.debug = false;
             this.appPath = 'app/'; //path to Angular app template files
             this.appTitle = 'Dev Projects Kanban'; //display title of the app
-            // list of SharePoint group names who's members are allowed to edit 
-            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations'];
+            // list of SharePoint group names allowed to save changes
+            this.editGroups = ['Developers', 'Testers', 'Managers'];
             this.orgName = ''; //the name of your organization, shown in Copyright
-            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
+            this.productionHostname = 'mysite'; //the hostname of the live production SharePoint site
             this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
             this.serverHostname = '//' + window.location.hostname;
             this.testUser = {
