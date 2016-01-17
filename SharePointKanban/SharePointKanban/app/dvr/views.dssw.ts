@@ -25,7 +25,7 @@
                 kanbanConfig: function (): IKanbanConfig {
                     var statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                     var config: IKanbanConfig = {
-                        siteUrl: '/kanban', //the SharePoint subsite relative URL
+                        siteUrl: '/media', //the SharePoint subsite relative URL
                         listName: 'Projects', //the SharePoint list name
                         previousMonths: 18, //how far back to show project tasks
                         timeLogListName: 'Time Log',
@@ -75,7 +75,7 @@
                 kanbanConfig: function (): IKanbanConfig {
                     var statuses = ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'];
                     var config: IKanbanConfig = {
-                        siteUrl: '/helpdesk',
+                        siteUrl: '/ws',
                         listName: 'Tasks',
                         previousMonths: 1,
                         timeLogListName: 'Time Log',
@@ -128,8 +128,8 @@
                 projectSiteConfigs: function (): Array<IProjectSiteConfig> {
                     // List as many SharePoint Project/Tasks configurations here as needed. 
                     return [
-                        { siteUrl: '/kanban', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
-                        { siteUrl: '/helpdesk', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks'  },
+                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
+                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks'  },
                     ]
                 }
             }

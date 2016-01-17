@@ -26,17 +26,17 @@ module App {
         public appPath: string = 'app/'; //path to Angular app template files
         public appTitle: string = 'Dev Projects Kanban'; //display title of the app
         // list of SharePoint group names who's members are allowed to edit 
-        public editGroups: Array<string> = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations'];
+        public editGroups: Array<string> = ['Developers', 'Testers', 'Managers'];
         public isProduction: boolean; //if this isn't the production site, get test data
         public orgName: string = ''; //the name of your organization, shown in Copyright
-        public productionHostname: string = 'webster'; //the hostname of the live production SharePoint site
+        public productionHostname: string = 'mysite'; //the hostname of the live production SharePoint site
         public priorities: Array<string> = ['(1) High', '(2) Normal', '(3) Low'];     
         public serverHostname: string = '//' + window.location.hostname;
         public testUser: SharePoint.ISpUser = {
             Account: null,
             Department: 'Vogon Affairs',
             EMail: 'hitchiker@galaxy.org',
-            Groups: [{id: 42, name: 'testers'}],
+            Groups: [{id: 42, name: 'Testers'}],
             ID: 42,
             JobTitle: 'Tester',
             Name: 'domain\marvin',

@@ -334,15 +334,6 @@ var App;
                 this.datacontext.updateSoapListItems(this.changeQueue, this.siteUrl, this.listName).then(function (response) {
                     var xmlDoc = response.data;
                     if (!!xmlDoc) {
-                        //<ErrorCode>0x00000000</ErrorCode>
-                        //var $errorNode = $(xmlDoc).find('ErrorCode');
-                        //if ($errorNode.text() != '0x00000000') {
-                        //    // report error message
-                        //    console.warn($errorNode.text());
-                        //    return;
-                        //}
-                        //console.info($(xmlDoc).find('UpdateListItemsResult'));
-                        //console.info('Saved ' + self.changeQueue.length + ' changes.');
                         self.changeQueue = [];
                     }
                 });
@@ -481,7 +472,9 @@ var App;
                 try {
                     var project = this.findProjectById(id);
                     if (!!!project) {
-                        console.warn('ERROR: Controllers.KanBanController.clockIn() - project is null');
+                        var ex = 'ERROR: Controllers.KanBanController.clockIn() - project is null';
+                        alert(ex);
+                        throw ex;
                         return false;
                     }
                     var now = new Date();
@@ -526,8 +519,8 @@ var App;
                     });
                 }
                 catch (e) {
-                    console.warn('ERROR: Controllers.KanBanController.clockIn()...');
-                    console.warn(e);
+                    alert('ERROR: Controllers.KanBanController.clockIn()');
+                    throw e;
                 }
                 finally {
                     return false;
@@ -537,10 +530,9 @@ var App;
                 var self = this;
                 try {
                     var project = this.findProjectById(id);
-                    if (!!!project) {
-                        console.warn('ERROR: Controllers.KanBanController.clockOut() - project is null');
-                        return false;
-                    }
+                    var ex = 'ERROR: Controllers.KanBanController.clockOut() - project is null';
+                    alert(ex);
+                    throw ex;
                     var now = new Date();
                     if (!this.config.isProduction) {
                         project.LastTimeOut = now;
@@ -582,8 +574,8 @@ var App;
                     });
                 }
                 catch (e) {
-                    console.warn('ERROR: Controllers.KanBanController.clockOut()...');
-                    console.warn(e);
+                    alert('ERROR: Controllers.KanBanController.clockOut()');
+                    throw e;
                 }
                 finally {
                     return false;
@@ -1331,7 +1323,7 @@ var App;
      */
     var Config = (function () {
         function Config() {
-            this.debug = true;
+            this.debug = false;
             this.appPath = 'app/'; //path to Angular app template files
             this.appTitle = 'Dev Projects Kanban'; //display title of the app
             // list of SharePoint group names who's members are allowed to edit 

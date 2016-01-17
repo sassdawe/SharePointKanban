@@ -66,17 +66,6 @@ module App.Controllers{
                     var xmlDoc = response.data;
 
                     if (!!xmlDoc) {
-                        //<ErrorCode>0x00000000</ErrorCode>
-                        //var $errorNode = $(xmlDoc).find('ErrorCode');
-                        //if ($errorNode.text() != '0x00000000') {
-                        //    // report error message
-                        //    console.warn($errorNode.text());
-                        //    return;
-                        //}
-
-                        //console.info($(xmlDoc).find('UpdateListItemsResult'));
-
-                        //console.info('Saved ' + self.changeQueue.length + ' changes.');
                         self.changeQueue = [];
                     }
                 });
@@ -133,7 +122,7 @@ module App.Controllers{
                         break;
                 }
 
-                if (change.length > 0) { //Update qeued change.
+                if (change.length > 0) { //Update queued change.
 
                     // update existing field changes
                     var fields = change[0].fields.filter((f: ISpUpdateField): boolean => {
@@ -146,7 +135,7 @@ module App.Controllers{
                         change[0].fields.push(field);
                     }
 
-                } else { //Add new change to qeue.
+                } else { //Add new change to queue.
                     this.changeQueue.push({
                         Id: taskId,
                         fields: [field]
@@ -239,7 +228,9 @@ module App.Controllers{
                 var project = this.findProjectById(id);
 
                 if (!!!project) {
-                    console.warn('ERROR: Controllers.KanBanController.clockIn() - project is null');
+                    var ex = 'ERROR: Controllers.KanBanController.clockIn() - project is null';
+                    alert(ex);
+                    throw ex;
                     return false;
                 }
 
@@ -291,8 +282,8 @@ module App.Controllers{
                     });
             }
             catch (e) {
-                console.warn('ERROR: Controllers.KanBanController.clockIn()...');
-                console.warn(e);
+                alert('ERROR: Controllers.KanBanController.clockIn()');
+                throw e;
             }
             finally {
                 return false;
@@ -304,10 +295,9 @@ module App.Controllers{
             try {
                 var project = this.findProjectById(id);
 
-                if (!!!project) {
-                    console.warn('ERROR: Controllers.KanBanController.clockOut() - project is null');
-                    return false;
-                }
+                var ex = 'ERROR: Controllers.KanBanController.clockOut() - project is null';
+                alert(ex);
+                throw ex;
 
                 var now = new Date();
 
@@ -358,8 +348,8 @@ module App.Controllers{
                     });
             }
             catch (e) {
-                console.warn('ERROR: Controllers.KanBanController.clockOut()...');
-                console.warn(e);
+                alert('ERROR: Controllers.KanBanController.clockOut()');
+                throw e;
             }
             finally {
                 return false;
