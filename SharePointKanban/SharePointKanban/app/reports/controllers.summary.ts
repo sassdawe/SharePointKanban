@@ -49,13 +49,6 @@
         private getData(): boolean {
             var self = this;
 
-            //console.info(this.startDate)
-
-            //if (this.updateState) {
-                //this.$state.go('app.summary.range', { start: this.startDate.toISOString().split('T')[0], end: this.endDate.toISOString().split('T')[0] });
-                //this.updateState = false;
-            //}
-
             this.groupedProjects = []; 
 
             for (var i = 0; i < this.projectSiteConfigs.length; i++) {
@@ -104,7 +97,7 @@
         private viewItem(project: IProjectTotal): boolean {
             var self = this;
             var item: SharePoint.ISpItem = <SharePoint.ISpItem>{
-                Id: project.Id, //only need these two propertiesto to create SP dialog; se method `SharePoint.Utils.openSpDisplayForm`
+                Id: project.Id, // only need these two properties to create SP dialog; see method `SharePoint.Utils.openSpDisplayForm`
                 Title: project.Title
             };
             SharePoint.Utils.openSpDisplayForm(project.SiteUrl, project.ListName, item);

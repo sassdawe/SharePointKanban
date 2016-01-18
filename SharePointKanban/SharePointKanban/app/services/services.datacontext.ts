@@ -20,9 +20,6 @@
         searchPrincipals(term: string, maxResults?: number, principalType?: string): ng.IPromise<any>;
         getCurrentUser(): ng.IPromise<SharePoint.ISpUser>;
         getUsersGroups(loginName: string): ng.IPromise<Array<SharePoint.ISpGroup>>;
-
-        getTestData(): ng.IPromise<Array<SharePoint.ISpTaskItem>>;
-
     }
 
     export class Datacontext implements IDatacontext {
@@ -84,6 +81,7 @@
         * @return void 
         */
         public getSpListItems(siteUrl: string, listName: string, filter: string = null, select: string = null, orderby: string = null, expand: string = null, top: number = 10): ng.IPromise<Array<any>> {
+            siteUrl = siteUrl == '/' ? '' : siteUrl;
             var self: any = this;
             var d = this.$q.defer();
             this.common.showLoader();
@@ -121,16 +119,7 @@
 
         public getProjects(siteUrl: string, listName: string, force: boolean = false, prevMonths: number = 6): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
             var d = this.$q.defer();
-
             var self = this;
-
-            // Show how many previous months of projects to request.
-            // Change this variable in App.Config;
-
-            if (!this.config.isProduction) {
-                return this.getTestData();
-            }
-
             var today = new Date();
             var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
             var filter = 'CategoryValue ne \'Log\' and Created gt datetime\'' + dateFilter + '\'';
@@ -166,6 +155,7 @@
         }
 
         public getProject(siteUrl: string, listName: string, itemId: number): ng.IPromise<SharePoint.ISpTaskItem> {
+            siteUrl = siteUrl == '/' ? '' : siteUrl;
             return this.executeRestRequest(siteUrl + '/_vti_bin/listdata.svc/' + SharePoint.Utils.toCamelCase(listName) + '(' + itemId + ')');
         }
 
@@ -253,7 +243,7 @@
         * @return IPromise<any>
         */
         public executeSoapRequest(action: string, packet: string, data: Array<any>, siteUrl: string = '', cache: boolean = false, headers: any = undefined, service: string = 'lists.asmx'): ng.IPromise<any> {
-
+            siteUrl = siteUrl == '/' ? '' : siteUrl;
             var d = this.$q.defer();
             var self = this;
             this.common.showLoader();
@@ -301,15 +291,6 @@
         * @return void
         */
         public updateSoapListItems(fields: Array<ISpUpdateItem>, siteUrl: string, listName: string): ng.IPromise<any> {
-
-            if (!this.config.isProduction) {
-                var d = this.$q.defer();
-                d.resolve({
-                    status: 200,
-                    statusText: 'OK'
-                });
-                return d.promise;
-            }
 
             var action = 'http://schemas.microsoft.com/sharepoint/soap/UpdateListItems';
             var packet = '<?xml version="1.0" encoding="utf-8"?>' +
@@ -421,37 +402,6 @@
                 Groups: []
             };
 
-            if (!this.config.isProduction) {
-
-                this.$http({ url: '/testuser.xml', method: 'GET', dataType: 'xml' }).then((response: ng.IHttpPromiseCallbackArg<any>): void => {
-
-                    var xmlDoc = response.data;
-
-                    var $zrows = $(xmlDoc).find('*').filter(function () {
-                        return this.nodeName.toLowerCase() == 'z:row';
-                    });
-
-                    $zrows.each(function () {
-                        user.ID = parseInt($(this).attr('ows_ID'));
-                        user.Title = $(this).attr('ows_Title');
-                        user.Name = $(this).attr('ows_Name');
-                        user.EMail = $(this).attr('ows_EMail');
-                        user.JobTitle = $(this).attr('ows_JobTitle');
-                        user.Department = $(this).attr('ows_Department');
-                        user.Account = user.ID + ';#' + user.Title;
-                        user.Groups = self.config.testUser.Groups;
-                    });
-
-                    d.resolve(user);
-
-                });
-
-                self.cache.currentUser = user;
-                return d.promise;
-            }
-
-            var self = this;
-            
             var query = '<Query><Where><Eq><FieldRef Name="ID" /><Value Type="Counter"><UserID /></Value></Eq></Where></Query>';
             var viewFields = '<ViewFields><FieldRef Name="ID" /><FieldRef Name="Name" /><FieldRef Name="EMail" /><FieldRef Name="Department" /><FieldRef Name="JobTitle" /><FieldRef Name="UserName" /><FieldRef Name="Office" /></ViewFields>';
 
@@ -532,37 +482,6 @@
             return d.promise;
         }
 
-        public getTestData(): ng.IPromise<Array<SharePoint.ISpTaskItem>> {
-            var d = this.$q.defer();
-            var self = this;
-
-            //if (!!this.cache.projects) {
-            //    d.resolve(this.cache.projects);
-            //    return d.promise;
-            //}
-
-            self.$http({
-                url: '/testdata.txt?_=' + Utils.getTimestamp(),
-                method: 'GET'
-            }).then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpCollectionWrapper<SharePoint.ISpTaskItem>>): void => {
-
-                if (response.status != 200) {
-                    d.resolve(null);
-                    d.reject(response.statusText);
-                    return;
-                }
-
-                var projects = response.data.d.results;
-                //self.cache.projects = response.data.d.results;
-                d.resolve(projects);
-
-            }).finally((): void => {
-                self.common.hideLoader();
-            });
-
-            return d.promise;
-        }
-
         public getProjectTotals(siteUrl: string, listName: string, start: Date, end: Date, title: string, projectsListName: string): ng.IPromise<Array<IPersonProjects>> {
             var self = this;
             var d = this.$q.defer();
@@ -632,41 +551,19 @@
             // tested Odata query
             // /_vti_bin/listdata.svc/TimeLog?$expand=CreatedBy,Project&$orderby=CreatedBy/Name,ProjectId,TimeIn&$filter=TimeIn ge datetime'2015-12-07T05:00:00.000Z' and TimeIn le datetime'2015-12-11T05:00:00.000Z'&$select=CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title
 
-            if (this.config.isProduction) {
-                var startIso: string = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
-                var endIso: string = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 24, 0, 0).toISOString();
+            var startIso: string = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
+            var endIso: string = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 0).toISOString();
 
-                // get data from production server
-                this.getSpListItems(
-                /*siteUrl:*/siteUrl,
-                /*listName:*/listName, 
-                /*filter:*/'TimeIn ne null and TimeOut ne null and TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'',
-                /*select:*/'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title',
-                /*orderby:*/'CreatedBy/Name,ProjectId,TimeIn',
-                /*expand:*/'CreatedBy,Project',
-                /*top:*/1000).then(transform);
-            }
-            else {
-                // get test data
-                this.common.hideLoader();
-                var testData = title == 'Projects' ? '/test_time_entries.txt' : 'test_support_entries.txt';
-                self.$http({
-                    url: testData + '?_=' + Utils.getTimestamp(),
-                    method: 'GET'
-                }).then((response: ng.IHttpPromiseCallbackArg<SharePoint.ISpCollectionWrapper<SharePoint.ITimeLogItem>>): void => {
-
-                    if (response.status != 200) {
-                        d.resolve(null);
-                        d.reject(response.statusText);
-                        return;
-                    }
-
-                    transform(response.data.d.results);
-
-                }).finally((): void => {
-                    self.common.hideLoader();
-                });
-            }
+            // get data from production server
+            this.getSpListItems(
+            /*siteUrl:*/siteUrl,
+            /*listName:*/listName, 
+            /*filter:*/'TimeIn ne null and TimeOut ne null and TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'',
+            /*select:*/'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title',
+            /*orderby:*/'CreatedBy/Name,ProjectId,TimeIn',
+            /*expand:*/'CreatedBy,Project',
+            /*top:*/1000).then(transform);
+           
             return d.promise;
         }
     }

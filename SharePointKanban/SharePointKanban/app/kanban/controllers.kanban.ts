@@ -94,8 +94,16 @@ module App.Controllers{
                 });
 
                 switch (field.name){
-                    case 'Status':
+                    case 'Status': //SP 2010
                         task.Status.Value = field.value;
+                        // Clock out the task if clocked in and not working.
+                        if (/(not started|completed)/i.test(field.value) && task.LastTimeOut == null) {
+                            self.clockOut(task.Id);
+                        }
+                        break;
+
+                    case 'TaskStatus': //SP 2013
+                        task.TaskStatus.Value = field.value;
                         // Clock out the task if clocked in and not working.
                         if (/(not started|completed)/i.test(field.value) && task.LastTimeOut == null) {
                             self.clockOut(task.Id);
@@ -105,17 +113,6 @@ module App.Controllers{
                     case 'OrderBy':
                         //update the order if an OrderBy change
                         if (!!!index) { break; }
-
-                        //TODO
-                        // Switch places with the task that has the same OrderBy value.
-                        // If the OrderBy value is 5, for example, find the task that is set to 5 and change to the task's index+1;
-                        //var orderBy: number = field.value;
-                        //for (var i = 0; i < this.projects.length; i++){
-                        //    if (this.projects[i].OrderBy == orderBy && this.projects[i].Status.Value == task.Status.Value) {
-                        //        this.projects[i].OrderBy = index+1;
-                        //    }
-                        //}
-
                         break;
 
                     default:
@@ -160,7 +157,7 @@ module App.Controllers{
             for (var i = 0; i < this.columns.length; i++){
                 var col: IKanbanColumn = this.columns[i];
                 col.tasks = self.projects.filter((task: SharePoint.ISpTaskItem): boolean => {
-                    return task.Status.Value == col.status;
+                    return (task.Status || task.TaskStatus).Value == col.status; // handle SP 2010 or 2013 property name
                 });
             }
 
@@ -300,11 +297,6 @@ module App.Controllers{
                 throw ex;
 
                 var now = new Date();
-
-                if (!this.config.isProduction) {
-                    project.LastTimeOut = now;
-                    return;
-                }
 
                 //Query the last time entry to get the ID, then update the TimeOut field to now.
                 this.datacontext.getSpListItems(this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, 'ProjectId eq ' + project.Id, null, 'Id desc', null, 1).then(

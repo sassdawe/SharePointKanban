@@ -28,133 +28,24 @@ var App;
 })(App || (App = {}));
 var App;
 (function (App) {
-    var Dependencies = (function () {
-        function Dependencies() {
-        }
-        Dependencies.currentUser = ['datacontext', function (datacontext) {
-                return datacontext.getCurrentUser();
-            }];
-        return Dependencies;
-    })();
-    App.Dependencies = Dependencies;
-})(App || (App = {}));
-/**
-* Central configuration of all application state routes via Angular UI Router
-*
-* Inject not only reusable dependencies but reusable views to assemble dashboards in any way necessary! Perfect Dependency Injection.
-* 'DVR - Dependencies, Views, and Routes' - John Bonfardeci
-*/
-var App;
-(function (App) {
-    var Routes = (function () {
-        function Routes($stateProvider, $urlRouterProvider) {
-            // the default url if url doesn't match any of the Angular UI Router states
-            $urlRouterProvider.otherwise('/');
-            // Setup the Angular UI Router states
-            $stateProvider.state('app', {
-                // With abstract set to true, that means this state can not be explicitly activated.
-                // It can only be implicitly activated by activating one of its children.
-                abstract: true,
-                // This abstract state will prepend '/' onto the urls of all its children.
-                url: '/',
-                // This is the top level state, so this template file will be loaded and then inserted into the ui-view within index.html.
-                templateUrl: 'app/shell/shell.htm',
-                controller: App.Controllers.ShellController.Id,
-                controllerAs: 'shell',
-                resolve: {
-                    currentUser: App.Dependencies.currentUser
-                }
-            });
-            //////////////
-            // Shell > Home
-            //////////////
-            // Using a '.' within a state name declares a child within a parent.
-            // So you have a new state 'menu' within the parent 'cds' state.
-            // You can have unlimited children within a state's `views` property!
-            $stateProvider.state('app.home', {
-                // use same url as parent - '/' + '' = '/'
-                url: '',
-                // If there is more than a single ui-view in the parent template, or you would
-                // like to target a ui-view from even higher up the state tree, you can use the
-                // views object to configure multiple views. Each view can get its own template,
-                // controller, and resolve data.
-                // View names can be relative or absolute. Relative view names do not use an '@'
-                // symbol. They always refer to views within this state's parent template.
-                // Absolute view names use a '@' symbol to distinguish the view and the state.
-                // So 'foo@bar' means the ui-view named 'foo' within the 'bar' state's template.
-                views: {
-                    ////////////
-                    // Main Menu
-                    ////////////
-                    // viewName@stateName
-                    'menu@app': App.Views.menu,
-                    ////////////
-                    // Home
-                    ////////////
-                    'main@app': App.Views.projects,
-                    ////////////
-                    // Footer
-                    ////////////
-                    'footer@app': App.Views.footer
-                }
-            });
-            $stateProvider.state('app.home.helpdesk', {
-                url: 'helpdesk',
-                views: {
-                    'main@app': App.Views.helpdesk,
-                }
-            });
-            $stateProvider.state('app.summary', {
-                url: 'summary',
-                views: {
-                    'menu@app': App.Views.menu,
-                    'main@app': App.Views.summary,
-                    'footer@app': App.Views.footer
-                }
-            });
-            $stateProvider.state('app.summary.range', {
-                url: '/start/{start:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}/end/{end:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}',
-                views: {
-                    'menu@app': App.Views.menu,
-                    'main@app': App.Views.summary,
-                    'footer@app': App.Views.footer
-                }
-            });
-        }
-        Routes.$inject = ['$stateProvider', '$urlRouterProvider'];
-        return Routes;
-    })();
-    App.Routes = Routes;
-    App.app.config(Routes);
-})(App || (App = {}));
-var App;
-(function (App) {
-    /**
-    * Views
-    * Setup your SharePoint Project/Tasks list configurations here and in /app/config.ts
-    * Reusable Angular UI Router view modules
-    * Declare all controller views here.
-    */
     var Views = (function () {
         function Views() {
         }
-        Views.getTs = function () {
-            return '?_=' + new Date().getTime();
-        };
-        /**
-        * SharePoint Projects/Tasks List View Configurations
-        */
+        /////////////////////
+        // The Kanban Config
+        /////////////////////
         Views.projects = {
-            templateUrl: 'app/kanban/kanban.htm' + Views.getTs(),
+            templateUrl: 'app/kanban/kanban.htm' + App.Utils.getTimestamp(),
             controller: 'kanbanController',
             controllerAs: 'vm',
             resolve: {
                 // Change SharePoint Project/Tasks configurations as needed. 
+                // This will be injected into the Kanban Controller
                 kanbanConfig: function () {
                     var statuses = ['Not Started', 'In Progress', 'Testing', 'Completed'];
                     var config = {
-                        siteUrl: '/media',
-                        listName: 'Projects',
+                        siteUrl: '/',
+                        listName: 'Tasks',
                         previousMonths: 18,
                         timeLogListName: 'Time Log',
                         statuses: statuses,
@@ -193,90 +84,63 @@ var App;
                 }
             }
         };
-        Views.helpdesk = {
-            templateUrl: 'app/kanban/kanban.htm' + Views.getTs(),
-            controller: 'kanbanController',
-            controllerAs: 'vm',
-            resolve: {
-                kanbanConfig: function () {
-                    var statuses = ['Not Started', 'In Progress', 'Completed', 'Waiting on someone else'];
-                    var config = {
-                        siteUrl: '/ws',
-                        listName: 'Tasks',
-                        previousMonths: 1,
-                        timeLogListName: 'Time Log',
-                        statuses: statuses,
-                        columns: [
-                            {
-                                title: 'Queue',
-                                id: 'backlog-tasks',
-                                className: 'panel panel-info',
-                                status: statuses[0],
-                                tasks: []
-                            },
-                            {
-                                title: 'In Progress',
-                                id: 'in-progress-tasks',
-                                className: 'panel panel-danger',
-                                status: statuses[1],
-                                tasks: []
-                            },
-                            {
-                                title: 'Waiting on someone else',
-                                id: 'waiting-on-someone-tasks',
-                                className: 'panel panel-warning',
-                                status: statuses[2],
-                                tasks: []
-                            },
-                            {
-                                title: 'Done',
-                                id: 'completed-tasks',
-                                className: 'panel panel-success',
-                                status: statuses[3],
-                                tasks: []
-                            }
-                        ]
-                    };
-                    return config;
-                }
-            }
-        };
-        /**
-        * Summary Report View
-        */
+        ///////////////////////////
+        // Project Summary Reports
+        ///////////////////////////
         Views.summary = {
-            templateUrl: 'app/reports/summary.htm' + Views.getTs(),
+            templateUrl: 'app/reports/summary.htm' + App.Utils.getTimestamp(),
             controller: 'projectSummaryController',
             controllerAs: 'vm',
             resolve: {
                 projectSiteConfigs: function () {
                     // List as many SharePoint Project/Tasks configurations here as needed. 
                     return [
-                        { siteUrl: '/media', listName: 'Time Log', title: 'Projects', projectsListName: 'Projects' },
-                        { siteUrl: '/ws', listName: 'Time Log', title: 'Support Requests', projectsListName: 'Tasks' },
+                        { siteUrl: '/', listName: 'Time Log', title: 'Projects', projectsListName: 'Tasks' }
                     ];
                 }
             }
         };
-        /**
-        * Application Main Menu View
-        */
+        /////////////
+        // Main Menu
+        /////////////
         Views.menu = {
-            templateUrl: 'app/menu/menu.htm' + Views.getTs(),
+            templateUrl: 'app/menu/menu.htm' + App.Utils.getTimestamp(),
             controller: 'menuController',
             controllerAs: 'vm' // the alias of the Angular controller in the HTML templates; `vm` short for 'View Model'
         };
-        /**
-        * Application Footer View
-        */
+        ///////////
+        // Footer
+        ///////////
         Views.footer = {
-            templateUrl: 'app/footer/footer.htm' + Views.getTs(),
+            templateUrl: 'app/footer/footer.htm' + App.Utils.getTimestamp(),
             controller: 'footerController',
             controllerAs: 'vm'
         };
         return Views;
     })();
     App.Views = Views;
+})(App || (App = {}));
+/**
+* Central configuration of all application state routes via Angular UI Router
+*
+* Inject not only reusable dependencies but reusable views to assemble dashboards in any way necessary! Perfect Dependency Injection.
+* 'DVR - Dependencies, Views, and Routes' - John Bonfardeci
+*/
+var App;
+(function (App) {
+    var Routes = (function () {
+        function Routes(config, $stateProvider, $urlRouterProvider) {
+            // the default url if url doesn't match any of the Angular UI Router states
+            $urlRouterProvider.otherwise('/');
+            config.routes.forEach(function (r) {
+                $stateProvider.state(r.route, r.model);
+            });
+        }
+        Routes.$inject = ['config', '$stateProvider', '$urlRouterProvider'];
+        return Routes;
+    })();
+    App.Routes = Routes;
+    App.app.config(Routes);
 })(App || (App = {}));
 var App;
 (function (App) {
@@ -366,20 +230,18 @@ var App;
                                 self.clockOut(task.Id);
                             }
                             break;
+                        case 'TaskStatus':
+                            task.TaskStatus.Value = field.value;
+                            // Clock out the task if clocked in and not working.
+                            if (/(not started|completed)/i.test(field.value) && task.LastTimeOut == null) {
+                                self.clockOut(task.Id);
+                            }
+                            break;
                         case 'OrderBy':
                             //update the order if an OrderBy change
                             if (!!!index) {
                                 break;
                             }
-                            //TODO
-                            // Switch places with the task that has the same OrderBy value.
-                            // If the OrderBy value is 5, for example, find the task that is set to 5 and change to the task's index+1;
-                            //var orderBy: number = field.value;
-                            //for (var i = 0; i < this.projects.length; i++){
-                            //    if (this.projects[i].OrderBy == orderBy && this.projects[i].Status.Value == task.Status.Value) {
-                            //        this.projects[i].OrderBy = index+1;
-                            //    }
-                            //}
                             break;
                         default:
                             break;
@@ -416,7 +278,7 @@ var App;
                 for (var i = 0; i < this.columns.length; i++) {
                     var col = this.columns[i];
                     col.tasks = self.projects.filter(function (task) {
-                        return task.Status.Value == col.status;
+                        return (task.Status || task.TaskStatus).Value == col.status; // handle SP 2010 or 2013 property name
                     });
                 }
                 //force a redraw of the columns if dragging projects around
@@ -534,10 +396,6 @@ var App;
                     alert(ex);
                     throw ex;
                     var now = new Date();
-                    if (!this.config.isProduction) {
-                        project.LastTimeOut = now;
-                        return;
-                    }
                     //Query the last time entry to get the ID, then update the TimeOut field to now.
                     this.datacontext.getSpListItems(this.kanbanConfig.siteUrl, this.kanbanConfig.timeLogListName, 'ProjectId eq ' + project.Id, null, 'Id desc', null, 1).then(function (items) {
                         var timeLog = items[0]; // Using `$top` returns a plain Array, not an Array named "results".
@@ -616,6 +474,9 @@ var App;
                 var $parent = this.$scope.$parent.shell;
                 this.currentUser = $parent.currentUser;
                 this.appTitle = config.appTitle;
+                this.routes = config.routes.filter(function (r) {
+                    return r.showInMenu;
+                });
             }
             MenuController.Id = 'menuController';
             MenuController.$inject = ['$scope', 'config', '$state', '$stateParams'];
@@ -660,11 +521,6 @@ var App;
             }
             ProjectSummary.prototype.getData = function () {
                 var self = this;
-                //console.info(this.startDate)
-                //if (this.updateState) {
-                //this.$state.go('app.summary.range', { start: this.startDate.toISOString().split('T')[0], end: this.endDate.toISOString().split('T')[0] });
-                //this.updateState = false;
-                //}
                 this.groupedProjects = [];
                 for (var i = 0; i < this.projectSiteConfigs.length; i++) {
                     var config = self.projectSiteConfigs[i];
@@ -790,6 +646,7 @@ var App;
                 if (orderby === void 0) { orderby = null; }
                 if (expand === void 0) { expand = null; }
                 if (top === void 0) { top = 10; }
+                siteUrl = siteUrl == '/' ? '' : siteUrl;
                 var self = this;
                 var d = this.$q.defer();
                 this.common.showLoader();
@@ -827,11 +684,6 @@ var App;
                 if (prevMonths === void 0) { prevMonths = 6; }
                 var d = this.$q.defer();
                 var self = this;
-                // Show how many previous months of projects to request.
-                // Change this variable in App.Config;
-                if (!this.config.isProduction) {
-                    return this.getTestData();
-                }
                 var today = new Date();
                 var dateFilter = new Date(today.getFullYear(), (today.getMonth() - prevMonths), today.getDate(), 0, 0, 0).toISOString();
                 var filter = 'CategoryValue ne \'Log\' and Created gt datetime\'' + dateFilter + '\'';
@@ -861,6 +713,7 @@ var App;
                 return d.promise;
             };
             Datacontext.prototype.getProject = function (siteUrl, listName, itemId) {
+                siteUrl = siteUrl == '/' ? '' : siteUrl;
                 return this.executeRestRequest(siteUrl + '/_vti_bin/listdata.svc/' + App.SharePoint.Utils.toCamelCase(listName) + '(' + itemId + ')');
             };
             Datacontext.prototype.insertListItem = function (url, data) {
@@ -944,6 +797,7 @@ var App;
                 if (cache === void 0) { cache = false; }
                 if (headers === void 0) { headers = undefined; }
                 if (service === void 0) { service = 'lists.asmx'; }
+                siteUrl = siteUrl == '/' ? '' : siteUrl;
                 var d = this.$q.defer();
                 var self = this;
                 this.common.showLoader();
@@ -985,14 +839,6 @@ var App;
             * @return void
             */
             Datacontext.prototype.updateSoapListItems = function (fields, siteUrl, listName) {
-                if (!this.config.isProduction) {
-                    var d = this.$q.defer();
-                    d.resolve({
-                        status: 200,
-                        statusText: 'OK'
-                    });
-                    return d.promise;
-                }
                 var action = 'http://schemas.microsoft.com/sharepoint/soap/UpdateListItems';
                 var packet = '<?xml version="1.0" encoding="utf-8"?>' +
                     '<soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/">' +
@@ -1085,28 +931,6 @@ var App;
                     Office: null,
                     Groups: []
                 };
-                if (!this.config.isProduction) {
-                    this.$http({ url: '/testuser.xml', method: 'GET', dataType: 'xml' }).then(function (response) {
-                        var xmlDoc = response.data;
-                        var $zrows = $(xmlDoc).find('*').filter(function () {
-                            return this.nodeName.toLowerCase() == 'z:row';
-                        });
-                        $zrows.each(function () {
-                            user.ID = parseInt($(this).attr('ows_ID'));
-                            user.Title = $(this).attr('ows_Title');
-                            user.Name = $(this).attr('ows_Name');
-                            user.EMail = $(this).attr('ows_EMail');
-                            user.JobTitle = $(this).attr('ows_JobTitle');
-                            user.Department = $(this).attr('ows_Department');
-                            user.Account = user.ID + ';#' + user.Title;
-                            user.Groups = self.config.testUser.Groups;
-                        });
-                        d.resolve(user);
-                    });
-                    self.cache.currentUser = user;
-                    return d.promise;
-                }
-                var self = this;
                 var query = '<Query><Where><Eq><FieldRef Name="ID" /><Value Type="Counter"><UserID /></Value></Eq></Where></Query>';
                 var viewFields = '<ViewFields><FieldRef Name="ID" /><FieldRef Name="Name" /><FieldRef Name="EMail" /><FieldRef Name="Department" /><FieldRef Name="JobTitle" /><FieldRef Name="UserName" /><FieldRef Name="Office" /></ViewFields>';
                 this.getSoapListItems('', 'User Information List', viewFields, query, true).then(function (response) {
@@ -1164,30 +988,6 @@ var App;
                         });
                     });
                     d.resolve(groups);
-                });
-                return d.promise;
-            };
-            Datacontext.prototype.getTestData = function () {
-                var d = this.$q.defer();
-                var self = this;
-                //if (!!this.cache.projects) {
-                //    d.resolve(this.cache.projects);
-                //    return d.promise;
-                //}
-                self.$http({
-                    url: '/testdata.txt?_=' + App.Utils.getTimestamp(),
-                    method: 'GET'
-                }).then(function (response) {
-                    if (response.status != 200) {
-                        d.resolve(null);
-                        d.reject(response.statusText);
-                        return;
-                    }
-                    var projects = response.data.d.results;
-                    //self.cache.projects = response.data.d.results;
-                    d.resolve(projects);
-                }).finally(function () {
-                    self.common.hideLoader();
                 });
                 return d.promise;
             };
@@ -1251,37 +1051,17 @@ var App;
                 };
                 // tested Odata query
                 // /_vti_bin/listdata.svc/TimeLog?$expand=CreatedBy,Project&$orderby=CreatedBy/Name,ProjectId,TimeIn&$filter=TimeIn ge datetime'2015-12-07T05:00:00.000Z' and TimeIn le datetime'2015-12-11T05:00:00.000Z'&$select=CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title
-                if (this.config.isProduction) {
-                    var startIso = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
-                    var endIso = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 24, 0, 0).toISOString();
-                    // get data from production server
-                    this.getSpListItems(
-                    /*siteUrl:*/ siteUrl, 
-                    /*listName:*/ listName, 
-                    /*filter:*/ 'TimeIn ne null and TimeOut ne null and TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'', 
-                    /*select:*/ 'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title', 
-                    /*orderby:*/ 'CreatedBy/Name,ProjectId,TimeIn', 
-                    /*expand:*/ 'CreatedBy,Project', 
-                    /*top:*/ 1000).then(transform);
-                }
-                else {
-                    // get test data
-                    this.common.hideLoader();
-                    var testData = title == 'Projects' ? '/test_time_entries.txt' : 'test_support_entries.txt';
-                    self.$http({
-                        url: testData + '?_=' + App.Utils.getTimestamp(),
-                        method: 'GET'
-                    }).then(function (response) {
-                        if (response.status != 200) {
-                            d.resolve(null);
-                            d.reject(response.statusText);
-                            return;
-                        }
-                        transform(response.data.d.results);
-                    }).finally(function () {
-                        self.common.hideLoader();
-                    });
-                }
+                var startIso = new Date(start.getFullYear(), start.getMonth(), start.getDate(), 0, 0, 0).toISOString();
+                var endIso = new Date(end.getFullYear(), end.getMonth(), end.getDate(), 23, 59, 0).toISOString();
+                // get data from production server
+                this.getSpListItems(
+                /*siteUrl:*/ siteUrl, 
+                /*listName:*/ listName, 
+                /*filter:*/ 'TimeIn ne null and TimeOut ne null and TimeIn ge datetime\'' + startIso + '\' and TimeIn le datetime\'' + endIso + '\'', 
+                /*select:*/ 'CreatedBy/Name,ProjectId,TimeIn,TimeOut,Hours,Project/Title', 
+                /*orderby:*/ 'CreatedBy/Name,ProjectId,TimeIn', 
+                /*expand:*/ 'CreatedBy,Project', 
+                /*top:*/ 1000).then(transform);
                 return d.promise;
             };
             Datacontext.Id = 'datacontext';
@@ -1318,34 +1098,102 @@ var App;
 })(App || (App = {}));
 var App;
 (function (App) {
+    // Reusable views for the Angular UI Routes
+    // Alter to fit your configuration
     /**
-     * Setup your SharePoint host application configurations here and in /app/dvr/views.ts
+     * Setup your SharePoint host application configurations here and in /app/dvr/Views.ts
      */
     var Config = (function () {
         function Config() {
             this.debug = false;
             this.appPath = 'app/'; //path to Angular app template files
             this.appTitle = 'Dev Projects Kanban'; //display title of the app
-            // list of SharePoint group names who's members are allowed to edit 
-            this.editGroups = ['Webster Owners', 'testers', 'Corporate Operations Manager', 'Corporate Executive Management', 'VP of Corporate Relations'];
+            this.editGroups = ['Developers', 'Testers', 'Managers']; // list of SharePoint group names allowed to save changes
             this.orgName = ''; //the name of your organization, shown in Copyright
-            this.productionHostname = 'webster'; //the hostname of the live production SharePoint site
             this.priorities = ['(1) High', '(2) Normal', '(3) Low'];
             this.serverHostname = '//' + window.location.hostname;
-            this.testUser = {
-                Account: null,
-                Department: 'Vogon Affairs',
-                EMail: 'hitchiker@galaxy.org',
-                Groups: [{ id: 42, name: 'testers' }],
-                ID: 42,
-                JobTitle: 'Tester',
-                Name: 'domain\marvin',
-                Office: 'Heart of Gold',
-                Title: 'Paranoid Android',
-                UserName: 'marvin'
-            };
             this.version = '0.0.1';
-            this.isProduction = !!(window.location.hostname.indexOf(this.productionHostname) > -1);
+            // Angular UI Routes
+            this.routes = [
+                // Top-level abstract route
+                {
+                    route: 'app',
+                    showInMenu: false,
+                    model: {
+                        // With abstract set to true, that means this state can not be explicitly activated.
+                        // It can only be implicitly activated by activating one of its children.
+                        abstract: true,
+                        // This abstract state will prepend '/' onto the urls of all its children.
+                        url: '/',
+                        // This is the top level state, so this template file will be loaded and then inserted into the ui-view within index.html.
+                        templateUrl: 'app/shell/shell.htm',
+                        controller: App.Controllers.ShellController.Id,
+                        controllerAs: 'shell',
+                        resolve: {
+                            currentUser: ['datacontext', function (datacontext) {
+                                    return datacontext.getCurrentUser();
+                                }]
+                        }
+                    }
+                },
+                {
+                    title: 'Projects',
+                    showInMenu: true,
+                    route: 'app.home',
+                    model: {
+                        // use same url as parent - '/' + '' = '/'
+                        url: '',
+                        // If there is more than a single ui-view in the parent template, or you would
+                        // like to target a ui-view from even higher up the state tree, you can use the
+                        // views object to configure multiple Views. Each view can get its own template,
+                        // controller, and resolve data.
+                        // View names can be relative or absolute. Relative view names do not use an '@'
+                        // symbol. They always refer to views within this state's parent template.
+                        // Absolute view names use a '@' symbol to distinguish the view and the state.
+                        // So 'foo@bar' means the ui-view named 'foo' within the 'bar' state's template.
+                        views: {
+                            ////////////
+                            // Main Menu
+                            ////////////
+                            // viewName@stateName
+                            'menu@app': App.Views.menu,
+                            ////////////
+                            // Home
+                            ////////////
+                            'main@app': App.Views.projects,
+                            ////////////
+                            // Footer
+                            ////////////
+                            'footer@app': App.Views.footer
+                        }
+                    }
+                },
+                {
+                    title: 'Summary',
+                    showInMenu: true,
+                    route: 'app.summary',
+                    model: {
+                        url: 'summary',
+                        views: {
+                            'menu@app': App.Views.menu,
+                            'main@app': App.Views.summary,
+                            'footer@app': App.Views.footer
+                        }
+                    }
+                },
+                {
+                    route: 'app.summary.range',
+                    showInMenu: false,
+                    model: {
+                        url: '/start/{start:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}/end/{end:[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}}',
+                        views: {
+                            'menu@app': App.Views.menu,
+                            'main@app': App.Views.summary,
+                            'footer@app': App.Views.footer
+                        }
+                    }
+                }
+            ];
         }
         Config.Id = 'config';
         return Config;

@@ -17,9 +17,7 @@
     <div id="navbar" class="navbar-collapse collapse">
 
         <ul class="nav navbar-nav">
-            <li><a ui-sref="app.home">Projects</a></li>
-            <li><a ui-sref="app.home.helpdesk">Helpdesk Requests</a></li>
-            <li><a ui-sref="app.summary">Summary</a></li>
+            <li ng-repeat="r in routes"><a ui-sref="{{r.route}}">{{r.title}}</a></li>
         </ul>
 
         <div style="display:inline-block;float:right;margin:1em;">Logged in as: {{vm.currentUser.Title}}</div>

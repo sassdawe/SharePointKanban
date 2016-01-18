@@ -7,6 +7,13 @@
         start: string;
         end: string;
     }
+
+    export interface IUIRoute{
+        route: string;
+        title: string;
+        showInMenu: boolean;
+        model: any;
+    }
     
     export interface IKanbanConfig {
         siteUrl: string;

@@ -109,10 +109,9 @@
   <ItemGroup />
   <ItemGroup>
     <TypeScriptCompile Include="app\app.ts" />
+    <TypeScriptCompile Include="app\app_config\views.ts" />
     <TypeScriptCompile Include="app\datatypes.ts" />
-    <TypeScriptCompile Include="app\dvr\dependencies.ts" />
-    <TypeScriptCompile Include="app\dvr\routes.ts" />
-    <TypeScriptCompile Include="app\dvr\views.ts" />
+    <TypeScriptCompile Include="app\routes.ts" />
     <TypeScriptCompile Include="app\footer\controllers.footer.ts" />
     <TypeScriptCompile Include="app\kanban\controllers.kanban.ts" />
     <TypeScriptCompile Include="app\menu\controllers.menu.ts" />
@@ -120,7 +119,7 @@
     <TypeScriptCompile Include="app\run.ts" />
     <TypeScriptCompile Include="app\services\services.datacontext.ts" />
     <TypeScriptCompile Include="app\common.ts" />
-    <TypeScriptCompile Include="app\config.ts" />
+    <TypeScriptCompile Include="app\app_config\config.ts" />
     <TypeScriptCompile Include="app\directives.ts" />
     <TypeScriptCompile Include="app\filters.ts" />
     <TypeScriptCompile Include="app\utils.ts" />

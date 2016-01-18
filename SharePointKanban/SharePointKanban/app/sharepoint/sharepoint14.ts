@@ -197,7 +197,8 @@
         Description: string;
         DueDate: Date;
         Priority: ISpChoiceValue;
-        Status: ISpChoiceValue;
+        Status: ISpChoiceValue; // property name in SP 2010
+        TaskStatus: ISpChoiceValue; // property name in SP 2013 - why did they change this?
         StartDate: Date;
         LastTimeIn: Date;
         LastTimeOut: Date;
