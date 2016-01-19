@@ -1,6 +1,6 @@
-# SharePoint Kanban (2010 - 2013)
+# Kanban for SharePoint 2010 - 2013 Compatibility In Progress
 
-##An Agile Kanban "signboard" application for SharePoint 2010-2013 built on Angular JS.
+##An Agile Kanban "signboard" application for SharePoint built on Angular JS.
 
 By adding this Angular application to any of your SharePoint sites, you can turn any SharePoint list, of content type Projects or Tasks, into your own Agile Kanban dashboard. 
 
