@@ -1,4 +1,5 @@
-# Kanban for SharePoint 2010 - 2013 Compatibility In Progress
+# Kanban for SharePoint 2010
+(2013 Compatibility In Progress)
 
 ##An Agile Kanban "signboard" application for SharePoint built on Angular JS.
 
